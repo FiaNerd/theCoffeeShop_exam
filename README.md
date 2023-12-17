@@ -1,1 +1,12 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/plurHXAj)
+# Kaffebönans skafferi
+## The Coffee shop
+This web shop is for those who love coffee and can't get enough. 
+
+
+## Teknologies
+ASP.Net Core
+React
+Vites
+React Hook Form
+
+## Get started 
