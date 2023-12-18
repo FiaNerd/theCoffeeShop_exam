@@ -41,6 +41,7 @@ app.MapControllers();
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
 try
 {
      context.Database.Migrate();
@@ -48,11 +49,11 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"An error occurred: {ex.Message}");
+    logger.LogError($"An error occurred: {ex.Message}", ex);
 
     if (ex.InnerException != null)
     {
-        Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+        logger.LogError($"Inner exception: {ex.InnerException.Message}", ex);
     }
 }
 
