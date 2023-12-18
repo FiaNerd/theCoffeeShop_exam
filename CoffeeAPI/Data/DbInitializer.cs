@@ -1,10 +1,4 @@
-using System;
-using static System.Guid;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using CoffeeAPI.Entities;
-using CoffeeAPI.Data;
 
 
 namespace CoffeeAPI.Data
@@ -13,16 +7,16 @@ namespace CoffeeAPI.Data
     {
         public static void Initialize(StoreContext context)
         {
-            // if(context.Products.Any())
-            // {
-            //     return;
-            // }
+            if(context.Products.Any())
+            {
+                return;
+            }
 
         var coffeeProducts = new List<Product>
         {
             
             new Product
-            {
+             {
                 ProductId = Guid.NewGuid(),
                 Name =  "Decaf Organic",
                 BlendDescription = "UPPTÄCK DECAF ORGANIC MED FRISKA TONER",
@@ -35,7 +29,7 @@ namespace CoffeeAPI.Data
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             },
-            new Product
+            new Product 
             {
                 ProductId = Guid.NewGuid(),
                 Name =  "Hazienda",
@@ -49,7 +43,7 @@ namespace CoffeeAPI.Data
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
             },
-            new Product
+            new Product 
             {
                 ProductId = Guid.NewGuid(),
                 Name = "Estanzia",
@@ -168,7 +162,7 @@ namespace CoffeeAPI.Data
                 Description = "Gott kaffe är vårt hantverk och passion. Blue Java är en smakfull komposition gjord på omsorgsfullt handplockade Arabicabönor från Östafrika, Syd- och Centralamerika. Genom att blanda olika ursprung/kaffebönor kan vi ta fram ännu fler rika smaknyanser som skapar den unika Blue Java-koppen. Blue Java har fått sin smakfulla kaffekaraktär i vårt kafferosteri i Helsingborg där våra rostmästare varsamt mörkrostat och koppat tongivande Arabicabönor från Etiopien, och lyft fram en kryddig karaktär med toner av citrus. Vi brinner för vårt kaffe och lägger ner stor passion och omsorg för att varje enskild detalj i vårt kaffehantverk ska vara av högsta kvalitet. Allt för att vi på Zoégas ska kunna ge dig som kaffeälskare möjligheten att uppleva en spännande smakresa med det bästa kaffet, och njuta av en Zoégas-stund.",
                 ImageUrl = "/images/bryggkaffe/latt_rost/blueJava_brygg_1200x1200.jpg",
                 Type = ["Bryggkaffe", "Hela bönor"],
-                RoastLevel = RoastLevel.LättRost,
+                RoastLevel = RoastLevel.Lättrost,
                 Price = 5880,
                 QuantityInStock = 100, 
                 CreatedDate = DateTime.Now,
@@ -196,7 +190,7 @@ namespace CoffeeAPI.Data
                 Description = "KAHAWA - MÄSTARENS BLANDNING FRUKTIG & BALANSERAD MÖRKROST. Zoégas Master Barista Ola Persson står inför en utmaning. Om ett par veckor ska han tävla i International Coffee Championship i Dubai – en tävling som han inte bara vill försöka vinna utan göra det på sitt eget sätt. Han reser därför till Kenya och ger sig ut på ett storslaget äventyr runt foten av Mount Kenya. Där måste han på bara en vecka lyckas hitta den ultimata kaffebönan till sin tävlingsblandning. Expeditionen leder honom kors och tvärs över Kenyas vidsträckta savanner, djupa plantage och höga berg. ZOÉGAS KAHAWA är resultatet av jakten på den ultimata kaffeblandningen. KAHAWA är en fruktig, smakrik, fyllig och balanserad mörkrost med toner av bär och mandarin. 100% Arabicabönor från Brasilien och Östafrika.",
                 ImageUrl = "/images/bryggkaffe/latt_rost/kahawa-1200x1200.jpg",
                 Type = ["Bryggkaffe"],
-                RoastLevel = RoastLevel.LättRost,
+                RoastLevel = RoastLevel.Lättrost,
                 Price =  7860,
                 QuantityInStock = 100,
                 CreatedDate = DateTime.Now,
@@ -243,20 +237,6 @@ namespace CoffeeAPI.Data
                 QuantityInStock = 100,
                 CreatedDate = DateTime.Now,
                 UpdatedDate = DateTime.Now
-            },
-            new Product
-            {
-                ProductId = Guid.NewGuid(),
-                Name = "Presso",
-                BlendDescription = "UPPTÄCK TONER AV MÖRKA BÄR",
-                Description = "Presso är en favorit i presskannan och perkolatorn med en smakfull blandning av 100% högvuxna Arabicabönor från Kenya, Centralamerika och Santoskaffe från Brasilien. Våra rostmästare har varsamt rostat och koppat bönorna i vårt kafferosteri i Helsingborg där vi lyft fram en smakfull kaffekaraktär med kärva toner av mörka bär och bitter kakao. Kaffebönorna i Presso kommer från bland annat Rainforest Alliance certifierade odlingar. Detta är en del av vårt hållbarhetsarbete för att säkra att kaffet odlas på ett sätt som skyddar miljön och ger bättre försörjningsmöjligheter för kaffeodlare. Allt för att du som kaffedrickare ska kunna njuta av den smakfulla Zoégas-koppen och samtidigt vara en del i en positiv och hållbar utveckling för framtiden, för människa och miljö. Läs mer om Zoégas mångåriga hållbarhetsinitiativ Coffee By Women här.",
-                ImageUrl = "/images/press/presso_press_1200x1200.jpg",
-                Type = ["Presskaffe"],
-                RoastLevel = RoastLevel.Mörkrost,
-                Price = 5840,
-                QuantityInStock = 100, 
-                CreatedDate = DateTime.Now,
-                UpdatedDate = DateTime.Now,
             },
             new Product
             {
@@ -364,7 +344,7 @@ namespace CoffeeAPI.Data
                 Description = "Zoégas Master Barista Ola Persson står inför en utmaning. Om ett par veckor ska han tävla i International Coffee Championship i Dubai - en tävling som han inte bara vill försöka vinna utan göra det på sitt eget sätt. Han reser därför till Kenya och ger sig ut på ett storslaget äventyr runt foten av Mount Kenya. Där måste han på bara en vecka lyckas hitta den ultimata kaffebönan till sin tävlingsblandning. Expeditionen leder honom kors och tvärs över Kenyas vidsträckta savanner, djupa plantage och höga berg.",
                 ImageUrl = "/images/bryggkaffe/latt_rost/kahawa-1200x1200.jpg",
                 Type = ["Bryggkaffe", "Hela bönor"],
-                RoastLevel = RoastLevel.LättRost,
+                RoastLevel = RoastLevel.Lättrost,
                 Price = 6130,
                 QuantityInStock = 100, 
                 CreatedDate = DateTime.Now,

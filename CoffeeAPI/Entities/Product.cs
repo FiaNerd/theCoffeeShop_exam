@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using static System.Guid;
-
-
 namespace CoffeeAPI.Entities
 {
-   public enum RoastLevel
+    public enum RoastLevel
 {   
-    LättRost,
+    Lättrost,
     Mellanrost,
     Mörkrost
 

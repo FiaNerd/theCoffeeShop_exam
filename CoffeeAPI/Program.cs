@@ -1,14 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
 using CoffeeAPI.Data;
-using System.Text;
-using CoffeeAPI.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StoreContext>(opt =>
@@ -48,12 +43,17 @@ var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
-     context.Database.MigrateAsync();
+     context.Database.Migrate();
      DbInitializer.Initialize(context);
 }
 catch (Exception ex)
 {
-    logger.LogError($"An error occurred during database migration and initialization: {ex.Message}", ex);
+    Console.WriteLine($"An error occurred: {ex.Message}");
+
+    if (ex.InnerException != null)
+    {
+        Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+    }
 }
 
 app.Run();
