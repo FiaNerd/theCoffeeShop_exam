@@ -9,7 +9,7 @@ import logo from '../../assets/images/coffeebean_logo.png'
 
 const Header = () => {
   return (
-    <div className='container fixed bg-deep-brown w-screen'>
+    <div className='container fixed bg-deep-brown w-screen sticky'>
       <p className='text-white font-features text-center p-1'>
         We're giving 5% of your order to the planet
       </p>
