@@ -21,9 +21,11 @@ namespace CoffeeAPI.Data.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     ImageUrl = table.Column<string>(type: "TEXT", nullable: true),
                     Type = table.Column<string>(type: "TEXT", nullable: true),
-                    RoastLevel = table.Column<string>(type: "TEXT", nullable: true),
-                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
-                    QuantityInStock = table.Column<int>(type: "INTEGER", nullable: false)
+                    RoastLevel = table.Column<int>(type: "INTEGER", nullable: false),
+                    Price = table.Column<decimal>(type: "TEXT", nullable: false),
+                    QuantityInStock = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {

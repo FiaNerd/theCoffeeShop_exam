@@ -23,10 +23,10 @@ namespace CoffeeAPI.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal>("Amount")
+                    b.Property<string>("BlendDescription")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("BlendDescription")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
@@ -38,13 +38,19 @@ namespace CoffeeAPI.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("RoastLevel")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("RoastLevel")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProductId");
