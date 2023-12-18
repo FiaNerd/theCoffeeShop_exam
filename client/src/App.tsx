@@ -1,12 +1,14 @@
+import Header from './Components/Partial/Header'
 import './index.css'
 
 const App = () => {
   return (
     <>
-      <h1 className='text-size-desktop-title font-heading text-dark-red font-extrabold underline'>
+    <Header />
+      <h1 className='text-desktop-title font-heading text-deep-red font-extrabold underline'>
         HELLO WORLD!
       </h1>
-      <p className='text-size-sub-title font-text'>Our products</p>
+      <p className='text-sub-title font-text'>OUR PRODUCTS</p>
     </>
   )
 }
