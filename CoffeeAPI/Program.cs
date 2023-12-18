@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using CoffeeAPI.Data;
+using System.Text;
+using CoffeeAPI.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,5 +41,19 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Create the database
+var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+try
+{
+     context.Database.MigrateAsync();
+     DbInitializer.Initialize(context);
+}
+catch (Exception ex)
+{
+    logger.LogError($"An error occurred during database migration and initialization: {ex.Message}", ex);
+}
 
 app.Run();

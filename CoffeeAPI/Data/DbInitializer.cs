@@ -1,9 +1,10 @@
 using System;
+using static System.Guid;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CoffeeAPI.Entities;
-using static System.Guid;
+using CoffeeAPI.Data;
 
 
 namespace CoffeeAPI.Data
@@ -12,11 +13,10 @@ namespace CoffeeAPI.Data
     {
         public static void Initialize(StoreContext context)
         {
-            if(context.Products.Any())
-            {
-                return;
-            }
-
+            // if(context.Products.Any())
+            // {
+            //     return;
+            // }
 
         var coffeeProducts = new List<Product>
         {
@@ -385,7 +385,9 @@ namespace CoffeeAPI.Data
             },
         };
 
-          context.Products.AddRange(coffeeProducts)
+          context.Products.AddRange(coffeeProducts);
+
+          context.SaveChanges();
         }
     }
 }
