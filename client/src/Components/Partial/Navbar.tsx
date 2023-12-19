@@ -56,6 +56,10 @@ const Navbar = () => {
     }
   }, [menuOpen, dropdownOpen])
 
+  const closeDropdown = () => {
+    setDropdownOpen(false)
+  }
+
   const portalRoot = document.getElementById('nav-root')
 
   if (!portalRoot) {
@@ -92,8 +96,11 @@ const Navbar = () => {
                   {menu.title}
                 </NavLink>
                 {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
-                  <div className='bg-deep-red absolute top-full z-50 w-80 pt-8 px-4 pb-4 mr-5'>
-                    <Dropdown subMenuItems={menu.subMenu} />
+                  <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
+                    <Dropdown
+                      subMenuItems={menu.subMenu}
+                      onCloseDropdown={closeDropdown}
+                    />
                   </div>
                 )}
               </li>
@@ -144,13 +151,16 @@ const Navbar = () => {
                       style={{
                         color: 'text-light-tan',
                       }}
-                      className='hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+                      className='font-heading text-3xl hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
                       onClick={handleLinkClick}>
                       {menu.title}
                     </NavLink>
                     {menu.subMenu && (
                       <div className='ml-4'>
-                        <Dropdown subMenuItems={menu.subMenu} />
+                        <Dropdown
+                          subMenuItems={menu.subMenu}
+                          onCloseDropdown={closeDropdown}
+                        />
                       </div>
                     )}
                   </li>

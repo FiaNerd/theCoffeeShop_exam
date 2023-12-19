@@ -34,11 +34,9 @@ export const menuItems: MenuItem[] = [
   {
     title: 'OM OSS',
     url: '#',
-    subMenu: [],
   },
   {
     title: 'OM BÖNOR',
     url: '#',
-    subMenu: [],
   },
 ]
