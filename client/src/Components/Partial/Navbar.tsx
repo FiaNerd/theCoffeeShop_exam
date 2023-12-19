@@ -16,12 +16,13 @@ import Dropdown from './Dropdown'
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
   const navRef = useRef<HTMLDivElement | null>(null)
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
     setMenuOpen(!menuOpen)
-    setDropdownOpen(false) // Stäng dropdown när huvudmenyn öppnas
+    setDropdownOpen(false)
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -33,6 +34,15 @@ const Navbar = () => {
 
   const handleLinkClick = () => {
     setMenuOpen(false)
+    setDropdownOpen(false)
+  }
+
+  const handleMouseEnter = (title: string) => {
+    setDropdownOpen(true)
+    setActiveMenuItem(title)
+  }
+
+  const handleMouseLeave = () => {
     setDropdownOpen(false)
   }
 
@@ -66,7 +76,11 @@ const Navbar = () => {
         <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''} `}>
           <ul className='flex md:gap-8'>
             {menuItems.map((menu, index) => (
-              <li key={index}>
+              <li
+                key={index}
+                className='relative'
+                onMouseEnter={() => handleMouseEnter(menu.title)}
+                onMouseLeave={handleMouseLeave}>
                 <NavLink
                   to={menu.url}
                   end
@@ -77,8 +91,8 @@ const Navbar = () => {
                   onClick={handleLinkClick}>
                   {menu.title}
                 </NavLink>
-                {menu.subMenu && (
-                  <div className='ml-4'>
+                {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
+                  <div className='bg-deep-red absolute top-full z-50 w-80 pt-8 px-4 pb-4 mr-5'>
                     <Dropdown subMenuItems={menu.subMenu} />
                   </div>
                 )}
@@ -86,6 +100,7 @@ const Navbar = () => {
             ))}
           </ul>
         </div>
+
         <div className='flex gap-4'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
@@ -120,7 +135,7 @@ const Navbar = () => {
                   <p className='text-end pr-4 pb-8'>close</p>
                 </button>
               </div>
-              <ul className='flex flex-col gap-8'>
+              <ul className=' relative flex flex-col gap-8'>
                 {menuItems.map((menu, index) => (
                   <li key={index} onClick={handleToggleMenu}>
                     <NavLink
