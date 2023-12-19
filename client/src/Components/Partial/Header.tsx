@@ -55,12 +55,47 @@ const Header = () => {
         <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-1'>
           <button
             onClick={(e) => handleToggleMenu(e)}
-            className='hover:text-light-tan'>
+            className='hover:text-light-tan md:hidden'>
             <Hamburger />
           </button>
           <NavLink to='/home' className='cursor-pointer'>
             <img src={logo} alt='coffebean logo' className='w-40' />
           </NavLink>
+          <div
+            className={`hidden md:flex gap-4 ${
+              menuOpen ? 'visible' : ''
+            } md:gap-8`}>
+            <NavLink
+              to='/'
+              end
+              style={{
+                color: 'text-light-tan',
+              }}
+              className='text-white font-heading text-3xl font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+              onClick={handleLinkClick}>
+              KAFFE
+            </NavLink>
+            <NavLink
+              to='#'
+              end
+              style={{
+                color: 'text-light-tan',
+              }}
+              className='text-white font-heading text-3xl font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+              onClick={handleLinkClick}>
+              OM OSS
+            </NavLink>
+            <NavLink
+              to='#'
+              end
+              style={{
+                color: 'text-light-tan',
+              }}
+              className='text-white font-heading text-3xl font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+              onClick={handleLinkClick}>
+              KONTAKTA OSS
+            </NavLink>
+          </div>
           <div className='flex gap-4'>
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
@@ -79,12 +114,14 @@ const Header = () => {
         ReactDOM.createPortal(
           <div
             ref={navRef}
-            className='bg-deep-red h-8/12 mt-8 text-white font-bold w-8/12 fixed top-0 left-0 z-10 px-4 text-xl'
+            className={`md:hidden gap-4 ${
+              menuOpen ? 'visible' : ''
+            } bg-deep-red h-8/12 mt-8 text-white font-bold w-8/12 fixed top-0 left-0 z-10 px-4 text-xl`}
             style={{
               marginTop: '104.641px',
               height: 'calc(100vh - 185.641px)',
             }}>
-            <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan'>
+            <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
               <button type='button' onClick={handleToggleMenu}>
                 <FontAwesomeIcon
                   icon={faXmark}
@@ -97,7 +134,11 @@ const Header = () => {
               <li>
                 <NavLink
                   to='/'
-                  className='hover:text-light-tan hover:underline hover:underline-offset-8'
+                  end
+                  style={{
+                    color: 'text-light-tan',
+                  }}
+                  className='hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
                   onClick={handleLinkClick}>
                   KAFFE
                 </NavLink>
@@ -105,7 +146,11 @@ const Header = () => {
               <li>
                 <NavLink
                   to='#'
-                  className='hover:text-light-tan hover:underline hover:underline-offset-8'
+                  end
+                  style={{
+                    color: 'text-light-tan',
+                  }}
+                  className='hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
                   onClick={handleLinkClick}>
                   OM OSS
                 </NavLink>
@@ -113,6 +158,10 @@ const Header = () => {
               <li>
                 <NavLink
                   to='#'
+                  end
+                  style={{
+                    color: 'text-light-tan',
+                  }}
                   className='hover:text-light-tan hover:underline hover:underline-offset-8'
                   onClick={handleLinkClick}>
                   KONTAKTA OSS

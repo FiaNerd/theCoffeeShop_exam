@@ -6,14 +6,14 @@ export default {
     extend: {
       colors: {
         'deep-red': '#42201A',
-        white: '#FEFEFE',
+        white: '#e2d6cc',
         'rich-dark': '#221E1F',
         'deep-brown': '#332620',
         'dark-deep-brown': '#2A221D',
         'medium-tan': '#675C60',
         'light-tan': '#c4b982',
-        // 'light-tan': '#8D7869',
         'deep-purple': '#3F333A',
+        orange: '#a17644',
         'light-deep-purple': '#675C60',
       },
       fontFamily: {
