@@ -11,6 +11,7 @@ import logo from '../../assets/images/coffeebean_logo.png'
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
+import Dropdown from './Dropdown'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -53,7 +54,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-1'>
+      <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-4'>
         <button
           onClick={(e) => handleToggleMenu(e)}
           className='hover:text-light-tan md:hidden'>
@@ -76,6 +77,11 @@ const Navbar = () => {
                   onClick={handleLinkClick}>
                   {menu.title}
                 </NavLink>
+                {menu.subMenu && (
+                  <div className='ml-4'>
+                    <Dropdown subMenuItems={menu.subMenu} />
+                  </div>
+                )}
               </li>
             ))}
           </ul>
@@ -92,6 +98,7 @@ const Navbar = () => {
           />
         </div>
       </div>
+
       <div>
         {menuOpen &&
           ReactDOM.createPortal(
@@ -113,9 +120,9 @@ const Navbar = () => {
                   <p className='text-end pr-4 pb-8'>close</p>
                 </button>
               </div>
-              <ul className='flex flex-col gap-4'>
+              <ul className='flex flex-col gap-8'>
                 {menuItems.map((menu, index) => (
-                  <li key={index}>
+                  <li key={index} onClick={handleToggleMenu}>
                     <NavLink
                       to={menu.url}
                       end
@@ -126,6 +133,11 @@ const Navbar = () => {
                       onClick={handleLinkClick}>
                       {menu.title}
                     </NavLink>
+                    {menu.subMenu && (
+                      <div className='ml-4'>
+                        <Dropdown subMenuItems={menu.subMenu} />
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
