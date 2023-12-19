@@ -1,13 +1,20 @@
+import { Routes, Route } from 'react-router-dom'
+import Footer from './Components/Partial/Footer'
+import Header from './Components/Partial/Header'
+import HomePage from './Pages/HomePage'
 import './index.css'
 
 const App = () => {
   return (
-    <>
-      <h1 className='text-size-desktop-title font-heading text-dark-red font-extrabold underline'>
-        HELLO WORLD!
-      </h1>
-      <p className='text-size-sub-title font-text'>Our products</p>
-    </>
+    <div className='flex flex-col min-h-screen'>
+      <Header />
+      <div className='px-4'>
+        <Routes>
+          <Route path='/' element={<HomePage />} />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
   )
 }
 
