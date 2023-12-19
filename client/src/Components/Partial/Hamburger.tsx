@@ -38,7 +38,7 @@ const Hamburger = () => {
         </g>
       </svg>
     </>
-  );
-};
+  )
+}
 
-export default Hamburger;
+export default Hamburger

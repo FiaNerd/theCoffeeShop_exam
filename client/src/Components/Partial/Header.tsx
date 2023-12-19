@@ -12,29 +12,33 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const navRef = useRef<HTMLDivElement | null>(null)
 
-  const handleToggle = (event: React.MouseEvent) => {
+  const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
-    setIsOpen(!isOpen)
+    setMenuOpen(!menuOpen)
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (navRef.current && !navRef.current.contains(event.target as Node)) {
-      setIsOpen(false)
+      setMenuOpen(false)
     }
   }
 
+  const handleLinkClick = () => {
+    setMenuOpen(false)
+  }
+
   useEffect(() => {
-    if (isOpen) {
+    if (menuOpen) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [isOpen])
+  }, [menuOpen])
 
   const portalRoot = document.getElementById('nav-root')
 
@@ -49,7 +53,9 @@ const Header = () => {
           We're giving 5% of your order to the planet
         </p>
         <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-1'>
-          <button onClick={(e) => handleToggle(e)}>
+          <button
+            onClick={(e) => handleToggleMenu(e)}
+            className='hover:text-light-tan'>
             <Hamburger />
           </button>
           <NavLink to='/home' className='cursor-pointer'>
@@ -59,7 +65,7 @@ const Header = () => {
             <FontAwesomeIcon
               icon={faMagnifyingGlass}
               className='text-white text-4xl cursor-pointer'
-              onClick={handleToggle}
+              onClick={handleToggleMenu}
             />
             <FontAwesomeIcon
               icon={faBasketShopping}
@@ -69,7 +75,7 @@ const Header = () => {
         </div>
       </div>
 
-      {isOpen &&
+      {menuOpen &&
         ReactDOM.createPortal(
           <div
             ref={navRef}
@@ -78,11 +84,11 @@ const Header = () => {
               marginTop: '104.641px',
               height: 'calc(100vh - 185.641px)',
             }}>
-            <div className='flex flex-col items-end gap-4'>
-              <button type='button' onClick={handleToggle}>
+            <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan'>
+              <button type='button' onClick={handleToggleMenu}>
                 <FontAwesomeIcon
                   icon={faXmark}
-                  className='flex text-4xl pl-2 pt-8 cursor-pointer'
+                  className='flex text-4xl pl-2 pt-8'
                 />
                 <p className='text-end pr-4 pb-8'>close</p>
               </button>
@@ -91,21 +97,24 @@ const Header = () => {
               <li>
                 <NavLink
                   to='/'
-                  className='hover:text-light-tan hover:underline hover:underline-offset-8'>
+                  className='hover:text-light-tan hover:underline hover:underline-offset-8'
+                  onClick={handleLinkClick}>
                   KAFFE
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to='#'
-                  className='hover:light-tan hover:underline hover:underline-offset-8'>
+                  className='hover:text-light-tan hover:underline hover:underline-offset-8'
+                  onClick={handleLinkClick}>
                   OM OSS
                 </NavLink>
               </li>
               <li>
                 <NavLink
                   to='#'
-                  className='hover:light-tan hover:underline hover:underline-offset-8'>
+                  className='hover:text-light-tan hover:underline hover:underline-offset-8'
+                  onClick={handleLinkClick}>
                   KONTAKTA OSS
                 </NavLink>
               </li>
