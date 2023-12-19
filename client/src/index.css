@@ -3,3 +3,32 @@
 @tailwind components;
 @tailwind utilities;
 /* global.css eller styles.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Popins', 'Arial', 'sans-serif';
+}
+
+html,
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+h1 {
+  font-family: 'Bebas Neue Pro', 'Helvetica', 'Arial', 'sans-serif';
+  font-size: 1.875rem;
+  font-weight: 900;
+}
+
+h2 {
+  font-family: 'Bebas Neue Pro', 'Helvetica', 'Arial', 'sans-serif';
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+p {
+  font-size: 1rem;
+}

@@ -21,7 +21,7 @@ export default {
       },
       fontSize: {
         title: '1.875rem',
-        'sub-title': '1.25rem',
+        'sub-title': '1.5rem',
         paragraph: '1rem',
         features: '0.875rem',
         'desktop-title': '2.25rem',
