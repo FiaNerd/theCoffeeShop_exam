@@ -13,8 +13,8 @@ public class ProductsController : BaseApiController
       
     }
 
-    [HttpGet]
-     public async Task<ActionResult<List<Product>>> GetProducts()
+    [HttpGet]     
+    public async Task<ActionResult<List<Product>>> GetProducts()
      {
       var products = await _context.Products.ToListAsync();
 

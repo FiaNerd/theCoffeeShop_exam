@@ -1,8 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
-import Footer from './Components/Partial/Footer'
-import Header from './Components/Partial/Header'
-import HomePage from './Pages/HomePage'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
+import Header from './components/Partial/Header'
+import Footer from './components/Partial/Footer'
+import HomePage from './pages/HomePage'
 
 const App = () => {
   return (
@@ -14,6 +15,8 @@ const App = () => {
         </Routes>
       </div>
       <Footer />
+
+      <ReactQueryDevtools initialIsOpen={false} position='bottom' />
     </div>
   )
 }

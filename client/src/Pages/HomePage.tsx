@@ -1,37 +1,10 @@
+import CoffeeCard from "../components/CoffeeCard"
+
 const HomePage = () => {
   return (
     <>
       <h1>HOME PAGE</h1>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
-      <h2>This is coffee</h2>
+      <CoffeeCard />
     </>
   )
 }
