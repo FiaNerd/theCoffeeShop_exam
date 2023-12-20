@@ -68,7 +68,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-4'>
+      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] py-4 '>
         <button
           onClick={(e) => handleToggleMenu(e)}
           className='hover:text-light-tan md:hidden'>
@@ -131,7 +131,7 @@ const Navbar = () => {
               } bg-deep-red h-8/12 mt-8 text-white font-bold w-8/12 fixed top-0 left-0 z-10 px-4 text-xl`}
               style={{
                 marginTop: '104.641px',
-                height: 'calc(100vh - 185.641px)',
+                height: '100vh',
               }}>
               <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
                 <button type='button' onClick={handleToggleMenu}>
@@ -156,7 +156,7 @@ const Navbar = () => {
                       {menu.title}
                     </NavLink>
                     {menu.subMenu && (
-                      <div className='ml-4'>
+                      <div className='ml-4 z-100'>
                         <Dropdown
                           subMenuItems={menu.subMenu}
                           onCloseDropdown={closeDropdown}
