@@ -3,6 +3,7 @@ import Footer from './Components/Partial/Footer'
 import Header from './Components/Partial/Header'
 import HomePage from './Pages/HomePage'
 import './index.css'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const App = () => {
   return (
@@ -14,6 +15,8 @@ const App = () => {
         </Routes>
       </div>
       <Footer />
+
+      <ReactQueryDevtools initialIsOpen={false} position='bottom' />
     </div>
   )
 }
