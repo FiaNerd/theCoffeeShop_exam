@@ -1,21 +1,22 @@
-import { useProducts } from "../hooks/useProducts"
+import useProducts from '../hooks/useProducts'
 
-
-const CoffeCard = () => {
+const CoffeeCard = () => {
   const { data: coffeeProducts } = useProducts()
 
-
-  if(!coffeeProducts){
+  if (!coffeeProducts) {
     return null
   }
 
- return(
-  <>
-  {/* { coffeeProducts && coffeeProducts.length > 0 && (
-        <p>{coffeeProducts?.map((products) => products.Name)}</p>
-  )} */}
-  </>
- )
+  return (
+    <div>
+      {coffeeProducts.map((product) => (
+        <div key={product.guid}>
+          <h3>{product.name}</h3>
+          <p>{product.roastLevel.toString()}</p>
+        </div>
+      ))}
+    </div>
+  )
 }
 
-export default CoffeCard
+export default CoffeeCard

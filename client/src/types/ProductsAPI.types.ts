@@ -1,15 +1,20 @@
+
+// export type Products = readonly Product[]
+
 export type Product = {
-  Guid: number,
-  Name: string;
-  BlendDescription: string;
-  Description: string;
-  ImageUrl: string;
-  Type: string[];
-  RoastLevel: string;
-  Price: number;
-  QuantityInStock: number;
-  CreatedDate: Date;
-  UpdatedDate: Date;
+  guid: string
+  name: string
+  blendDescription: string
+  description: string
+  imageUrl: string
+  type: string[]
+  roastLevel: string
+  price: number
+  quantityInStock: number
+  createdDate?: Date
+  updatedDate?: Date
 }
 
+
 export type Products = Product[]
+

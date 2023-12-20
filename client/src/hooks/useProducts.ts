@@ -1,9 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import * as CoffeAPI from '../services/CoffeeAPI';
+import { useQuery } from '@tanstack/react-query'
+import * as CoffeeProducts from '../services/CoffeeAPI'
 
-export const useProducts = () => {
-    return useQuery({
-        queryKey: ['products'],
-        queryFn: () => CoffeAPI.getProducts()
-    });
-};
+const useProducts = () => {
+  return useQuery({
+    queryKey: ['products'],
+    queryFn: () => CoffeeProducts.getProducts(),
+  })
+}
+
+export default useProducts
