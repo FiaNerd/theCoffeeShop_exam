@@ -68,7 +68,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='bg-deep-red flex align-middle items-center justify-between px-2 py-4'>
+      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] py-4 '>
         <button
           onClick={(e) => handleToggleMenu(e)}
           className='hover:text-light-tan md:hidden'>
