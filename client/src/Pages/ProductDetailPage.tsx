@@ -1,7 +1,17 @@
+import { useParams } from 'react-router-dom'
+import useProduct from '../hooks/useProduct'
+
 const ProductDetailPage = () => {
-  return(
-    <h1>Detail Page</h1>
-  )
+  const { guid } = useParams()
+  const { data: product } = useProduct(guid!)
+
+  if (!product) {
+    return
+  }
+
+  console.log(product.name)
+
+  return <h1>{product.name}</h1>
 }
 
 export default ProductDetailPage

@@ -31,8 +31,9 @@ export const getProducts = () => {
 }
 
 /**
- * Get all products
+ * Get single product
+ * @param guid get GUID
  */
 export const getProduct = (guid: string) => {
-  return get<Product>(`/Product/${guid}`)
+  return get<Product>(`/Products/${guid}`)
 }

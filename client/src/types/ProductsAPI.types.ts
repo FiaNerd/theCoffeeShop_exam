@@ -1,6 +1,3 @@
-
-// export type Products = readonly Product[]
-
 export type Product = {
   productId: string
   name: string
@@ -14,7 +11,6 @@ export type Product = {
   createdDate?: Date
   updatedDate?: Date
 }
-
 
 export type Products = Product[]
 
