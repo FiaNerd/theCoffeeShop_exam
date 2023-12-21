@@ -13,7 +13,7 @@ const App = () => {
       <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4'>
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/product' element={<ProductDetailPage />} />
+          <Route path='/product/:guid' element={<ProductDetailPage />} />
         </Routes>
       </div>
       <Footer />

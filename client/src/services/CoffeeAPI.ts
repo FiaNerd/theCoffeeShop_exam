@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Products } from '../types/ProductsAPI.types'
+import { Product, Products } from '../types/ProductsAPI.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -28,4 +28,12 @@ const get = async <T>(endpoint: string) => {
  */
 export const getProducts = () => {
   return get<Products>('/Products')
+}
+
+/**
+ * Get single product
+ * @param guid get GUID
+ */
+export const getProduct = (guid: string) => {
+  return get<Product>(`/Products/${guid}`)
 }
