@@ -4,6 +4,7 @@ import './index.css'
 import Header from './components/Partial/Header'
 import Footer from './components/Partial/Footer'
 import HomePage from './pages/HomePage'
+import ProductDetailPage from './pages/ProductDetailPage'
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4'>
         <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/product' element={<ProductDetailPage />} />
         </Routes>
       </div>
       <Footer />
