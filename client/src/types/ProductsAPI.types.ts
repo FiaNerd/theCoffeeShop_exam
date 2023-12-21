@@ -2,7 +2,7 @@
 // export type Products = readonly Product[]
 
 export type Product = {
-  guid: string
+  productId: string
   name: string
   blendDescription: string
   description: string

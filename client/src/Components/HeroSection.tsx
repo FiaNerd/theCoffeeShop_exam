@@ -20,7 +20,7 @@ const HeroSection = () => {
           <Link to='/'>
             <button
               type='button'
-              className='font-heading text-white text-bold text-2xl text-center border-2 border-white rounded cursor-pointer bg-deep-brown hover:bg-white hover:border-deep-brown hover:text-deep-brown px-4 py-1 md:py-2 md:px-8 md:text-3xl xl:text-4xl xl:py-4 xl:px-10 xl:border-4'>
+              className='font-heading text-white text-bold text-2xl text-center border-2 border-white rounded-md cursor-pointer bg-deep-brown hover:bg-white hover:border-deep-brown hover:text-deep-brown px-4 py-1 md:py-2 md:px-8 md:text-3xl xl:text-4xl xl:py-4 xl:px-10 xl:border-4'>
               Till kaffet
             </button>
           </Link>
