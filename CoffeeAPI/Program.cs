@@ -33,6 +33,8 @@ app.UseCors(opt =>
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowCors");
+
 // app.UseAuthorization();
 
 app.MapControllers();

@@ -44,8 +44,8 @@ namespace CoffeeAPI.Data.Migrations
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RoastLevel")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("RoastLevel")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Type")
                         .HasColumnType("TEXT");
