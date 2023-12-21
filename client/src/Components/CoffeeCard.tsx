@@ -7,22 +7,14 @@ const CoffeeCard = () => {
     return null
   }
 
-  // Function to limit text to three sentences
   const limitDescription = (text: string, sentenceLimit = 1) => {
-    const sentences = text.split('.') // Assuming sentences end with a period.
+    const sentences = text.split('.') //
     const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
     return truncatedText
   }
 
-  // const formatCurrency = (amount: number) => {
-  //   return amount.toLocaleString('sv-SE', {
-  //     style: 'currency',
-  //     currency: 'SEK',
-  //   })
-  // }
-
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  xl:grid-cols-4 gap-8 text-dark-deep-brown'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
       {coffeeProducts.map((product) => (
         <div
           key={product.productId}
@@ -35,19 +27,29 @@ const CoffeeCard = () => {
           <div className='p-6 flex flex-col justify-between flex-1'>
             <div>
               <h3 className='text-sub-title font-bold mb-2'>{product.name}</h3>
+              <p className='font-bold mb-2'>Typ: {product.type.join(' ')}</p>
+              <p className='font-bold mb-2'>Sort: {product.roastLevel}</p>
               <p className='text-paragraph mb-4'>
                 {limitDescription(product.description)}
               </p>
             </div>
-            <div className='flex justify-between items-center'>
-              <p className='text-heading font-bold'>
-              {((product.price / 100).toFixed(2))} SEK
+
+            <div className='flex flex-col'>
+              <p className='flex text-xl font-bold mb-2 justify-end'>
+                {(product.price / 100).toFixed(2)} SEK
               </p>
-              <button
-                className='font-heading text-white text-bold text-2xl text-center border-2 border-white rounded-md cursor-pointer bg-deep-brown hover:bg-white hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 focus:outline-none focus:ring focus:border-deep-red px-4 py-1'
-                type='submit'>
-                Lägg till
-              </button>
+              <div className='flex justify-between items-center'>
+                <button
+                  className='font-heading text-white bg-orange text-bold text-2xl text-center border-2 rounded-md cursor-pointer border-deep-brown hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 px-4 py-1'
+                  type='submit'>
+                  Läs mer
+                </button>
+                <button
+                  className='font-heading text-white text-bold text-2xl text-center border-2 border-white rounded-md cursor-pointer bg-deep-brown  hover:border-deep-brown hover:bg-deep-brown hover:text-white uppercase hover:bg-opacity-80  px-4 py-1'
+                  type='submit'>
+                  Lägg till
+                </button>
+              </div>
             </div>
           </div>
         </div>
