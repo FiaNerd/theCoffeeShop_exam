@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import useProducts from '../hooks/useProducts'
 
 const CoffeeCard = () => {
@@ -39,13 +40,15 @@ const CoffeeCard = () => {
                 {(product.price / 100).toFixed(2)} SEK
               </p>
               <div className='flex justify-between items-center'>
+                <Link to={`/product/${product.productId}`}>
+                  <button
+                    className='font-heading text-white bg-orange text-bold text-2xl text-center rounded cursor-pointer border-orange border-2 hover:border-2  hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 px-4 py-1'
+                    type='submit'>
+                    Läs mer
+                  </button>
+                </Link>
                 <button
-                  className='font-heading text-white bg-orange text-bold text-2xl text-center rounded-md cursor-pointer hover:border-2  hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 px-4 py-1'
-                  type='submit'>
-                  Läs mer
-                </button>
-                <button
-                  className='font-heading text-white text-bold text-2xl text-center border-2 rounded-md cursor-pointer bg-deep-brown hover:hover:border-2  hover:border-deep-brown hover:bg-deep-brown hover:text-white uppercase hover:bg-opacity-80  px-4 py-1'
+                  className='font-heading text-white text-bold text-2xl text-center rounded cursor-pointer border-deep-brown border-2 bg-deep-brown hover:border-2 hover:border-deep-brown hover:bg-deep-brown hover:text-white uppercase hover:bg-opacity-80  px-4 py-1'
                   type='submit'>
                   Lägg till
                 </button>

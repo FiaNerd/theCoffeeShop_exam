@@ -13,7 +13,8 @@ export default {
         'medium-tan': '#675C60',
         'light-tan': '#c4b982',
         'deep-purple': '#3F333A',
-        orange: '#a17644',
+        orange: '#87714c',
+        // orange: '#a17644',
         'light-deep-purple': '#675C60',
       },
       fontFamily: {
