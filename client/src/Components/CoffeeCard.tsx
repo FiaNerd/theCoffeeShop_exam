@@ -1,16 +1,18 @@
-import { Link } from 'react-router-dom';
-import { Product } from '../types/ProductsAPI.types';
+import { Link, useParams } from 'react-router-dom'
+import { Product } from '../types/ProductsAPI.types'
 
 interface IProps {
-  product: Product;
+  product: Product
 }
 
 const CoffeeCard = ({ product }: IProps) => {
+  const { type } = useParams()
+
   const limitDescription = (text: string, sentenceLimit = 1) => {
-    const sentences = text.split('.');
-    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...';
-    return truncatedText;
-  };
+    const sentences = text.split('.')
+    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
+    return truncatedText
+  }
 
   return (
     <div className='relative flex flex-col rounded-xl bg-white bg-clip-border overflow-hidden shadow-md'>
@@ -24,7 +26,9 @@ const CoffeeCard = ({ product }: IProps) => {
           <h3 className='text-sub-title font-bold mb-2'>{product.name}</h3>
           <p className='font-bold mb-2'>Typ: {product.type.join(' ')}</p>
           <p className='font-bold mb-2'>Sort: {product.roastLevel}</p>
-          <p className='text-paragraph mb-4'>{limitDescription(product.description)}</p>
+          <p className='text-paragraph mb-4'>
+            {limitDescription(product.description)}
+          </p>
         </div>
 
         <div className='flex flex-col sm:flex-row justify-between items-center'>
@@ -32,19 +36,23 @@ const CoffeeCard = ({ product }: IProps) => {
             {(product.price / 100).toFixed(2)} SEK
           </p>
           <div className='flex justify-between items-center mt-4 sm:mt-0'>
-            <Link to={`/product/${product.productId}`}>
-              <button className='font-heading text-white bg-orange text-bold text-2xl text-center rounded cursor-pointer border-orange border-2 hover:border-2  hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 px-4 py-1' type='submit'>
+            <Link to={`/product/${type}/${product.productId}`}>
+              <button
+                className='font-heading text-white bg-orange text-bold text-2xl text-center rounded cursor-pointer border-orange border-2 hover:border-2  hover:border-deep-brown hover:text-deep-brown uppercase hover:bg-opacity-80 px-4 py-1'
+                type='submit'>
                 Läs mer
               </button>
             </Link>
-            <button className='font-heading text-white text-bold text-2xl text-center rounded cursor-pointer border-deep-brown border-2 bg-deep-brown hover:border-2 hover:border-deep-brown hover:bg-deep-brown hover:text-white uppercase hover:bg-opacity-80 px-4 py-1' type='submit'>
+            <button
+              className='font-heading text-white text-bold text-2xl text-center rounded cursor-pointer border-deep-brown border-2 bg-deep-brown hover:border-2 hover:border-deep-brown hover:bg-deep-brown hover:text-white uppercase hover:bg-opacity-80 px-4 py-1'
+              type='submit'>
               Lägg till
             </button>
           </div>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CoffeeCard;
+export default CoffeeCard
