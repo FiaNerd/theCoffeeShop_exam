@@ -6,18 +6,22 @@ import Footer from './components/Partial/Footer'
 import HomePage from './pages/HomePage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProductPage from './pages/ProductPage'
+import LoadingSpinner from './components/Partial/LoadingSpinner'
 
 const App = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
       <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4'>
-      <Routes>
-  <Route path='/product/:type/:productId' element={<ProductDetailPage />} />
-  <Route path='/product/:type' element={<ProductPage />} />
-  <Route path='/' element={<HomePage />} />
-</Routes>
-
+        <LoadingSpinner />
+        <Routes>
+          <Route
+            path='/product/:type/:productId'
+            element={<ProductDetailPage />}
+          />
+          <Route path='/product/:type' element={<ProductPage />} />
+          <Route path='/' element={<HomePage />} />
+        </Routes>
       </div>
       <Footer />
 
