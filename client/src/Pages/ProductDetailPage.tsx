@@ -2,8 +2,8 @@ import { useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
 
 const ProductDetailPage = () => {
-  const { guid } = useParams()
-  const { data: product } = useProduct(guid!)
+  const { productId } = useParams()
+  const { data: product } = useProduct(productId!)
 
   if (!product) {
     return

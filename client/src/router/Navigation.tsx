@@ -15,15 +15,15 @@ export const menuItems: MenuItem[] = [
       },
       {
         title: 'Bryggkaffe',
-        url: '#',
+        url: '/product/bryggkaffe',
       },
       {
-        title: 'Helabönor',
-        url: '#',
+        title: 'Hela bönor',
+        url: '/product/hela bönor',
       },
       {
         title: 'Presskaffe',
-        url: '#',
+        url: '/product/presskaffe',
       },
       {
         title: 'Ekologiskt',
