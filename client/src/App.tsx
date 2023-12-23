@@ -7,13 +7,15 @@ import HomePage from './pages/HomePage'
 import ProductDetailPage from './pages/ProductDetailPage'
 import ProductPage from './pages/ProductPage'
 import LoadingSpinner from './components/Partial/LoadingSpinner'
+import PageNotFound from './components/Partial/PageNotFound'
 
 const App = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
-      <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4'>
+      <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4' style={{margin: 'auto'}}>
         <LoadingSpinner />
+
         <Routes>
           <Route
             path='/product/:type/:productId'
@@ -21,6 +23,8 @@ const App = () => {
           />
           <Route path='/product/:type' element={<ProductPage />} />
           <Route path='/' element={<HomePage />} />
+
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </div>
       <Footer />
