@@ -1,17 +1,20 @@
 import { useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
+// import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
-  const { data: product } = useProduct(productId!)
+  const { data: product, isLoading } = useProduct(productId!)
 
-  if (!product) {
-    return
+  if (!productId) {
+    return <p className='text-2xl font-bold'>Ogiltigt produkt-ID</p>
   }
 
-  console.log(product.name)
-
-  return (
+  return isLoading || !product ? (
+    <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
+      {isLoading ? 'Laddar...' : 'Ingen produkt hittades'}
+    </p>
+  ) : (
     <div className='w-full flex flex-col md:flex-row gap-6'>
       <img
         src={`http://localhost:5173/src/assets/${product.imageUrl}`}
@@ -70,7 +73,9 @@ const ProductDetailPage = () => {
                     fill='white'
                   />
                 </svg>
-                <span className='text-white font-bold uppercase'>Lägg till</span>
+                <span className='text-white font-bold uppercase'>
+                  Lägg till
+                </span>
               </button>
             </div>
           </div>

@@ -3,7 +3,7 @@ import heroImg from '../assets/images/hero_section.jpg'
 
 const HeroSection = () => {
   return (
-    <div className='mx-auto items-center'>
+    <div className='mx-auto items-center mb-8'>
       <div className='relative'>
         <img
           className='w-full h-full object-cover min-h-[14em]'

@@ -27,23 +27,25 @@ const ProductPage = () => {
 
   const filteredProducts = coffeeProducts ? filterProducts() : []
 
-  if (!coffeeProducts) {
-    return (
-      <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
-        Tyvärr finns det inga produkter
-      </p>
-    )
-  }
-
   return (
     <div>
-      <h1 className='text-dark-deep-brown mb-4 uppercase'>{type}</h1>
+      {filteredProducts!.length > 0 && (
+        <h1 className='text-dark-deep-brown mb-4 uppercase'>{type}</h1>
+      )}
 
-      <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
-        {filteredProducts?.map((product) => (
-          <CoffeeCard key={product.productId} product={product} />
-        ))}
-      </div>
+      {filteredProducts!.length > 0 ? (
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
+          {filteredProducts?.map((product) => (
+            <CoffeeCard key={product.productId} product={product} />
+          ))}
+        </div>
+      ) : (
+        type && (
+          <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
+            Inga produkter hittades
+          </p>
+        )
+      )}
     </div>
   )
 }

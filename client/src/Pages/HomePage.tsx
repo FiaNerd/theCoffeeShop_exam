@@ -5,7 +5,7 @@ const HomePage = () => {
   const { data: coffeeProducts, isLoading } = useProducts()
 
   return (
-    <div className=''>
+    <div>
       <h1
         className={`text-dark-deep-brown mb-4 to uppercase ${
           isLoading ? 'hidden' : ''
