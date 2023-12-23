@@ -1,10 +1,15 @@
 import { useParams } from 'react-router-dom'
 import CoffeeCard from '../components/CoffeeCard'
 import useProducts from '../hooks/useProducts'
+import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductPage = () => {
-  const { data: coffeeProducts } = useProducts()
+  const { data: coffeeProducts, isError } = useProducts()
   const { type } = useParams()
+
+  if (isError) {
+    return <PageNotFound />
+  }
 
   const trimmedType = type ?? ''
 
@@ -23,7 +28,7 @@ const ProductPage = () => {
   const filteredProducts = coffeeProducts ? filterProducts() : []
 
   if (!coffeeProducts) {
-    return
+    return <p>Tyvärr finns det inga produkter</p>
   }
 
   return (
@@ -32,7 +37,7 @@ const ProductPage = () => {
 
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
         {filteredProducts?.map((product) => (
-          <CoffeeCard key={product.productId} product={product}/>
+          <CoffeeCard key={product.productId} product={product} />
         ))}
       </div>
     </div>
