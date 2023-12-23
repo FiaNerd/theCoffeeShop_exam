@@ -4,7 +4,7 @@ import useProducts from '../hooks/useProducts'
 import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductPage = () => {
-  const { data: coffeeProducts, isError } = useProducts()
+  const { data: coffeeProducts, isLoading, isError } = useProducts()
   const { type } = useParams()
 
   if (isError) {
@@ -28,7 +28,11 @@ const ProductPage = () => {
   const filteredProducts = coffeeProducts ? filterProducts() : []
 
   if (!coffeeProducts) {
-    return <p>Tyvärr finns det inga produkter</p>
+    return (
+      <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
+        Tyvärr finns det inga produkter
+      </p>
+    )
   }
 
   return (
