@@ -6,18 +6,20 @@ namespace CoffeeAPI.Entities
         public Guid BuyerId { get; set; }
         public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 
-         public void AddItem (Product product, int quantity)
+        public void AddItem(Product product, int quantity)
         {
-            if(Items.All(item => item.ItemId != product.ProductId))
+           
+            if(Items.All(item => item.ProductId != product.ProductId))
             {
-                 Items.Add(new BasketItem { Product = product, Quantity = quantity });
+                Items.Add(new BasketItem{ Product = product, Quantity = quantity });
+                return;
             }
 
-            var existingitem = Items.FirstOrDefault(item => item.ProductId == product.ProductId);
+            var existingItem = Items.FirstOrDefault(item => item.ProductId == product.ProductId);
 
-            if(existingitem != null)
+            if(existingItem != null)
             {
-                existingitem.Quantity += quantity;
+                existingItem.Quantity += quantity;
             }
         }
 
@@ -34,8 +36,8 @@ namespace CoffeeAPI.Entities
 
             item.Quantity -= quantity;
 
-            // Can not delete to negative numbers
-            if (item.Quantity <= 0)
+
+            if (item.Quantity >= 0)
             {
                 Items.Remove(item);
             }

@@ -15,7 +15,7 @@ namespace CoffeeAPI.Entities
              _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
             Basket basket = await RetrieveBasket();
@@ -25,25 +25,12 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return Ok( new BasketDto
-            {
-                BasketDtoId = basket.BasketId,
-                BuyerId = basket.BuyerId,
-                Items = basket.Items.Select(item => new BasketItemDto
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    ImageUrl = item.Product.ImageUrl,
-                    Type = item.Product.Type,
-                    RoastLevel = item.Product.RoastLevel,
-                    Quantity = item.Quantity
-                }).ToList()
-            });
+            return ResponseMapBasketToDto(basket);
         }
 
+
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<ActionResult> AddItemToBasketAsync(Guid productId, int quantity)
+        public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity)
         {
             var basket = await RetrieveBasket() ?? CreateBasket();
 
@@ -66,7 +53,8 @@ namespace CoffeeAPI.Entities
 
             if(result)
             {
-                return StatusCode(201);
+                // Add loaction header to the response
+                return CreatedAtRoute("GetBasket", ResponseMapBasketToDto(basket));
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
@@ -105,6 +93,7 @@ namespace CoffeeAPI.Entities
         }
 
 
+
         private async Task<Basket> RetrieveBasket()
         {
             var buyerIdString = Request.Cookies["buyerId"];
@@ -141,6 +130,25 @@ namespace CoffeeAPI.Entities
 
             return basket;
         }
+
+         private BasketDto ResponseMapBasketToDto(Basket basket)
+        {
+            return new BasketDto
+            {
+                BasketDtoId = basket.BasketId,
+                BuyerId = basket.BuyerId,
+                Items = basket.Items.Select(item => new BasketItemDto
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    ImageUrl = item.Product.ImageUrl,
+                    Type = item.Product.Type,
+                    RoastLevel = item.Product.RoastLevel,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+        } 
 
     }
 }
