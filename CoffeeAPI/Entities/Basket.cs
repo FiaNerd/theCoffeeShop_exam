@@ -20,5 +20,22 @@ namespace CoffeeAPI.Entities
                 existingitem.Quantity += quantity;
             }
         }
+
+        public void RemoveItem (Guid ProductId, int quantity)
+        {
+            var item = Items.FirstOrDefault(item => item.ProductId == ProductId);
+
+            if(item == null)
+            {
+                return;
+            }
+
+            item.Quantity -= quantity;
+
+            if(item.Quantity == 0)
+            {
+                Items.Remove(item);
+            }
+        }
     }
 }
