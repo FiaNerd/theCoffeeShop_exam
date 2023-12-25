@@ -9,7 +9,7 @@ namespace CoffeeAPI.Entities
         public string Description { get; set; }
         public string ImageUrl { get; set; }
         public List<string> Type { get; set; }
-        public string RoastLevel { get; set; }
+        public string RoastLevel { get; set; } 
         public decimal Price { get; set; }
         public int QuantityInStock { get; set; }
         public DateTime CreatedDate { get; set; }
