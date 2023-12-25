@@ -47,6 +47,12 @@ namespace CoffeeAPI.Entities
         {
             var basket = await RetrieveBasket() ?? CreateBasket();
 
+            if (quantity < 0)
+            {
+                // Negative quantity is not allowed
+                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+            }
+
             var product = await _context.Products.FindAsync(productId);
 
             if(product == null)
@@ -68,29 +74,36 @@ namespace CoffeeAPI.Entities
 
 
         [HttpDelete]
-        public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity)
+        public async Task<ActionResult<BasketDto>> RemoveBasketItem(Guid productId, int quantity)
         {
-            // Get basket
-            var basket =  await RetrieveBasket();
+            if (quantity < 0)
+            {
+                // Negative quantity is not allowed
+                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+            }
 
-            if(basket == null)
+            // Get basket from basket methods
+            var basket = await RetrieveBasket();
+
+            if (basket == null)
             {
                 return NotFound();
             }
-            
-            // remove item och reduce quantity
+
+            // Remove item from basket and reduce quantity
             basket.RemoveItem(productId, quantity);
 
             // Save changes
             var result = await _context.SaveChangesAsync() > 0;
 
-            if(result)
+            if (result)
             {
                 return Ok();
             }
 
-            return BadRequest(new ProblemDetails{ Title = "Problem removing item from the basket" });
+            return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket" });
         }
+
 
         private async Task<Basket> RetrieveBasket()
         {

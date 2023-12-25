@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace CoffeeAPI.Entities
 {
     public class Basket
@@ -13,7 +10,7 @@ namespace CoffeeAPI.Entities
         {
             if(Items.All(item => item.ItemId != product.ProductId))
             {
-                Items.Add(new BasketItem { Product = product, Quantity = quantity });
+                 Items.Add(new BasketItem { Product = product, Quantity = quantity });
             }
 
             var existingitem = Items.FirstOrDefault(item => item.ProductId == product.ProductId);
@@ -35,10 +32,10 @@ namespace CoffeeAPI.Entities
                 return;
             }
 
-            // Can not delete to negative numbers
-            item.Quantity = Math.Max(0, item.Quantity - quantity);
+            item.Quantity -= quantity;
 
-            if(item.Quantity == 0)
+            // Can not delete to negative numbers
+            if (item.Quantity <= 0)
             {
                 Items.Remove(item);
             }
