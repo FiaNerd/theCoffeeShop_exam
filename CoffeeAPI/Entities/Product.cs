@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CoffeeAPI.Entities
@@ -5,7 +6,7 @@ namespace CoffeeAPI.Entities
 
     public class Product
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public Guid ProductId { get; set; }
         public string Name { get; set; }
         public string BlendDescription { get; set; }
