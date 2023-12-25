@@ -25,7 +25,7 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return new BasketDto
+            return Ok( new BasketDto
             {
                 BasketDtoId = basket.BasketId,
                 BuyerId = basket.BuyerId,
@@ -39,7 +39,7 @@ namespace CoffeeAPI.Entities
                     RoastLevel = item.Product.RoastLevel,
                     Quantity = item.Quantity
                 }).ToList()
-            };
+            });
         }
 
         [HttpPost] // api/basket?productId=1&quantity=2
@@ -64,6 +64,32 @@ namespace CoffeeAPI.Entities
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
+        }
+
+
+        [HttpDelete]
+        public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity)
+        {
+            // Get basket
+            var basket =  await RetrieveBasket();
+
+            if(basket == null)
+            {
+                return NotFound();
+            }
+            
+            // remove item och reduce quantity
+            basket.RemoveItem(productId, quantity);
+
+            // Save changes
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if(result)
+            {
+                return Ok();
+            }
+
+            return BadRequest(new ProblemDetails{ Title = "Problem removing item from the basket" });
         }
 
         private async Task<Basket> RetrieveBasket()

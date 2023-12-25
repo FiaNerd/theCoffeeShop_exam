@@ -4,7 +4,8 @@ namespace CoffeeAPI.DTOs
     {
         public Guid BasketDtoId { get; set; }
         public Guid BuyerId { get; set; }
-        public ICollection<BasketItemDto> Items { get; set; } = new List<BasketItemDto>();
+        public List<BasketItemDto> Items { get; set; }
+        // public ICollection<BasketItemDto> Items { get; set; } = new List<BasketItemDto>();
     }
 
 }

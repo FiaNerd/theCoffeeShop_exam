@@ -24,16 +24,19 @@ namespace CoffeeAPI.Entities
             }
         }
 
-        public void RemoveItem (Guid ProductId, int quantity)
+        // Method to remove item
+        
+        public void RemoveItem(Guid ProductId, int quantity)
         {
             var item = Items.FirstOrDefault(item => item.ProductId == ProductId);
 
-            if(item == null)
+            if(item == null) 
             {
                 return;
             }
 
-            item.Quantity -= quantity;
+            // Can not delete to negative numbers
+            item.Quantity = Math.Max(0, item.Quantity - quantity);
 
             if(item.Quantity == 0)
             {
