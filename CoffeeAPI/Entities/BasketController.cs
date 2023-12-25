@@ -17,17 +17,22 @@ namespace CoffeeAPI.Entities
         [HttpGet]
         public async Task<ActionResult<Basket>> GetBasket()
         {
-            var basket = await _context.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
-            
-            if(basket == null)
+            Basket basket = await RetriveBasket();
+
+            if (basket == null)
             {
                 return NotFound();
             }
 
             return basket;
+        }
+
+        private async Task<Basket> RetriveBasket()
+        {
+            return await _context.Baskets
+                            .Include(i => i.Items)
+                            .ThenInclude(p => p.Product)
+                            .FirstOrDefaultAsync(x => x.BuyerId == Request.Cookies["buyerId"]);
         }
     }
 }
