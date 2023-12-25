@@ -1,10 +1,13 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CoffeeAPI.Entities
 {
     public class Basket
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid BasketId { get; set; }
         public string BuyerId { get; set; }
-        public List<BasketItem> Items { get; set; } = [];
+        public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 
          public void AddItem (Product product, int quantity)
         {
