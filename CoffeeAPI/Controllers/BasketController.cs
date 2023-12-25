@@ -1,5 +1,6 @@
 using CoffeeAPI.Controllers;
 using CoffeeAPI.Data;
+using CoffeeAPI.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ namespace CoffeeAPI.Entities
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetBasketAsync()
+        public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
             Basket basket = await RetrieveBasket();
 
@@ -24,11 +25,25 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return Ok(basket);
+            return new BasketDto
+            {
+                BasketDtoId = basket.BasketId,
+                BuyerId = basket.BuyerId,
+                Items = basket.Items.Select(item => new BasketItemDto
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    ImageUrl = item.Product.ImageUrl,
+                    Type = item.Product.Type,
+                    RoastLevel = item.Product.RoastLevel,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
         }
 
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<IActionResult> AddItemToBasketAsync(Guid productId, int quantity)
+        public async Task<ActionResult> AddItemToBasketAsync(Guid productId, int quantity)
         {
             var basket = await RetrieveBasket() ?? CreateBasket();
 
