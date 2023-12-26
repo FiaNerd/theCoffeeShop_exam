@@ -1,13 +1,10 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faPlus,
-  faMinus
-} from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
 
 interface IProps {
-  buttonType: 'create' | 'read-more'
+  buttonType: 'create' | 'read-more' | 'checkout'
   typeAction: 'button' | 'submit'
   iconType?: 'increase' | 'decrease' | 'cart' | undefined
   children?: React.ReactNode
@@ -36,8 +33,15 @@ const Buttons: React.FC<IProps> = ({
           'text-white bg-orange rounded',
           'hover:opacity-80'
         )
+
       case 'read-more':
         return clsx('w-full', 'text-center text-dark-deep-brown')
+
+      case 'checkout':
+        return clsx(
+          'w-full flex items-center justify-center w-full',
+          'text-center text-white bg-orange hover:opacity-80'
+        )
       default:
         return ''
     }

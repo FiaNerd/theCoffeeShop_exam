@@ -71,7 +71,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] py-4 '>
+      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] pt-4 '>
         <button
           onClick={(e) => handleToggleMenu(e)}
           className='hover:text-light-tan md:hidden'>
@@ -111,7 +111,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className='flex gap-4'>
+        <div className='flex gap-2 md:gap-6 items-center'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className='text-white text-4xl cursor-pointer items-center hover:opacity-80'
@@ -140,7 +140,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      { openBasket && <Basket />}
+      {openBasket && <Basket />}
 
       <div>
         {menuOpen &&

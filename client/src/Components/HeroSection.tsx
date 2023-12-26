@@ -10,11 +10,11 @@ const HeroSection = () => {
           src={heroImg}
           alt='hero image'
         />
-        <div className='absolute inset-0 flex flex-col justify-center font-bold text-center items-center text-light-tan '>
-          <h1 className='mb-2 bg-rich-dark opacity-80 px-2 py-2 sm:text-3xl md:text-4xl md:px-6 lg:text-5xl xl:text-6xl xl:py-4 xl:px-8'>
+        <div className='absolute inset-0 flex flex-col justify-center font-bold text-center items-center'>
+          <h1 className=' text-light-tan bg-rich-dark mb-2 opacity-80 px-2 py-2 sm:text-3xl md:text-4xl md:px-6 lg:text-5xl xl:text-6xl xl:py-4 xl:px-8'>
             EN VÄRLD AV SMAKER I VARJE SIPP!
           </h1>
-          <h2 className='bg-rich-dark opacity-80 px-2 py-2 text-2xl font-bold mb-10 text-center sm:text-2xl md:text-3xl md:px-6 md:mb-15 lg:text-4xl lg:mb-[2.6em] xl:py-4'>
+          <h2 className=' text-light-tan bg-rich-dark opacity-80 px-2 py-2 text-2xl font-bold mb-10 text-center sm:text-2xl md:text-3xl md:px-6 md:mb-15 lg:text-4xl lg:mb-[2.6em] xl:py-4'>
             Din Dag Börjar Med Vår Blandning
           </h2>
           <Link to='/'>
