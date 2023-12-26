@@ -38,7 +38,11 @@ const CoffeeCard = ({ product }: IProps) => {
           </p>
 
           <div className='flex flex-col w-full justify-between items-center mt-4 sm:mt-0'>
-            <Button buttonType='create' typeAction='submit' iconType='cart'>
+            <Button
+              buttonType='create'
+              typeAction='submit'
+              iconType='cart'
+              className='w-full mb-4'>
               Lägg till
             </Button>
 
