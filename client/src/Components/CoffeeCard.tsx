@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
+import { useCreateBasket } from '../hooks/useCreateBasket'
 
 interface IProps {
   product: Product
@@ -8,6 +9,14 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
+  const createBasketMutation = useCreateBasket()
+
+  const handleAddItem = async (productId: string) => {
+    await createBasketMutation.mutateAsync({ productId, quantity: 1 })
+
+    const basketId = createBasketMutation.data?.basketId
+    console.log('basketId', basketId, createBasketMutation.data?.buyerId)
+  }
 
   const limitDescription = (text: string, sentenceLimit = 1) => {
     const sentences = text.split('.')
@@ -42,7 +51,8 @@ const CoffeeCard = ({ product }: IProps) => {
               buttonType='create'
               typeAction='submit'
               iconType='cart'
-              className='w-full mb-4'>
+              className='w-full mb-4'
+              onClick={() => handleAddItem(product.productId)}>
               Lägg till
             </Button>
 

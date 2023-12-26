@@ -1,8 +1,11 @@
 import axios from 'axios'
 import { Product, Products } from '../types/ProductsAPI.types'
-import { Baskets } from '../types/Basket.types'
+import { Basket } from '../types/Basket.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
+const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
+
+axios.defaults.withCredentials = AXIOS_CREDENTIALS
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -28,7 +31,7 @@ const get = async <T>(endpoint: string) => {
  * Get all products
  */
 export const getProducts = async () => {
-  return await get<Products>('/Products')
+  return await get<Products>('/products')
 }
 
 /**
@@ -36,22 +39,27 @@ export const getProducts = async () => {
  * @param guid get GUID
  */
 export const getProduct = async (guid: string) => {
-  return await get<Product>(`/Products/${guid}`)
+  return await get<Product>(`/products/${guid}`)
 }
 
 /**
  * Get all basket
  */
-export const getBaskets = async () => {
-  return  await get<Baskets>('/Basket')
+export const getBasket = async () => {
+  return await get<Basket>('/basket')
 }
 
 /**
  * Create a basket
  */
 export const createBasket = async (productId: string, quantity = 1) => {
-  console.log(`Calling createBasket with productId: ${productId}, quantity: ${quantity}`);
-  const res = await axios.post(`${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`, {});
-  console.log('createBasket response:', res.data);
-  return res.data;
+  console.log(
+    `Calling createBasket with productId: ${productId}, quantity: ${quantity}`
+  )
+  const res = await axios.post(
+    `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
+    {}
+  )
+  console.log('createBasket response:', res.data)
+  return res.data
 }

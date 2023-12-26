@@ -3,8 +3,8 @@ import * as CoffeeProducts from '../services/CoffeeAPI'
 
 const useBaskets = () => {
   return useQuery({
-    queryKey: ['All baskets'],
-    queryFn: () => CoffeeProducts.getBaskets(),
+    queryKey: ['GetBasket'],
+    queryFn: () => CoffeeProducts.getBasket(),
   })
 }
 

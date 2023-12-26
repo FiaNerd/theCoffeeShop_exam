@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createBasket } from '../services/CoffeeAPI'
-import { Baskets } from '../types/Basket.types'
+import { Basket } from '../types/Basket.types'
 
 interface CreateBasketParams {
   productId: string
@@ -15,12 +15,22 @@ export const useCreateBasket = () => {
       createBasket(params.productId, params.quantity),
     onSuccess: (addBasket) => {
       console.log('onSuccess, addBasket:', addBasket)
-      queryClient.setQueryData<Baskets>(
+
+      const { basketId, ...rest } = addBasket
+
+      queryClient.setQueryData<Basket>(
         ['basket'],
-        (prevBasket: Baskets | undefined) => {
-          return [...(prevBasket ?? []), addBasket]
+        (prevBasket: Basket | undefined) => {
+          return {
+            ...rest,
+            basketId,
+            items: [...(prevBasket?.items ?? [])],
+          }
         }
       )
+    },
+    onError: (error: any) => {
+      console.log(`There was an error ${error.message}`)
     },
   })
 }
