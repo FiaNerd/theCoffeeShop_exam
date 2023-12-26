@@ -14,4 +14,4 @@ export type BasketItems = {
   quantity: number
 }
 
-export type BasketProduct = Basket[]
+export type Baskets = Basket[]

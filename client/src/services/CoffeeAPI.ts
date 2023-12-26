@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { Product, Products } from '../types/ProductsAPI.types'
+import { Baskets } from '../types/Basket.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -36,4 +37,11 @@ export const getProducts = () => {
  */
 export const getProduct = (guid: string) => {
   return get<Product>(`/Products/${guid}`)
+}
+
+/**
+ * Get all basket
+ */
+export const getBaskets = () => {
+  return get<Baskets>('/Basket')
 }
