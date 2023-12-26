@@ -88,7 +88,7 @@ const Basket = () => {
                     <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
                       <div className='flex items-start justify-between'>
                         <Dialog.Title className='text-heading uppercase font-medium '>
-                          Shopping cart
+                          Din varukorg
                         </Dialog.Title>
                         <div className='ml-3 flex h-7 items-center'>
                           <button
