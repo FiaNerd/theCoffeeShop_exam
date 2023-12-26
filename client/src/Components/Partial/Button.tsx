@@ -1,12 +1,12 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
 
 interface IProps {
-  buttonType: 'create' | 'read-more' | 'checkout'
+  buttonType: 'create' | 'read-more' | 'checkout' | 'back'
   typeAction: 'button' | 'submit'
-  iconType?: 'increase' | 'decrease' | 'cart' | undefined
+  iconType?: 'increase' | 'decrease' | 'cart' | 'arrow'
   children?: React.ReactNode
   buttonText?: React.ReactNode
   className?: string
@@ -31,16 +31,26 @@ const Buttons: React.FC<IProps> = ({
           'py-3',
           'flex items-normal justify-center gap-4',
           'text-white bg-orange rounded',
-          'hover:opacity-80'
+          
         )
 
       case 'read-more':
-        return clsx('w-full', 'text-center text-dark-deep-brown')
+        return clsx(
+          'w-full',
+          'text-center text-dark-deep-brown',
+          'border-orange border-2 rounded'
+        )
 
       case 'checkout':
         return clsx(
-          'w-full flex items-center justify-center w-full',
-          'text-center text-white bg-orange hover:opacity-80'
+          'w-full flex items-center justify-center',
+          'text-center text-white bg-orange'
+        )
+
+      case 'back':
+        return clsx(
+          'flex flex-rows gap-2',
+          'items-center text-center text-dark-deep-brown hover:text-orange'
         )
       default:
         return ''
@@ -62,6 +72,8 @@ const Buttons: React.FC<IProps> = ({
             />
           </svg>
         )
+      case 'arrow':
+        return <FontAwesomeIcon icon={faArrowLeft} className='text-dark-deep-brown hover:text-orange'/>
       default:
         return null
     }
@@ -70,7 +82,7 @@ const Buttons: React.FC<IProps> = ({
   return (
     <button
       className={clsx(
-        'py-3 border-orange border-2 rounded',
+        'py-3 ',
         'font-bold uppercase',
         'hover:opacity-80',
         buttonClasses(buttonType),
