@@ -1,28 +1,31 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faMagnifyingGlass,
-  faBasketShopping,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons'
+import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import logo from '../../assets/images/coffeebean_logo.png'
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
+import Basket from '../Basket'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
+  const [openBasket, setOpenbasket] = useState(false)
+
   const navRef = useRef<HTMLDivElement | null>(null)
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
     setMenuOpen(!menuOpen)
     setDropdownOpen(false)
+  }
+  const handleToggleBasket = () => {
+    console.log('Toggle basket')
+    setOpenbasket(!openBasket)
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -47,14 +50,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (menuOpen || dropdownOpen) {
+    if (menuOpen || dropdownOpen || openBasket) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [menuOpen, dropdownOpen])
+  }, [menuOpen, dropdownOpen, openBasket])
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -68,7 +71,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] py-4 '>
+      <div className='bg-deep-red flex align-middle items-center justify-between px-2 md:px-[2em] pt-4 '>
         <button
           onClick={(e) => handleToggleMenu(e)}
           className='hover:text-light-tan md:hidden'>
@@ -108,18 +111,36 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className='flex gap-4'>
+        <div className='flex gap-2 md:gap-6 items-center'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
-            className='text-white text-4xl cursor-pointer'
+            className='text-white text-4xl cursor-pointer items-center hover:opacity-80'
             onClick={handleToggleMenu}
           />
-          <FontAwesomeIcon
-            icon={faBasketShopping}
-            className='text-white text-4xl cursor-pointer'
-          />
+          <button
+            className='py-4 px-1 relative border-2 border-transparent text-white rounded-full hover:opacity-80 focus:outline-none focus:opacity-80 transition duration-150 ease-in-out'
+            aria-label='Cart'
+            onClick={handleToggleBasket}>
+            <svg
+              className='h-[40px] w-[38px]'
+              fill='none'
+              stroke-linecap='round'
+              stroke-linejoin='round'
+              stroke-width='2'
+              viewBox='0 0 24 24'
+              stroke='currentColor'>
+              <path d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'></path>
+            </svg>
+            <span className='absolute inset-0 object-right-top -mr-6'>
+              <div className='inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-orange text-white hover:bg-light-tan hover:text-deep-brown'>
+                6
+              </div>
+            </span>
+          </button>
         </div>
       </div>
+
+      {openBasket && <Basket />}
 
       <div>
         {menuOpen &&

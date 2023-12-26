@@ -16,7 +16,7 @@ const Header = () => {
       </div>
       <div
         style={{
-          marginTop: '128.641px',
+          marginTop: '7.75em',
         }}>
         {isHomePage && <HeroSection />}
       </div>
