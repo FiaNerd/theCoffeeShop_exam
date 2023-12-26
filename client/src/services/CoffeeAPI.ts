@@ -27,21 +27,31 @@ const get = async <T>(endpoint: string) => {
 /**
  * Get all products
  */
-export const getProducts = () => {
-  return get<Products>('/Products')
+export const getProducts = async () => {
+  return await get<Products>('/Products')
 }
 
 /**
  * Get single product
  * @param guid get GUID
  */
-export const getProduct = (guid: string) => {
-  return get<Product>(`/Products/${guid}`)
+export const getProduct = async (guid: string) => {
+  return await get<Product>(`/Products/${guid}`)
 }
 
 /**
  * Get all basket
  */
-export const getBaskets = () => {
-  return get<Baskets>('/Basket')
+export const getBaskets = async () => {
+  return  await get<Baskets>('/Basket')
+}
+
+/**
+ * Create a basket
+ */
+export const createBasket = async (productId: string, quantity = 1) => {
+  console.log(`Calling createBasket with productId: ${productId}, quantity: ${quantity}`);
+  const res = await axios.post(`${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`, {});
+  console.log('createBasket response:', res.data);
+  return res.data;
 }
