@@ -6,6 +6,7 @@ namespace CoffeeAPI.Entities
         public Guid BuyerId { get; set; }
         public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 
+        // Method to AddItems
         public void AddItem(Product product, int quantity)
         {
            
@@ -24,7 +25,6 @@ namespace CoffeeAPI.Entities
         }
 
         // Method to remove item
-        
         public void RemoveItem(Guid ProductId, int quantity)
         {
             var item = Items.FirstOrDefault(item => item.ProductId == ProductId);
@@ -37,7 +37,7 @@ namespace CoffeeAPI.Entities
             item.Quantity -= quantity;
 
 
-            if (item.Quantity == 0)
+            if (item.Quantity <= 0)
             {
                 Items.Remove(item);
             }

@@ -62,7 +62,7 @@ namespace CoffeeAPI.Entities
 
 
         [HttpDelete]
-        public async Task<ActionResult<BasketDto>> RemoveBasketItem(Guid productId, int quantity)
+        public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity)
         {
             if (quantity <= 0)
             {
