@@ -64,7 +64,7 @@ namespace CoffeeAPI.Entities
         [HttpDelete]
         public async Task<ActionResult<BasketDto>> RemoveBasketItem(Guid productId, int quantity)
         {
-            if (quantity < 0)
+            if (quantity <= 0)
             {
                 // Negative quantity is not allowed
                 return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });

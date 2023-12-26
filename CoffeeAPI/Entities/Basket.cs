@@ -37,7 +37,7 @@ namespace CoffeeAPI.Entities
             item.Quantity -= quantity;
 
 
-            if (item.Quantity >= 0)
+            if (item.Quantity == 0)
             {
                 Items.Remove(item);
             }

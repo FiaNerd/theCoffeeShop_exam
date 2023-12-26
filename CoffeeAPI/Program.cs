@@ -27,7 +27,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(opt => 
 {
-    app.UseCors(opt => opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
+    // AllowCredential is for allowing the client to pass cookie, otherwhise this would not work
+    app.UseCors(opt => opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173"));
 });
 
 
