@@ -15,7 +15,7 @@ namespace CoffeeAPI.Entities
              _context = context;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
             Basket basket = await RetrieveBasket();
@@ -25,27 +25,20 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return Ok( new BasketDto
-            {
-                BasketDtoId = basket.BasketId,
-                BuyerId = basket.BuyerId,
-                Items = basket.Items.Select(item => new BasketItemDto
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    ImageUrl = item.Product.ImageUrl,
-                    Type = item.Product.Type,
-                    RoastLevel = item.Product.RoastLevel,
-                    Quantity = item.Quantity
-                }).ToList()
-            });
+            return ResponseMapBasketToDto(basket);
         }
 
+
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<ActionResult> AddItemToBasketAsync(Guid productId, int quantity)
+        public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity)
         {
             var basket = await RetrieveBasket() ?? CreateBasket();
+
+            if (quantity < 0)
+            {
+                // Negative quantity is not allowed
+                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+            }
 
             var product = await _context.Products.FindAsync(productId);
 
@@ -60,7 +53,8 @@ namespace CoffeeAPI.Entities
 
             if(result)
             {
-                return StatusCode(201);
+                // Add loaction header to the response
+                return CreatedAtRoute("GetBasket", ResponseMapBasketToDto(basket));
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
@@ -70,27 +64,35 @@ namespace CoffeeAPI.Entities
         [HttpDelete]
         public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity)
         {
-            // Get basket
-            var basket =  await RetrieveBasket();
+            if (quantity <= 0)
+            {
+                // Negative quantity is not allowed
+                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+            }
 
-            if(basket == null)
+            // Get basket from basket methods
+            var basket = await RetrieveBasket();
+
+            if (basket == null)
             {
                 return NotFound();
             }
-            
-            // remove item och reduce quantity
+
+            // Remove item from basket and reduce quantity
             basket.RemoveItem(productId, quantity);
 
             // Save changes
             var result = await _context.SaveChangesAsync() > 0;
 
-            if(result)
+            if (result)
             {
                 return Ok();
             }
 
-            return BadRequest(new ProblemDetails{ Title = "Problem removing item from the basket" });
+            return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket" });
         }
+
+
 
         private async Task<Basket> RetrieveBasket()
         {
@@ -128,6 +130,25 @@ namespace CoffeeAPI.Entities
 
             return basket;
         }
+
+         private BasketDto ResponseMapBasketToDto(Basket basket)
+        {
+            return new BasketDto
+            {
+                BasketDtoId = basket.BasketId,
+                BuyerId = basket.BuyerId,
+                Items = basket.Items.Select(item => new BasketItemDto
+                {
+                    ProductId = item.ProductId,
+                    Name = item.Product.Name,
+                    Price = item.Product.Price,
+                    ImageUrl = item.Product.ImageUrl,
+                    Type = item.Product.Type,
+                    RoastLevel = item.Product.RoastLevel,
+                    Quantity = item.Quantity
+                }).ToList()
+            };
+        } 
 
     }
 }
