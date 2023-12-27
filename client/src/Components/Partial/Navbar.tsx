@@ -9,6 +9,9 @@ import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
 import Basket from '../Basket'
+import useBasket from '../../hooks/useBasket'
+import { useStoreContext } from '../../hooks/useStoreContext'
+import { getCookie } from '../../utils/getCookie'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -17,6 +20,29 @@ const Navbar = () => {
   const [openBasket, setOpenbasket] = useState(false)
 
   const navRef = useRef<HTMLDivElement | null>(null)
+
+  const { setBasket } = useStoreContext()
+  const { data: basket } = useBasket()
+
+  useEffect(() => {
+    const buyerId = getCookie('buyerId')
+
+    const fetchData = async () => {
+      try {
+        if (!basket) {
+          return
+        }
+
+        if (buyerId) {
+          setBasket(basket)
+        }
+      } catch (error) {
+        console.error('Soemthing went wrong:', error)
+      }
+    }
+
+    fetchData()
+  }, [basket, setBasket])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()

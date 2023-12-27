@@ -1,40 +1,15 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment, useState /* useEffect */ } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
-import useBasket from '../hooks/useBasket'
 import { NavLink } from 'react-router-dom'
-import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
-import { useStoreContext } from '../hooks/useStoreContext'
 import { formatPrice } from '../utils/formatPrice'
-import { getCookie } from '../utils/getCookie'
+import { useStoreContext } from '../hooks/useStoreContext'
 
 const Basket = () => {
   const [open, setOpen] = useState(true)
 
-  const { setBasket } = useStoreContext()
-
-  const { data: basket } = useBasket()
-
-  // const removeBasketMutation = useRemoveItemFromBasket()
-
-  const { data: removeItem } = useRemoveItemFromBasket()
-
-  useEffect(() => {
-    const buyerId = getCookie('buyerId')
-
-    if (buyerId) {
-      setBasket(removeItem!)
-    }
-  }, [setBasket, removeItem])
-
-  const handleRemoveItem = async () => {
-    const buyerId = getCookie('buyerId')
-
-    if (buyerId) {
-      setBasket(removeItem!)
-    }
-  }
+  const { basket } = useStoreContext()
 
   if (!basket) {
     return null
@@ -123,9 +98,10 @@ const Basket = () => {
                                       <div className='flex flex-row w-20 md:w-32'>
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                                          onClick={() =>
-                                            handleRemoveItem(item.productId)
-                                          }>
+                                          // onClick={() =>
+                                          //   handleRemoveItem(item.productId)
+                                          // }
+                                        >
                                           <span className='m-auto text-2xl font-thin'>
                                             −
                                           </span>
