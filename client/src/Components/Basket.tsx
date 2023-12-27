@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
 import useBasket from '../hooks/useBasket'
 import formatPrice from '../utils/formatPrice'
-// import { useCreateBasket } from '../hooks/useCreateBasket'
+import { NavLink } from 'react-router-dom'
 
 const Basket = () => {
   const [open, setOpen] = useState(true)
@@ -12,7 +12,7 @@ const Basket = () => {
   const { data: basket } = useBasket()
 
   if (!basket) {
-    return
+    return null
   }
 
   return (
@@ -64,12 +64,12 @@ const Basket = () => {
                           <ul
                             role='list'
                             className='-my-6 divide-y divide-gray-200'>
-                            {basket.items.map((items) => (
-                              <li key={items.productId} className='flex py-6'>
-                                <div className='h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200'>
+                            {basket.items.map((item) => (
+                              <li key={item.productId} className='flex py-6'>
+                                <div className='h-auto w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200'>
                                   <img
-                                    src={items.imageUrl}
-                                    alt={items.name}
+                                    src={item.imageUrl}
+                                    alt={item.name}
                                     className='h-full w-full object-cover object-center'
                                   />
                                 </div>
@@ -78,26 +78,57 @@ const Basket = () => {
                                   <div>
                                     <div className='flex justify-between text-base font-medium text-gray-900'>
                                       <h3>
-                                        <a href='#'>Link</a>
+                                        <NavLink
+                                          to='#'
+                                          className='hover:-text-orange'>
+                                          {item.name}
+                                        </NavLink>
                                       </h3>
-                                      <p className='ml-4'>{formatPrice(items.price)}</p>
+                                      <p className='ml-4'>
+                                        {formatPrice(item.price)}
+                                      </p>
                                     </div>
-                                    <p className='mt-1 text-sm text-gray-500'>
-                                      {items.roastLevel}
+                                    <p className='mb-2 text-sm text-gray-500'>
+                                      {item.roastLevel}
                                     </p>
                                   </div>
-                                  <div className='flex flex-1 items-end justify-between text-sm'>
-                                    <p className='text-gray-500'>
-                                      Antal: {items.quantity}
-                                    </p>
 
-                                    <div className='flex'>
-                                      <button
-                                        type='button'
-                                        className='font-medium text-indigo-600 hover:text-indigo-500'>
-                                        Ta bort
-                                      </button>
+                                  <div className='flex flex-row flex-1 items-end text-sm'>
+                                    <div className='flex flex-row h-auto w-full mb-4 rounded-lg justify-between relative bg-transparent mt-1'>
+                                      <div className='flex flex-row w-20 md:w-32'>
+                                        <button className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'>
+                                          <span className='m-auto text-2xl font-thin'>
+                                            −
+                                          </span>
+                                        </button>
+                                        <input
+                                          type='number'
+                                          className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                                          value='0'
+                                        />
+                                        <button
+                                          data-action='increment'
+                                          className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'>
+                                          <span className='m-auto text-2xl font-thin'>
+                                            +
+                                          </span>
+                                        </button>
+                                      </div>
+                                      <div className='flex justify-between mt-2 md:ml-2'>
+                                        <button
+                                          type='button'
+                                          className='font-bold text-deep-brown hover:opacity-80'>
+                                          Ta bort
+                                        </button>
+                                      </div>
                                     </div>
+                                  </div>
+                                  <div className='text-end font-bold'>
+                                    {' '}
+                                    <p>
+                                      {item.quantity} antal{' '}
+                                      {formatPrice(item.price * item.quantity)}
+                                    </p>
                                   </div>
                                 </div>
                               </li>
@@ -110,7 +141,7 @@ const Basket = () => {
                     <div className='border-t border-gray-200 px-4 py-6 sm:px-6'>
                       <div className='flex justify-between text-base font-medium text-gray-900'>
                         <p>Totalt</p>
-                        <p>262.00 SEK</p>
+                        <p>245 SEK</p>
                       </div>
                       <p className='mt-0.5 text-sm text-gray-500'>
                         Frakt and taxa beräknas i kassan.
@@ -145,4 +176,5 @@ const Basket = () => {
     </Transition.Root>
   )
 }
+
 export default Basket
