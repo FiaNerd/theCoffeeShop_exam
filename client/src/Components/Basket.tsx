@@ -5,11 +5,30 @@ import Button from './Partial/Button'
 import useBasket from '../hooks/useBasket'
 import formatPrice from '../utils/formatPrice'
 import { NavLink } from 'react-router-dom'
+import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
+import { Product } from '../types/ProductsAPI.types'
 
-const Basket = () => {
+interface IProps {
+  product: Product
+}
+const Basket = ({ product }: IProps) => {
   const [open, setOpen] = useState(true)
 
   const { data: basket } = useBasket()
+
+  const removeBasketMutation = useRemoveItemFromBasket()
+
+  const handleRemoveItem = async (productId: string) => {
+    try {
+      await removeBasketMutation.mutateAsync({ productId, quantity: 1 })
+
+      const basketId = removeBasketMutation.data?.basketId
+      console.log('basketId', basketId, removeBasketMutation.data?.buyerId)
+      console.log('Item clicked', productId)
+    } catch (error) {
+      console.error('Error removing item:', error)
+    }
+  }
 
   if (!basket) {
     return null
@@ -96,7 +115,11 @@ const Basket = () => {
                                   <div className='flex flex-row flex-1 items-end text-sm'>
                                     <div className='flex flex-row h-auto w-full mb-4 rounded-lg justify-between relative bg-transparent mt-1'>
                                       <div className='flex flex-row w-20 md:w-32'>
-                                        <button className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'>
+                                        <button
+                                          className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
+                                          onClick={() =>
+                                            handleRemoveItem(item.productId)
+                                          }>
                                           <span className='m-auto text-2xl font-thin'>
                                             −
                                           </span>
