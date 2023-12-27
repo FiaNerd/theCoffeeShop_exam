@@ -1,32 +1,38 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
 import useBasket from '../hooks/useBasket'
-import formatPrice from '../utils/formatPrice'
 import { NavLink } from 'react-router-dom'
 import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
-import { Product } from '../types/ProductsAPI.types'
+import { useStoreContext } from '../hooks/useStoreContext'
+import { formatPrice } from '../utils/formatPrice'
+import { getCookie } from '../utils/getCookie'
 
-interface IProps {
-  product: Product
-}
-const Basket = ({ product }: IProps) => {
+const Basket = () => {
   const [open, setOpen] = useState(true)
+
+  const { setBasket } = useStoreContext()
 
   const { data: basket } = useBasket()
 
-  const removeBasketMutation = useRemoveItemFromBasket()
+  // const removeBasketMutation = useRemoveItemFromBasket()
 
-  const handleRemoveItem = async (productId: string) => {
-    try {
-      await removeBasketMutation.mutateAsync({ productId, quantity: 1 })
+  const { data: removeItem } = useRemoveItemFromBasket()
 
-      const basketId = removeBasketMutation.data?.basketId
-      console.log('basketId', basketId, removeBasketMutation.data?.buyerId)
-      console.log('Item clicked', productId)
-    } catch (error) {
-      console.error('Error removing item:', error)
+  useEffect(() => {
+    const buyerId = getCookie('buyerId')
+
+    if (buyerId) {
+      setBasket(removeItem!)
+    }
+  }, [setBasket, removeItem])
+
+  const handleRemoveItem = async () => {
+    const buyerId = getCookie('buyerId')
+
+    if (buyerId) {
+      setBasket(removeItem!)
     }
   }
 
