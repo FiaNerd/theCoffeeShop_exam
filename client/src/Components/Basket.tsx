@@ -80,7 +80,7 @@ const Basket = () => {
                                       <h3>
                                         <NavLink
                                           to='#'
-                                          className='hover:-text-orange'>
+                                          className='font-bold uppercase hover:-text-orange'>
                                           {item.name}
                                         </NavLink>
                                       </h3>
@@ -104,7 +104,7 @@ const Basket = () => {
                                         <input
                                           type='number'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          value='0'
+                                          /*   value='0' */
                                         />
                                         <button
                                           data-action='increment'
