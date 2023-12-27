@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
-import { useCreateBasket } from '../hooks/useCreateBasket'
+import { useAddItemToBasket } from '../hooks/useAddItemToBasket'
 import formatPrice from '../utils/formatPrice'
 
 interface IProps {
@@ -10,7 +10,7 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
-  const createBasketMutation = useCreateBasket()
+  const createBasketMutation = useAddItemToBasket()
 
   const handleAddItem = async (productId: string) => {
     await createBasketMutation.mutateAsync({ productId, quantity: 1 })

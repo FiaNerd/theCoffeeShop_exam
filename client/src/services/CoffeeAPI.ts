@@ -50,9 +50,9 @@ export const getBasket = async () => {
 }
 
 /**
- * Create a basket
+ * Create a items in basket
  */
-export const createBasket = async (productId: string, quantity = 1) => {
+export const addItemToBasket = async (productId: string, quantity = 1) => {
   console.log(
     `Calling createBasket with productId: ${productId}, quantity: ${quantity}`
   )
@@ -61,5 +61,15 @@ export const createBasket = async (productId: string, quantity = 1) => {
     {}
   )
   console.log('createBasket response:', res.data)
+  return res.data
+}
+
+export const removeItemFromBasket = async (productId: string, quantity = 1) => {
+  console.log(`Delete Item with productId: ${productId}, quantity: ${quantity}`)
+  const res = await axios.delete(
+    `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
+    {}
+  )
+  console.log('delete response:', res.data)
   return res.data
 }

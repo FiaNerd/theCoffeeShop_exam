@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createBasket } from '../services/CoffeeAPI'
+import { addItemToBasket } from '../services/CoffeeAPI'
 import { Basket } from '../types/Basket.types'
 
 interface CreateBasketParams {
@@ -7,12 +7,12 @@ interface CreateBasketParams {
   quantity: number
 }
 
-export const useCreateBasket = () => {
+ const useAddItemToBasket = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: (params: CreateBasketParams) =>
-      createBasket(params.productId, params.quantity),
+      addItemToBasket(params.productId, params.quantity),
     onSuccess: (addBasket) => {
       console.log('onSuccess, addBasket:', addBasket)
 
@@ -35,3 +35,5 @@ export const useCreateBasket = () => {
     },
   })
 }
+
+export default useAddItemToBasket
