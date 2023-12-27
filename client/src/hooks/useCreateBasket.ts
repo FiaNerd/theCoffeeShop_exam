@@ -29,6 +29,7 @@ export const useCreateBasket = () => {
         }
       )
     },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       console.log(`There was an error ${error.message}`)
     },

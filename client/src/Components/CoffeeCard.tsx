@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { useCreateBasket } from '../hooks/useCreateBasket'
+import formatPrice from '../utils/formatPrice'
 
 interface IProps {
   product: Product
@@ -43,7 +44,7 @@ const CoffeeCard = ({ product }: IProps) => {
 
         <div className='flex flex-col justify-between items-center w-full'>
           <p className='flex text-xl font-bold mb-2 self-end'>
-            {(product.price / 100).toFixed(2)} SEK
+            {formatPrice(product.price)}
           </p>
 
           <div className='flex flex-col w-full justify-between items-center mt-4 sm:mt-0'>
