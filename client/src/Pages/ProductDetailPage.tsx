@@ -18,7 +18,7 @@ const ProductDetailPage = () => {
     </p>
   ) : (
     <>
-      <div className='w-full flex flex-col md:flex-row gap-6 mt-[10em] max-w-[1180px]'>
+      <div className='w-full flex flex-col md:flex-row mx-auto gap-6 mt-[10em] max-w-[960px]'>
         <img
           src={`http://localhost:5173/src/assets/${product.imageUrl}`}
           className='w-full object-cover mb-4 md:w-1/2 md:mb-0'
@@ -40,9 +40,7 @@ const ProductDetailPage = () => {
             </p>
           </div>
 
-          <div
-            className='flex flex-col justify-between flex-1 space-between'
-            style={{ height: '63%' }}>
+          <div className='flex flex-col justify-between flex-1 space-between'>
             <div className='flex flex-col flex-grow justify-between'>
               <p className='mb-8'>{product.description}</p>
             </div>
@@ -73,7 +71,7 @@ const ProductDetailPage = () => {
                   buttonType='create'
                   typeAction='submit'
                   iconType='cart'
-                  className=' w-60 max-sm:w-full'>
+                  className='w-full'>
                   Lägg till
                 </Button>
               </div>
