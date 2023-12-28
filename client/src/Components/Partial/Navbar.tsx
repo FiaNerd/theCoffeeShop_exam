@@ -8,50 +8,71 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
-import Basket from '../Basket'
 import useBasket from '../../hooks/useBasket'
-import { useStoreContext } from '../../hooks/useStoreContext'
+import ShoppingCart from '../ShoppingCart'
 import { getCookie } from '../../utils/getCookie'
+import { useStore } from '../../context/StoreProvider'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
-  const [openBasket, setOpenbasket] = useState(false)
+  const [openBasket, setOpenBasket] = useState(false)
 
   const navRef = useRef<HTMLDivElement | null>(null)
 
-  const { setBasket } = useStoreContext()
-  const { data: basket } = useBasket()
+  const { cartItem, setCartItem } = useStore()
 
-  useEffect(() => {
-    const buyerId = getCookie('buyerId')
+  const { data: basketItem } = useBasket()
 
-    const fetchData = async () => {
-      try {
-        if (!basket) {
-          return
-        }
+  // const handleAddItem = async (productId: string) => {
+  //   try {
+  //     await addItemToBasketMutation.mutateAsync({
+  //       productId,
+  //       quantity: 1,
+  //     })
 
-        if (buyerId) {
-          setBasket(basket)
-        }
-      } catch (error) {
-        console.error('Soemthing went wrong:', error)
-      }
-    }
+  //     if (addItemToBasketMutation.isSuccess) {
+  //       setCartItem(addItemToBasketMutation.data)
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding item to basket:', error)
+  //   }
+  // }
 
-    fetchData()
-  }, [basket, setBasket])
+  const itemCount = cartItem?.items.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  )
+
+  // useEffect(() => {
+  //   const buyerId = getCookie('buyerId')
+
+  //   // const fetchData = async () => {
+  //   try {
+  //     if (!buyerId) {
+  //       return
+  //     }
+
+  //     if (basketItem && basketItem !== cartItem) {
+  //       setCartItem(basketItem)
+  //     }
+  //   } catch (error) {
+  //     console.error('Something went wrong:', error)
+  //   }
+  //   // }
+
+  //   // fetchData();
+  // }, [])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
     setMenuOpen(!menuOpen)
     setDropdownOpen(false)
   }
+
   const handleToggleBasket = () => {
-    console.log('Toggle basket')
-    setOpenbasket(!openBasket)
+    setOpenBasket(!openBasket)
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -76,14 +97,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (menuOpen || dropdownOpen || openBasket) {
+    if (dropdownOpen || openBasket) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [menuOpen, dropdownOpen, openBasket])
+  }, [dropdownOpen, openBasket])
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -159,14 +180,14 @@ const Navbar = () => {
             </svg>
             <span className='absolute inset-0 object-right-top -mr-6'>
               <div className='inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-orange text-white hover:bg-light-tan hover:text-deep-brown'>
-                6
+                {itemCount}
               </div>
             </span>
           </button>
         </div>
       </div>
 
-      {openBasket && <Basket />}
+      {openBasket && <ShoppingCart />}
 
       <div>
         {menuOpen &&

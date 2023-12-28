@@ -1,28 +1,46 @@
-import { Link, useParams } from 'react-router-dom'
-import { Product } from '../types/ProductsAPI.types'
-import Button from './Partial/Button'
-import { formatPrice } from '../utils/formatPrice'
-import useAddItemToBasket from '../hooks/useAddItemToBasket'
+import { Link, useParams } from 'react-router-dom';
+import { Product } from '../types/ProductsAPI.types';
+import Button from './Partial/Button';
+import { formatPrice } from '../utils/formatPrice';
+import useAddItemToBasket from '../hooks/useAddItemToBasket';
+import { useEffect } from 'react';
+import { useStore } from '../context/StoreProvider'; // Import useStore
 
 interface IProps {
-  product: Product
+  product: Product;
 }
 
 const CoffeeCard = ({ product }: IProps) => {
-  const { type } = useParams()
-  const createBasketMutation = useAddItemToBasket()
+  const { type } = useParams();
+  const {  setCartItem } = useStore(); 
+  const addItemToBasketMutation = useAddItemToBasket();
 
   const handleAddItem = async (productId: string) => {
-    await createBasketMutation.mutateAsync({ productId, quantity: 1 })
+    try {
+      await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      });
 
-    const basketId = createBasketMutation.data?.basketId
-    console.log('basketId', basketId, createBasketMutation.data?.buyerId)
+      setCartItem(addItemToBasketMutation)
+
+      // Handle result if needed
+    } catch (error) {
+      console.error('Error adding item to basket:', error);
+    }
   }
 
+  useEffect(() => {
+    // Listen for changes in the shopping cart and update the component
+    if (addItemToBasketMutation.isSuccess) {
+      setCartItem(addItemToBasketMutation.data);
+    }
+  }, [addItemToBasketMutation.data, addItemToBasketMutation.isSuccess, setCartItem]);
+
   const limitDescription = (text: string, sentenceLimit = 1) => {
-    const sentences = text.split('.')
-    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
-    return truncatedText
+    const sentences = text.split('.');
+    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...';
+    return truncatedText;
   }
 
   return (
@@ -68,7 +86,7 @@ const CoffeeCard = ({ product }: IProps) => {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CoffeeCard
+export default CoffeeCard;

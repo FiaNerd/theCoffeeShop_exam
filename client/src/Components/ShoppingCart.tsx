@@ -1,19 +1,35 @@
-import { Fragment, useState /* useEffect */ } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
 import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../utils/formatPrice'
-import { useStoreContext } from '../hooks/useStoreContext'
+import useBasket from '../hooks/useBasket'
+import { useStore } from '../context/StoreProvider'
 
-const Basket = () => {
+const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
-  const { basket } = useStoreContext()
+  const { cartItem, setCartItem } = useStore()
 
-  if (!basket) {
+  const { data: basketItem } = useBasket()
+
+  console.log(basketItem?.buyerId)
+  
+
+  useEffect(() => {
+    console.log('Basket component updated with basket:', basketItem)
+    setCartItem(basketItem!)
+    console.log('Updated basketItem:', basketItem)
+  }, [cartItem, basketItem, setCartItem])
+
+
+  if (!cartItem) {
+    console.log('Basket is null or undefined')
     return null
   }
+
+  console.log('Rendering Basket component with basket:', cartItem)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -45,7 +61,7 @@ const Basket = () => {
                     <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
                       <div className='flex items-start justify-between'>
                         <Dialog.Title className='text-heading uppercase font-medium '>
-                          Din varukorg -{basket!.buyerId}
+                          Din varukorg -{basketItem!.buyerId}
                         </Dialog.Title>
                         <div className='ml-3 flex h-7 items-center'>
                           <button
@@ -64,7 +80,7 @@ const Basket = () => {
                           <ul
                             role='list'
                             className='-my-6 divide-y divide-gray-200'>
-                            {basket.items.map((item) => (
+                            {cartItem?.items.map((item) => (
                               <li key={item.productId} className='flex py-6'>
                                 <div className='h-auto w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200'>
                                   <img
@@ -182,4 +198,4 @@ const Basket = () => {
   )
 }
 
-export default Basket
+export default ShoppingCart

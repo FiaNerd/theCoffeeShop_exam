@@ -7,7 +7,7 @@ interface CreateBasketParams {
   quantity: number
 }
 
- const useAddItemToBasket = () => {
+const useAddItemToBasket = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -19,19 +19,25 @@ interface CreateBasketParams {
       const { basketId, ...rest } = addBasket
 
       queryClient.setQueryData<Basket>(
-        ['basket'],
+        ['addBasket'],
         (prevBasket: Basket | undefined) => {
+          if (!prevBasket) {
+            return { ...rest, basketId, items: [] }
+          }
+
+          const updatedItems = [...prevBasket.items, ...rest.items]
+          console.log(updatedItems)
+
           return {
             ...rest,
             basketId,
-            items: [...(prevBasket?.items ?? [])],
+            items: updatedItems,
           }
         }
       )
     },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onError: (error: any) => {
-      console.log(`There was an error ${error.message}`)
+    onError: (error) => {
+      console.error('Mutation error:', error)
     },
   })
 }
