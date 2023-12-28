@@ -1,8 +1,10 @@
+using System.Text.Json;
+using API.Extensions;
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
 using CoffeeAPI.Extensions;
+using CoffeeAPI.RequestHelpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeAPI.Controllers;
 public class ProductsController : BaseApiController
@@ -14,22 +16,23 @@ public class ProductsController : BaseApiController
       
     }
 
-   [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetProducts(
-      string orderBy, string searchTerm, string types, string roastLevels)
-    {
-        var query = _context.Products
-          .Sort(orderBy)
-          .Search(searchTerm)
-          .Filter(types, roastLevels)
-          .AsQueryable();
-      
-        return await query.ToListAsync();
+    [HttpGet]
+public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery]ProductParams productParams)
+{
+    var query = _context.Products
+        .Sort(productParams.OrderBy)
+        .Search(productParams.SearchTerm)
+        .Filter(productParams.Types, productParams.RoastLevels)
+        .AsQueryable();
+    
+        var products = await PagedList<Product>.ToPagedList(query, 
+            productParams.PageNumber, 
+            productParams.PageSize);
+
+          Response.AddPaginationHeader(products.ResponseMetaData);
+          
+        return products;
     }
-
-
-
-
 
        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
