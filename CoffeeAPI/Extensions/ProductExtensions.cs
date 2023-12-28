@@ -34,5 +34,28 @@ namespace CoffeeAPI.Extensions
 
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm));
         }
+
+       public static IQueryable<Product> Filter(this IQueryable<Product> query, string types, string roastLevels)
+        {
+            var typesList = new List<string>();
+            var roastLevelList = new List<string>();
+
+            if (!string.IsNullOrEmpty(types))
+            {
+                typesList.AddRange(types.ToLower().Split(",").ToList());
+            }
+
+            if (!string.IsNullOrEmpty(roastLevels))
+            {
+                roastLevelList.AddRange(roastLevels.ToLower().Split(",").ToList());
+            }
+
+            query = query.Where(p => typesList.Count == 0 || p.Type.Any(t => typesList.Contains(t.ToLower())));
+            
+            query = query.Where(p => roastLevelList.Count == 0 || roastLevelList.Contains(p.RoastLevel.ToLower()));
+
+            return query;
+        }
+
     }
 }
