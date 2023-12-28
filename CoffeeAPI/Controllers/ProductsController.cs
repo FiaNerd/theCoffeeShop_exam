@@ -16,11 +16,12 @@ public class ProductsController : BaseApiController
 
    [HttpGet]
     public async Task<ActionResult<List<Product>>> GetProducts(
-      string orderBy, string searchTerm)
+      string orderBy, string searchTerm, string types, string roastLevels)
     {
         var query = _context.Products
           .Sort(orderBy)
           .Search(searchTerm)
+          .Filter(types, roastLevels)
           .AsQueryable();
       
         return await query.ToListAsync();
