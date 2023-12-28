@@ -2,17 +2,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeAPI.RequestHelpers
 {
-    // T is for generic, but going to get from Product
     public class PagedList<T> : List<T>
     {
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
             ResponseMetaData = new ResponseMetaData
             {
-                TotalCountPages = count,
-                PageSize = pageSize,
                 CurrentPage = pageNumber,
                 TotalPages = (int)Math.Ceiling(count / (double)pageSize),
+                TotalCount = count,
+                PageSize = pageSize,
             };
 
             AddRange(items);
