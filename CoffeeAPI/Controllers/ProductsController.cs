@@ -5,6 +5,7 @@ using CoffeeAPI.Entities;
 using CoffeeAPI.Extensions;
 using CoffeeAPI.RequestHelpers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeAPI.Controllers;
 public class ProductsController : BaseApiController
@@ -46,4 +47,38 @@ public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery]Produ
 
             return product;
         }
+
+        // [HttpGet("filters")]
+        // public async Task<ActionResult> GetFilters()
+        // {
+        //   var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
+        //   var roastLevel = await _context.Products.Select(p => p.RoastLevel).Distinct().ToListAsync();
+
+        //   return Ok(new {types, roastLevel});
+        // }
+
+      [HttpGet("filters")]
+      public async Task<ActionResult> GetFilters()
+      {
+          var products = await _context.Products.ToListAsync();
+
+          var searchTerms = new List<string> { "Hela bönor", "Bryggkaffe", "Press", "Kapslar", "Ekologiskt" };
+
+          var filteredProducts = products
+              .Where(p => p.Type.Any(term => searchTerms.Contains(term)))
+              .ToList();
+
+          var combinedTypes = filteredProducts
+              .SelectMany(p => p.Type)
+              .Distinct()
+              .ToList();
+
+          var roastLevel = products
+              .Select(p => p.RoastLevel)
+              .Distinct()
+              .ToList();
+
+          return Ok(new { types = combinedTypes, roastLevel });
+      }
+
 }
