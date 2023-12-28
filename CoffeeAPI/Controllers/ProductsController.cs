@@ -1,5 +1,6 @@
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
+using CoffeeAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,18 +14,19 @@ public class ProductsController : BaseApiController
       
     }
 
-    [HttpGet]     
-    public async Task<ActionResult<List<Product>>> GetProducts()
-     {
-      var products = await _context.Products.ToListAsync();
+   [HttpGet]
+    public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
+    {
+        var query = _context.Products
+          .Sort(orderBy)
+          .AsQueryable();
+      
+        return await query.ToListAsync();
+    }
 
-      if(products == null || products.Count == 0)
-      {
-        return NotFound();
-      }
 
-      return Ok(products);
-     }
+
+
 
        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
