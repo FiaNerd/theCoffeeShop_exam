@@ -1,5 +1,6 @@
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
+using CoffeeAPI.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,27 +15,16 @@ public class ProductsController : BaseApiController
     }
 
    [HttpGet]
-public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
-{
-    var query = _context.Products.AsQueryable();
-
-    var productList = await query.ToListAsync();
-
-    switch (orderBy)
+    public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
     {
-        case "price":
-            productList = productList.OrderBy(p => p.Price).ToList();
-            break;
-        case "priceDesc":
-            productList = productList.OrderByDescending(p => p.Price).ToList();
-            break;
-        default:
-            productList = productList.OrderByDescending(p => p.Name).ToList();
-            break;
+        var query = _context.Products
+          .Sort(orderBy)
+          .AsQueryable();
+      
+        return await query.ToListAsync();
     }
 
-    return productList;
-}
+
 
 
 
