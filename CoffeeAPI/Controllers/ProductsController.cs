@@ -13,18 +13,30 @@ public class ProductsController : BaseApiController
       
     }
 
-    [HttpGet]     
-    public async Task<ActionResult<List<Product>>> GetProducts()
-     {
-      var products = await _context.Products.ToListAsync();
+   [HttpGet]
+public async Task<ActionResult<List<Product>>> GetProducts(string orderBy)
+{
+    var query = _context.Products.AsQueryable();
 
-      if(products == null || products.Count == 0)
-      {
-        return NotFound();
-      }
+    var productList = await query.ToListAsync();
 
-      return Ok(products);
-     }
+    switch (orderBy)
+    {
+        case "price":
+            productList = productList.OrderBy(p => p.Price).ToList();
+            break;
+        case "priceDesc":
+            productList = productList.OrderByDescending(p => p.Price).ToList();
+            break;
+        default:
+            productList = productList.OrderByDescending(p => p.Name).ToList();
+            break;
+    }
+
+    return productList;
+}
+
+
 
        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
