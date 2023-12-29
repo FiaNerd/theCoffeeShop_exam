@@ -28,30 +28,6 @@ const CoffeeCard = ({ product }: IProps) => {
     }
   }
 
-  // const {  setCartItem } = useStore();   // const addItemToBasketMutation = useAddItemToBasket();
-
-  // const handleAddItem = async (productId: string) => {
-  //   try {
-  //     await addItemToBasketMutation.mutateAsync({
-  //       productId,
-  //       quantity: 1,
-  //     });
-
-  //     // setCartItem(/* addItemToBasketMutation */)
-
-  //     // Handle result if needed
-  //   } catch (error) {
-  //     console.error('Error adding item to basket:', error);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   // Listen for changes in the shopping cart and update the component
-  //   if (addItemToBasketMutation.isSuccess) {
-  //     setCartItem(addItemToBasketMutation.data);
-  //   }
-  // }, [addItemToBasketMutation.data, addItemToBasketMutation.isSuccess, setCartItem]);
-
   const limitDescription = (text: string, sentenceLimit = 1) => {
     const sentences = text.split('.')
     const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'

@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
@@ -6,19 +6,32 @@ import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../utils/formatPrice'
 import { useStoreContext } from '../context/StoreProvider'
 import useBasket from '../hooks/useBasket'
+import useAddItemToBasket from '../hooks/useAddItemToBasket'
 
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
   const { basket, setBasket } = useStoreContext()
-  const { data: basketItems, refetch } = useBasket()
+  const { data: basketItem, refetch } = useBasket()
 
-  useEffect(() => {
-    setBasket(basketItems!)
-    refetch()
-  }, [basket, basketItems, refetch, setBasket])
+  const addItemToBasketMutation = useAddItemToBasket()
 
-  if (!basketItems) {
+
+  const handleAddItem = async (productId: string) => {
+    try {
+      await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      })
+
+      setBasket(addItemToBasketMutation.data)
+      refetch()
+    } catch (error) {
+      console.error('Error adding item to basket:', error)
+    }
+  }
+
+  if (!basketItem) {
     return null
   }
 
@@ -120,7 +133,10 @@ const ShoppingCart = () => {
                                         />
                                         <button
                                           data-action='increment'
-                                          className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'>
+                                          className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
+                                          onClick={() =>
+                                            handleAddItem(item.productId)
+                                          }>
                                           <span className='m-auto text-2xl font-thin'>
                                             +
                                           </span>
