@@ -10,10 +10,10 @@ import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
 import ShoppingCart from '../ShoppingCart'
 // import { getCookie } from '../../utils/getCookie'
-import { useStore } from '../../context/StoreProvider'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
+import { useStoreContext } from '../../context/StoreProvider'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,13 +22,13 @@ const Navbar = () => {
   const [openBasket, setOpenBasket] = useState(false)
   const [openSearchbar, setOpenSearchbar] = useState(false)
 
-
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
 
-  const { cartItem, /* setCartItem */ } = useStore()
+  const { basket } = useStoreContext()
+  console.log(useStoreContext)
 
-/*   const { data: basketItem } = useBasket() */
+  /*   const { data: basketItem } = useBasket() */
 
   // const handleAddItem = async (productId: string) => {
   //   try {
@@ -45,10 +45,7 @@ const Navbar = () => {
   //   }
   // }
 
-  const itemCount = cartItem?.items.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  )
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
 
   // useEffect(() => {
   //   const buyerId = getCookie('buyerId')

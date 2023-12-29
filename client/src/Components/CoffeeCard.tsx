@@ -1,46 +1,61 @@
-import { Link, useParams } from 'react-router-dom';
-import { Product } from '../types/ProductsAPI.types';
-import Button from './Partial/Button';
-import { formatPrice } from '../utils/formatPrice';
-import useAddItemToBasket from '../hooks/useAddItemToBasket';
-import { useEffect } from 'react';
-import { useStore } from '../context/StoreProvider'; // Import useStore
+import { Link, useParams } from 'react-router-dom'
+import { Product } from '../types/ProductsAPI.types'
+import Button from './Partial/Button'
+import { formatPrice } from '../utils/formatPrice'
+import { useStoreContext } from '../context/StoreProvider'
+import useAddItemToBasket from '../hooks/useAddItemToBasket'
 
 interface IProps {
-  product: Product;
+  product: Product
 }
 
 const CoffeeCard = ({ product }: IProps) => {
-  const { type } = useParams();
-  const {  setCartItem } = useStore(); 
-  const addItemToBasketMutation = useAddItemToBasket();
+  const { type } = useParams()
+
+  const { setBasket } = useStoreContext()
+  const addItemToBasketMutation = useAddItemToBasket()
 
   const handleAddItem = async (productId: string) => {
     try {
       await addItemToBasketMutation.mutateAsync({
         productId,
         quantity: 1,
-      });
+      })
 
-      setCartItem(addItemToBasketMutation)
-
-      // Handle result if needed
+      setBasket(addItemToBasketMutation.data)
     } catch (error) {
-      console.error('Error adding item to basket:', error);
+      console.error('Error adding item to basket:', error)
     }
   }
 
-  useEffect(() => {
-    // Listen for changes in the shopping cart and update the component
-    if (addItemToBasketMutation.isSuccess) {
-      setCartItem(addItemToBasketMutation.data);
-    }
-  }, [addItemToBasketMutation.data, addItemToBasketMutation.isSuccess, setCartItem]);
+  // const {  setCartItem } = useStore();   // const addItemToBasketMutation = useAddItemToBasket();
+
+  // const handleAddItem = async (productId: string) => {
+  //   try {
+  //     await addItemToBasketMutation.mutateAsync({
+  //       productId,
+  //       quantity: 1,
+  //     });
+
+  //     // setCartItem(/* addItemToBasketMutation */)
+
+  //     // Handle result if needed
+  //   } catch (error) {
+  //     console.error('Error adding item to basket:', error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   // Listen for changes in the shopping cart and update the component
+  //   if (addItemToBasketMutation.isSuccess) {
+  //     setCartItem(addItemToBasketMutation.data);
+  //   }
+  // }, [addItemToBasketMutation.data, addItemToBasketMutation.isSuccess, setCartItem]);
 
   const limitDescription = (text: string, sentenceLimit = 1) => {
-    const sentences = text.split('.');
-    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...';
-    return truncatedText;
+    const sentences = text.split('.')
+    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
+    return truncatedText
   }
 
   return (
@@ -86,7 +101,7 @@ const CoffeeCard = ({ product }: IProps) => {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default CoffeeCard;
+export default CoffeeCard

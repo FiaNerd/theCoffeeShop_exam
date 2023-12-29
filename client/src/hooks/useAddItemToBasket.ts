@@ -14,6 +14,7 @@ const useAddItemToBasket = () => {
     mutationFn: (params: CreateBasketParams) =>
       addItemToBasket(params.productId, params.quantity),
     onSuccess: (addBasket) => {
+      
       console.log('onSuccess, addBasket:', addBasket)
 
       const { basketId, ...rest } = addBasket

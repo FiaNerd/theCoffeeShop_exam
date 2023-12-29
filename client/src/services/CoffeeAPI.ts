@@ -57,7 +57,7 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
     `Calling createBasket with productId: ${productId}, quantity: ${quantity}`
   )
   const res = await axios.post(
-    `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
+    `${BASE_URL}/Basket?productId=${productId}&quantity=${quantity}`,
     {}
   )
   console.log('createBasket response:', res.data)

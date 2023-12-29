@@ -4,32 +4,28 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from './Partial/Button'
 import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../utils/formatPrice'
+import { useStoreContext } from '../context/StoreProvider'
 import useBasket from '../hooks/useBasket'
-import { useStore } from '../context/StoreProvider'
 
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
-  const { cartItem, setCartItem } = useStore()
-
-  const { data: basketItem } = useBasket()
-
-  console.log(basketItem?.buyerId)
-  
+  const { basket, setBasket } = useStoreContext()
+  const { data: basketItems, refetch } = useBasket()
 
   useEffect(() => {
-    console.log('Basket component updated with basket:', basketItem)
-    setCartItem(basketItem!)
-    console.log('Updated basketItem:', basketItem)
-  }, [cartItem, basketItem, setCartItem])
+    console.log('Basket component updated with basket:', basketItems)
+    setBasket(basketItems!)
+    refetch()
+    console.log('Updated basket:', basketItems)
+  }, [basket, basketItems, refetch, setBasket])
 
-
-  if (!cartItem) {
+  if (!basketItems) {
     console.log('Basket is null or undefined')
     return null
   }
 
-  console.log('Rendering Basket component with basket:', cartItem)
+  console.log('Rendering Basket component with basket:', basketItems)
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -61,7 +57,7 @@ const ShoppingCart = () => {
                     <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
                       <div className='flex items-start justify-between'>
                         <Dialog.Title className='text-heading uppercase font-medium '>
-                          Din varukorg -{basketItem!.buyerId}
+                          Din varukorg -
                         </Dialog.Title>
                         <div className='ml-3 flex h-7 items-center'>
                           <button
@@ -80,7 +76,7 @@ const ShoppingCart = () => {
                           <ul
                             role='list'
                             className='-my-6 divide-y divide-gray-200'>
-                            {cartItem?.items.map((item) => (
+                            {basket?.items.map((item) => (
                               <li key={item.productId} className='flex py-6'>
                                 <div className='h-auto w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200'>
                                   <img
