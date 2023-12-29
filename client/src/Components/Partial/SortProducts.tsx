@@ -1,6 +1,6 @@
 const SortProducts = () => {
   return (
-    <div className='main w-fit flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
+    <div className='main w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
       <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
         Sortera
       </div>
