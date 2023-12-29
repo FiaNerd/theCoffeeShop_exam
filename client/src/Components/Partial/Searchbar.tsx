@@ -2,6 +2,8 @@ import { useRef } from 'react'
 import Button from './Button'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
+import FilterTypes from './FilterTypes'
+import FilterRoastLevel from './FilterRoastLevel'
 
 interface IProps {
   openSearchbar: boolean
@@ -32,8 +34,11 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
             Sök nu
           </Button>
         </div>
+
+        <SortProducts />
+        <FilterTypes />
+        <FilterRoastLevel />
       </div>
-      <SortProducts />
     </div>
   )
 }
