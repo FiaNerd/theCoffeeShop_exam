@@ -8,18 +8,30 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
+<<<<<<< HEAD
 import useBasket from '../../hooks/useBasket'
 import ShoppingCart from '../ShoppingCart'
 import { getCookie } from '../../utils/getCookie'
 import { useStore } from '../../context/StoreProvider'
+=======
+import Basket from '../Basket'
+import useClickOutside from '../../hooks/useClickoutside'
+import SearchBar from './Searchbar'
+import { Transition } from '@headlessui/react'
+>>>>>>> dev
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
   const [openBasket, setOpenBasket] = useState(false)
+<<<<<<< HEAD
+=======
+  const [openSearchbar, setOpenSearchbar] = useState(false)
+>>>>>>> dev
 
   const navRef = useRef<HTMLDivElement | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
 
   const { cartItem, setCartItem } = useStore()
 
@@ -73,14 +85,37 @@ const Navbar = () => {
 
   const handleToggleBasket = () => {
     setOpenBasket(!openBasket)
+<<<<<<< HEAD
+=======
+  }
+
+  const handleToggleSearchbar = () => {
+    setOpenSearchbar(!openSearchbar)
+  }
+
+  const handleClick = (event: React.MouseEvent) => {
+    if (event.currentTarget.id === 'searchIcon') {
+      event.stopPropagation()
+      handleToggleSearchbar()
+    }
+>>>>>>> dev
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
-    if (navRef.current && !navRef.current.contains(event.target as Node)) {
+    if (
+      navRef.current &&
+      !navRef.current.contains(event.target as Node) &&
+      searchRef.current &&
+      !searchRef.current.contains(event.target as Node)
+    ) {
       setMenuOpen(false)
       setDropdownOpen(false)
+      setOpenSearchbar(false)
     }
   }
+
+  useClickOutside({ ref: navRef, callback: handleOutsideClick })
+  useClickOutside({ ref: searchRef, callback: handleOutsideClick })
 
   const handleLinkClick = () => {
     setMenuOpen(false)
@@ -97,14 +132,22 @@ const Navbar = () => {
   }
 
   useEffect(() => {
+<<<<<<< HEAD
     if (dropdownOpen || openBasket) {
+=======
+    if (menuOpen || dropdownOpen || openBasket || openSearchbar) {
+>>>>>>> dev
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
+<<<<<<< HEAD
   }, [dropdownOpen, openBasket])
+=======
+  }, [menuOpen, dropdownOpen, openBasket, openSearchbar])
+>>>>>>> dev
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -145,6 +188,7 @@ const Navbar = () => {
                   onClick={handleLinkClick}>
                   {menu.title}
                 </NavLink>
+
                 {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
                   <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
                     <Dropdown
@@ -161,9 +205,29 @@ const Navbar = () => {
         <div className='flex gap-2 md:gap-6 items-center'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
+            id='searchIcon'
             className='text-white text-4xl cursor-pointer items-center hover:opacity-80'
-            onClick={handleToggleMenu}
+            onClick={handleClick}
           />
+
+          {openSearchbar && (
+            <Transition
+              show={openSearchbar}
+              enter='transition-opacity ease-in-out duration-300'
+              enterFrom='opacity-0'
+              enterTo='opacity-100'
+              leave='transition-opacity ease-in-out duration-300'
+              leaveFrom='opacity-100'
+              leaveTo='opacity-0'>
+              {openSearchbar && (
+                <SearchBar
+                  openSearchbar={openSearchbar}
+                  onCloseSearchbar={handleToggleSearchbar}
+                />
+              )}
+            </Transition>
+          )}
+
           <button
             className='py-4 px-1 relative border-2 border-transparent text-white rounded-full hover:opacity-80 focus:outline-none focus:opacity-80 transition duration-150 ease-in-out'
             aria-label='Cart'
@@ -207,9 +271,9 @@ const Navbar = () => {
                     icon={faXmark}
                     className='flex text-4xl pl-2 pt-8'
                   />
-                  <p className='text-end pr-4 pb-8'>close</p>
                 </button>
               </div>
+
               <ul className=' relative flex flex-col gap-8'>
                 {menuItems.map((menu, index) => (
                   <li key={index} onClick={handleToggleMenu}>

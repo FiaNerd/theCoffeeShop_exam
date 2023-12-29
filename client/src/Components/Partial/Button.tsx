@@ -4,7 +4,11 @@ import { faPlus, faMinus, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
 
 interface IProps {
+<<<<<<< HEAD
   buttonType: 'create' | 'read-more' | 'checkout' | 'back'
+=======
+  buttonType: 'create' | 'read-more' | 'search' | 'checkout'
+>>>>>>> dev
   typeAction: 'button' | 'submit'
   iconType?: 'increase' | 'decrease' | 'cart' | 'arrow'
   children?: React.ReactNode
@@ -52,6 +56,14 @@ const Buttons: React.FC<IProps> = ({
           'flex flex-rows gap-2',
           'items-center text-center text-dark-deep-brown hover:text-orange'
         )
+
+      case 'search':
+        return clsx(
+          'ml-2 px-6 py-2',
+          'cursor-pointer text-white hover:border-white ',
+          'font-bold bg-orange rounded'
+        )
+
       default:
         return ''
     }
