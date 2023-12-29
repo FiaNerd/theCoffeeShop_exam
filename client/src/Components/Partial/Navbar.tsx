@@ -8,34 +8,27 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
-<<<<<<< HEAD
-import useBasket from '../../hooks/useBasket'
 import ShoppingCart from '../ShoppingCart'
-import { getCookie } from '../../utils/getCookie'
+// import { getCookie } from '../../utils/getCookie'
 import { useStore } from '../../context/StoreProvider'
-=======
-import Basket from '../Basket'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
->>>>>>> dev
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
   const [openBasket, setOpenBasket] = useState(false)
-<<<<<<< HEAD
-=======
   const [openSearchbar, setOpenSearchbar] = useState(false)
->>>>>>> dev
+
 
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
 
-  const { cartItem, setCartItem } = useStore()
+  const { cartItem, /* setCartItem */ } = useStore()
 
-  const { data: basketItem } = useBasket()
+/*   const { data: basketItem } = useBasket() */
 
   // const handleAddItem = async (productId: string) => {
   //   try {
@@ -85,8 +78,6 @@ const Navbar = () => {
 
   const handleToggleBasket = () => {
     setOpenBasket(!openBasket)
-<<<<<<< HEAD
-=======
   }
 
   const handleToggleSearchbar = () => {
@@ -98,7 +89,6 @@ const Navbar = () => {
       event.stopPropagation()
       handleToggleSearchbar()
     }
->>>>>>> dev
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
@@ -132,22 +122,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-<<<<<<< HEAD
-    if (dropdownOpen || openBasket) {
-=======
     if (menuOpen || dropdownOpen || openBasket || openSearchbar) {
->>>>>>> dev
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-<<<<<<< HEAD
-  }, [dropdownOpen, openBasket])
-=======
   }, [menuOpen, dropdownOpen, openBasket, openSearchbar])
->>>>>>> dev
 
   const closeDropdown = () => {
     setDropdownOpen(false)
