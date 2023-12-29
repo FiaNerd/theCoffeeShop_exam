@@ -206,7 +206,6 @@ const Navbar = () => {
                     icon={faXmark}
                     className='flex text-4xl pl-2 pt-8'
                   />
-                  <p className='text-end pr-4 pb-8'>close</p>
                 </button>
               </div>
 
