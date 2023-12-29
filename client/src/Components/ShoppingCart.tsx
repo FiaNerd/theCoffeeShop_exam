@@ -14,18 +14,13 @@ const ShoppingCart = () => {
   const { data: basketItems, refetch } = useBasket()
 
   useEffect(() => {
-    console.log('Basket component updated with basket:', basketItems)
     setBasket(basketItems!)
     refetch()
-    console.log('Updated basket:', basketItems)
   }, [basket, basketItems, refetch, setBasket])
 
   if (!basketItems) {
-    console.log('Basket is null or undefined')
     return null
   }
-
-  console.log('Rendering Basket component with basket:', basketItems)
 
   return (
     <Transition.Root show={open} as={Fragment}>

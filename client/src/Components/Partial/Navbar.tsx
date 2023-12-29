@@ -8,12 +8,13 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
+import { getCookie } from '../../utils/getCookie'
 import ShoppingCart from '../ShoppingCart'
-// import { getCookie } from '../../utils/getCookie'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
 import { useStoreContext } from '../../context/StoreProvider'
+import useBasket from '../../hooks/useBasket'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -25,47 +26,27 @@ const Navbar = () => {
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
 
-  const { basket } = useStoreContext()
-  console.log(useStoreContext)
-
-  /*   const { data: basketItem } = useBasket() */
-
-  // const handleAddItem = async (productId: string) => {
-  //   try {
-  //     await addItemToBasketMutation.mutateAsync({
-  //       productId,
-  //       quantity: 1,
-  //     })
-
-  //     if (addItemToBasketMutation.isSuccess) {
-  //       setCartItem(addItemToBasketMutation.data)
-  //     }
-  //   } catch (error) {
-  //     console.error('Error adding item to basket:', error)
-  //   }
-  // }
+  const { basket, setBasket } = useStoreContext()
+  const { data: basketItem } = useBasket()
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
 
-  // useEffect(() => {
-  //   const buyerId = getCookie('buyerId')
+  useEffect(() => {
+    const buyerId = getCookie('buyerId')
+    console.log("buyerId", buyerId)
 
-  //   // const fetchData = async () => {
-  //   try {
-  //     if (!buyerId) {
-  //       return
-  //     }
+    const fetchData = async () => {
+      try {
+        if (buyerId) {
+          setBasket(basketItem!)
+        }
+      } catch (error) {
+        console.error('Något gick fel:', error)
+      }
+    }
 
-  //     if (basketItem && basketItem !== cartItem) {
-  //       setCartItem(basketItem)
-  //     }
-  //   } catch (error) {
-  //     console.error('Something went wrong:', error)
-  //   }
-  //   // }
-
-  //   // fetchData();
-  // }, [])
+    fetchData()
+  }, [basketItem, setBasket])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
