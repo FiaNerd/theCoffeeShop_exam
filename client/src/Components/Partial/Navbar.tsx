@@ -9,12 +9,14 @@ import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
 import Basket from '../Basket'
+import Searchbar from './Searchbar'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
   const [openBasket, setOpenbasket] = useState(false)
+  const [openSearchbar, setOpenSeachbar] = useState(false)
 
   const navRef = useRef<HTMLDivElement | null>(null)
 
@@ -24,14 +26,19 @@ const Navbar = () => {
     setDropdownOpen(false)
   }
   const handleToggleBasket = () => {
-    console.log('Toggle basket')
     setOpenbasket(!openBasket)
+  }
+
+  const handleToggleSearcbar = () => {
+    console.log('Toggle searchbar')
+    setOpenSeachbar(!openSearchbar)
   }
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (navRef.current && !navRef.current.contains(event.target as Node)) {
       setMenuOpen(false)
       setDropdownOpen(false)
+      setOpenSeachbar(false)
     }
   }
 
@@ -50,14 +57,14 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (menuOpen || dropdownOpen || openBasket) {
+    if (menuOpen || dropdownOpen || openBasket || openSearchbar) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [menuOpen, dropdownOpen, openBasket])
+  }, [menuOpen, dropdownOpen, openBasket, openSearchbar])
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -98,6 +105,7 @@ const Navbar = () => {
                   onClick={handleLinkClick}>
                   {menu.title}
                 </NavLink>
+
                 {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
                   <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
                     <Dropdown
@@ -111,12 +119,20 @@ const Navbar = () => {
           </ul>
         </div>
 
+        {openSearchbar && (
+          <div className='bg-deep-red w-full z-50'>
+            <Searchbar />
+          </div>
+        )}
+
         <div className='flex gap-2 md:gap-6 items-center'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
             className='text-white text-4xl cursor-pointer items-center hover:opacity-80'
-            onClick={handleToggleMenu}
+            onClick={handleToggleSearcbar}
+            onMouseLeave={handleMouseLeave}
           />
+
           <button
             className='py-4 px-1 relative border-2 border-transparent text-white rounded-full hover:opacity-80 focus:outline-none focus:opacity-80 transition duration-150 ease-in-out'
             aria-label='Cart'
