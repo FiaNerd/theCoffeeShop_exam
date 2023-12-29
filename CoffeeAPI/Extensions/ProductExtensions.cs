@@ -1,5 +1,4 @@
 using CoffeeAPI.Entities;
-using System.Linq;
 
 namespace CoffeeAPI.Extensions
 {

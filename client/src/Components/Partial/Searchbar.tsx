@@ -15,7 +15,7 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
   return (
     <div
       ref={searchRef}
-      className={`fixed top-0 mt-[30px] left-0 w-full flex items-center justify-center z-50 transition-opacity ${
+      className={`fixed bg-deep-red shadow-md flex-col top-0 mt-[30px] left-0 w-full  items-center justify-center z-50 transition-opacity ${
         openSearchbar ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
       <div className='bg-deep-red p-4 shadow-md w-full'>
@@ -28,8 +28,7 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
           <Button
             buttonType='search'
             typeAction='button'
-            onClick={onCloseSearchbar}
-            >
+            onClick={onCloseSearchbar}>
             Sök nu
           </Button>
         </div>
