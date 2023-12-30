@@ -24,8 +24,12 @@ const ShoppingCart = () => {
     updateQuantity(productId, newQuantity)
   }
 
-  const handleRemoveItem = (productId: string, newQuantity: number) => {
-    removeItem(productId, newQuantity)
+  const handleRemoveItem = (productId: string) => {
+    const item = basket?.items.find((item) => item.productId === productId)
+
+    if (item && item.quantity > 0) {
+      removeItem(productId, 1)
+    }
   }
 
   if (!basketItem) {
