@@ -41,7 +41,7 @@ const Navbar = () => {
           setBasket(basketItem)
         }
       } catch (error) {
-        console.error('Något gick fel:', error)
+        console.error('Something went wrong', error)
       }
     }
 

@@ -3,7 +3,6 @@ import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useStoreContext } from '../context/StoreProvider'
-import useAddItemToBasket from '../hooks/useAddItemToBasket'
 interface IProps {
   product: Product
 }
@@ -11,46 +10,11 @@ interface IProps {
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
 
-  const { setBasket } = useStoreContext()
-  const addItemToBasketMutation = useAddItemToBasket()
+  const { addToBasket } = useStoreContext()
 
-  const handleAddItem = async (productId: string) => {
-    try {
-      const result = await addItemToBasketMutation.mutateAsync({
-        productId,
-        quantity: 1,
-      })
-
-      console.log('Mutation result:', result)
-
-      if (result) {
-        setBasket(result)
-        console.log('Item added to basket. New basket:', result)
-      } else {
-        console.error('Error adding item to basket. Empty or invalid response.')
-      }
-    } catch (error) {
-      console.error('Error adding item to basket:', error)
-    }
+  const handleAddItem = (productId: string) => {
+    addToBasket(productId)
   }
-
-  // const handleAddItem = async (productId: string) => {
-  //   try {
-  //     const result = await addItemToBasketMutation.mutateAsync({
-  //       productId,
-  //       quantity: 1,
-  //     })
-
-  //     if (result?.data) {
-  //       console.log('Item added to basket. New basket:', result?.data)
-  //       setBasket(result?.data)
-  //     } else {
-  //       console.error('Error adding item to basket. Empty or invalid response.')
-  //     }
-  //   } catch (error) {
-  //     console.error('Error adding item to basket:', error)
-  //   }
-  // }
 
   const limitDescription = (text: string, sentenceLimit = 1) => {
     const sentences = text.split('.')

@@ -6,30 +6,25 @@ import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../utils/formatPrice'
 import { useStoreContext } from '../context/StoreProvider'
 import useBasket from '../hooks/useBasket'
-import useAddItemToBasket from '../hooks/useAddItemToBasket'
 
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
-  const { basket, setBasket } = useStoreContext()
-  const { data: basketItem, refetch } = useBasket()
+  const { basket } = useStoreContext()
+  const { data: basketItem  } = useBasket()
 
-  const addItemToBasketMutation = useAddItemToBasket()
+  const { addToBasket, updateQuantity } = useStoreContext();
 
-  const handleAddItem = async (productId: string) => {
-    try {
-      const result = await addItemToBasketMutation.mutateAsync({
-        productId,
-        quantity: 1,
-      })
-      console.log('Result items', result)
+  const handleAddItem = (productId: string) => {
+    addToBasket(productId);
+  };
 
-      setBasket(result)
-      refetch()
-    } catch (error) {
-      console.error('Error adding item to basket:', error)
-    }
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    // Call the updateQuantity function from your context
+    updateQuantity(productId, newQuantity)
   }
+
+
 
   if (!basketItem) {
     return null
@@ -130,7 +125,12 @@ const ShoppingCart = () => {
                                           type='number'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
                                           value={item.quantity}
-                                          onChange={(e) => e.target.value}
+                                          onChange={(e) =>
+                                            handleQuantityChange(
+                                              item?.productId,
+                                              parseInt(e.target.value, 10)
+                                            )
+                                          }
                                         />
                                         <button
                                           data-action='increment'
@@ -143,6 +143,7 @@ const ShoppingCart = () => {
                                           </span>
                                         </button>
                                       </div>
+                                      
                                       <div className='flex justify-between mt-2 md:ml-2'>
                                         <button
                                           type='button'

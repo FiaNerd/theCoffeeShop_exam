@@ -1,234 +1,14 @@
-// import { ReactNode, createContext, useContext, useState } from 'react';
-// import { Basket, BasketItems } from '../types/Basket.types';
-// import ShoppingCart from '../components/ShoppingCart';
-
-// // Skapa ett context
-// export const StoreContext = createContext<StoreContextType | undefined>(undefined);
-
-// // Skapa ett gränssnitt för context-värden
-// interface StoreContextType {
-//   cartQuantity: number;
-//   cartItem: Basket | null;
-//   setCartItem: (updatedFields: Partial<Basket>) => void;
-//   openCart: () => void;
-//   closeCart: () => void;
-//   getItemQuantity: (id: string) => number;
-//   increaseCartQuantity: (id: string) => void;
-//   decreaseCartQuantity: (id: string) => void;
-//   removeFromCart: (id: string) => void;
-//   calculateCartTotal: () => number;
-// }
-
-// interface ShoppingCartProviderProps {
-//   children: ReactNode;
-// }
-
-// export const StoreProvider = ({ children }: ShoppingCartProviderProps) => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [cartItem, setCartItemState] = useState<Basket | null>({
-//     basketId: '',
-//     buyerId: '',
-//     items: [],
-//   });
-
-//   const cartItems = cartItem?.items || [];
-
-//   const cartQuantity = cartItems.reduce(
-//     (quantity, item) => item.quantity + quantity,
-//     0
-//   );
-
-//   const openCart = () => setIsOpen(true);
-//   const closeCart = () => setIsOpen(false);
-
-//   const getItemQuantity = (id: string) =>
-//     cartItems.find((item) => item.productId === id)?.quantity || 0;
-
-//   const increaseCartQuantity = (id: string) => {
-//     setCartItemState((prevCart: Basket | null) => {
-//       if (!prevCart) return prevCart;
-
-//       const existingItem = prevCart.items.find(
-//         (item) => item.productId === id
-//       );
-
-//       if (!existingItem) {
-//         return {
-//           ...prevCart,
-//           items: [...prevCart.items, { productId: id, quantity: 1 }],
-//         } as Basket;
-//       } else {
-//         const updatedItems = prevCart.items.map((item) =>
-//           item.productId === id
-//             ? { ...item, quantity: item.quantity + 1 }
-//             : item
-//         ) as BasketItems[];
-
-//         return { ...prevCart, items: updatedItems } as Basket;
-//       }
-//     });
-//   };
-
-//   const decreaseCartQuantity = (id: string) => {
-//     setCartItemState((prevCart) => {
-//       if (!prevCart) return prevCart;
-
-//       const existingItem = prevCart.items.find(
-//         (item) => item.productId === id
-//       );
-
-//       if (!existingItem) return prevCart;
-
-//       if (existingItem.quantity === 1) {
-//         const updatedItems = prevCart.items.filter(
-//           (item) => item.productId !== id
-//         );
-//         return { ...prevCart, items: updatedItems };
-//       } else {
-//         const updatedItems = prevCart.items.map((item) =>
-//           item.productId === id
-//             ? { ...item, quantity: item.quantity - 1 }
-//             : item
-//         );
-
-//         return { ...prevCart, items: updatedItems };
-//       }
-//     });
-//   };
-
-//   const removeFromCart = (id: string) => {
-//     setCartItemState((prevCart) => {
-//       if (!prevCart) return prevCart;
-//       const updatedItems = prevCart.items.filter(
-//         (item) => item.productId !== id
-//       );
-//       return { ...prevCart, items: updatedItems };
-//     });
-//   };
-
-//   const calculateCartTotal = () =>
-//     cartItems.reduce(
-//       (total, item) => total + item.quantity * item.price,
-//       0
-//     );
-
-//   const setCartItem = (updatedFields: Partial<Basket>) => {
-//     setCartItemState((prevBasket: Basket | null) => {
-//       if (!prevBasket) return prevBasket;
-//       return { ...prevBasket, ...updatedFields };
-//     });
-//   };
-
-//   // Skapa ett värdeobjekt för context
-//   const contextValue: StoreContextType = {
-//     cartQuantity,
-//     cartItem,
-//     setCartItem,
-//     openCart,
-//     closeCart,
-//     getItemQuantity,
-//     increaseCartQuantity,
-//     decreaseCartQuantity,
-//     removeFromCart,
-//     calculateCartTotal,
-//   };
-
-//   // Returnera provider med barnkomponenter och värdeobjektet
-//   return (
-//     <StoreContext.Provider value={contextValue}>
-//       {children}
-//       {isOpen && <ShoppingCart />}
-//     </StoreContext.Provider>
-//   );
-// };
-
-// // Använd en egen hook för att konsumera context
-// export const useStore = () => {
-//   const context = useContext(StoreContext);
-//   if (!context) {
-//     throw new Error('useStore must be used within a StoreProvider');
-//   }
-//   return context;
-// };
-
-
-
-
-
-// import { ReactNode, createContext, useContext, useState } from 'react';
-// import { Basket, } from '../types/Basket.types';
-
-
-// interface StoreContextValue {
-//   basket: Basket
-//   setBasket: (basket: Basket) => void
-//   removeItemFromCart: (productId: string, quantity: number) => void
-// }
-
-// const initialBasket: Basket = { buyerId: '', basketId: '', items: [] }
-
-// export const StoreContext = createContext<StoreContextValue | undefined>(
-//   undefined
-// )
-
-// interface StoreProviderProps {
-//   children: ReactNode
-// }
-
-// export const StoreProvider: FC<StoreProviderProps> = ({ children }) => {
-//   const [basket, setBasket] = useState<Basket>(initialBasket)
-
-//   function removeItemFromCart(productId: string, quantity: number) {
-//     if (!basket) return
-
-//     const updatedBasket = [...basket.items]
-
-//     const itemIndex = updatedBasket.findIndex((i) => i.productId === productId)
-//     if (itemIndex >= 0) {
-//       updatedBasket[itemIndex].quantity -= quantity
-
-//       if (updatedBasket[itemIndex].quantity === 0)
-//         updatedBasket.splice(itemIndex, 1)
-//       setBasket((prevState) => {
-//         return { ...prevState, items: updatedBasket }
-//       })
-//     }
-//   }
-
-//   const storeContextValue: StoreContextValue = {
-//     basket,
-//     setBasket,
-//     removeItemFromCart,
-//   }
-
-//   return (
-//     <StoreContext.Provider value={storeContextValue}>
-//       {children}
-//     </StoreContext.Provider>
-//   )
-// }
-
-// export const useShoppingCart = () => {
-//   const context = useContext(StoreContext)
-
-//   if (!context) {
-//     throw new Error('useShoppingCart must be used within a StoreProvider')
-//   }
-
-//   return context
-// }
-
-
-
-
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { Basket } from '../types/Basket.types'
-
+import useAddItemToBasket from '../hooks/useAddItemToBasket'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query' // Importera QueryClient och QueryClientProvider
 
 interface StoreContextValue {
-  removeItem: (productId: string, quantity: number) => void
-  setBasket: (basket: Basket) => void
   basket: Basket | null
+  setBasket: (basket: Basket) => void
+  addToBasket: (productId: string) => void
+  updateQuantity: (productId: string, newQuantity: number) => void // Add this line
+  removeItem: (productId: string, quantity: number) => void
 }
 
 export const StoreContext = createContext<StoreContextValue | undefined>(
@@ -247,13 +27,47 @@ export const useStoreContext = () => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const StoreProvider = ({ children }: PropsWithChildren<any>) => {
+const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   const [basket, setBasket] = useState<Basket | null>(null)
+  const addItemToBasketMutation = useAddItemToBasket()
+
+  const addToBasket = async (productId: string) => {
+    console.log('Adding item to basket:', productId)
+    try {
+      const result = await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      })
+
+      if (result) {
+        setBasket(result)
+      } else {
+        console.error('Error adding item to basket. Empty or invalid response.')
+      }
+    } catch (error) {
+      console.error('Error adding item to basket:', error)
+    }
+  }
+
+  const updateQuantity = (productId: string, newQuantity: number) => {
+    setBasket((prevBasket) => {
+      if (!prevBasket) return prevBasket
+
+      const updatedItems = prevBasket.items.map((item) => {
+        if (item.productId === productId) {
+          return { ...item, quantity: newQuantity }
+        }
+        return item
+      })
+
+      return { ...prevBasket, items: updatedItems }
+    })
+  }
 
   const removeItem = (productId: string, quantity: number) => {
     if (!basket) return
 
-    const items = [...basket.items] 
+    const items = [...basket.items]
 
     const itemIndex = items.findIndex((i) => i.productId === productId)
     if (itemIndex >= 0) {
@@ -265,55 +79,16 @@ export const StoreProvider = ({ children }: PropsWithChildren<any>) => {
     }
   }
 
+  const queryClient = new QueryClient()
+
   return (
-    <StoreContext.Provider value={{ basket, setBasket, removeItem }}>
-      {children}
-    </StoreContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <StoreContext.Provider
+        value={{ basket, setBasket, addToBasket, updateQuantity, removeItem }}>
+        {children}
+      </StoreContext.Provider>
+    </QueryClientProvider>
   )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-// import { ReactNode, useState } from 'react';
-// import { Basket } from '../types/Basket.types';
-// import { StoreContext } from './StoreContext';
-
-// type BasketProviderProps = {
-//   children: ReactNode;
-// };
-
-// export const StoreProvider = ({ children }: BasketProviderProps) => {
-//   const [basket, setBasket] = useState<Basket>({ buyerId: "", basketId: "", items: [] });
-
-//   function removeItemFromCart(productId: string, quantity: number) {
-//     if (!basket) return;
-
-//     const updatedBasket = [...basket.items];
-
-//     const itemIndex = updatedBasket.findIndex((i) => i.productId === productId);
-//     if (itemIndex >= 0) {
-//       updatedBasket[itemIndex].quantity -= quantity;
-
-//       if (updatedBasket[itemIndex].quantity === 0)
-//         updatedBasket.splice(itemIndex, 1);
-//       setBasket((prevState) => {
-//         return { ...prevState, items: updatedBasket };
-//       });
-//     }
-//   }
-
-//   return (
-//     <StoreContext.Provider value={{ basket, setBasket, removeItemFromCart }}>
-//       {children}
-//     </StoreContext.Provider>
-//   );
-// };
+export default StoreProvider

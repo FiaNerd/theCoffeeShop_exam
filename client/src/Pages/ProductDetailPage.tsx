@@ -1,12 +1,28 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
+import { useStoreContext } from '../context/StoreProvider'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
   const { data: product, isLoading } = useProduct(productId!)
 
   const navigate = useNavigate()
+
+  const { basket, addToBasket, updateQuantity } = useStoreContext()
+
+  const item = basket?.items.find(
+    (item) => item.productId === product?.productId
+  )
+
+  const handleAddItem = (productId: string) => {
+    addToBasket(productId)
+  }
+
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    // Call the updateQuantity function from your context
+    updateQuantity(productId, newQuantity)
+  }
 
   if (!productId) {
     return <p className='text-2xl font-bold'>Ogiltigt produkt-ID</p>
@@ -50,28 +66,41 @@ const ProductDetailPage = () => {
                 {(product.price / 100).toFixed(2)} SEK
               </p>
 
-              <div className='flex items-center w-full gap-5 flex-col sm:flex-row sm:justify-between'>
-                <div className='flex items-center justify-between p-3 rounded-lg w-36'>
-                  <img
-                    src='images/icon-minus.svg'
-                    alt=''
-                    className='cursor-pointer'
-                    width={18}
+              <div className='flex items-center w-full gap-5 flex-row sm:justify-between'>
+                <div className='flex items-center h-full justify-between p-3 rounded-lg w-36'>
+                  <button
+                    className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
+                    // onClick={() =>
+                    //   handleRemoveItem(item.productId)
+                    // }
+                  >
+                    <span className='m-auto text-2xl font-thin'>−</span>
+                  </button>
+                  <input
+                    type='number'
+                    className='focus:outline-none h-full text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none"'
+                    value={item?.quantity}
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        product.productId,
+                        parseInt(e.target.value, 10)
+                      )
+                    }
                   />
-                  <div className='font-bold text-text-md'></div>
-                  <img
-                    src='images/icon-plus.svg'
-                    alt=''
-                    className='cursor-pointer'
-                    width={18}
-                  />
+                  <button
+                    data-action='increment'
+                    className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
+                    onClick={() => handleAddItem(product.productId)}>
+                    <span className='m-auto text-2xl font-thin'>+</span>
+                  </button>
                 </div>
 
                 <Button
                   buttonType='create'
                   typeAction='submit'
                   iconType='cart'
-                  className='w-full'>
+                  className='w-full'
+                  onClick={() => handleAddItem(product.productId)}>
                   Lägg till
                 </Button>
               </div>
