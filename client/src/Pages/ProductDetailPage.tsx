@@ -9,7 +9,7 @@ const ProductDetailPage = () => {
 
   const navigate = useNavigate()
 
-  const { basket, addToBasket, updateQuantity } = useStoreContext()
+  const { basket, addToBasket, updateQuantity, removeItem } = useStoreContext()
 
   const item = basket?.items.find(
     (item) => item.productId === product?.productId
@@ -19,9 +19,16 @@ const ProductDetailPage = () => {
     addToBasket(productId)
   }
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    // Call the updateQuantity function from your context
-    updateQuantity(productId, newQuantity)
+  const handleQuantityChange = (productId: string, quantity: number) => {
+    updateQuantity(productId, quantity)
+  }
+
+  const handleRemoveItem = (productId: string) => {
+    const item = basket?.items.find((item) => item.productId === productId)
+
+    if (item && item.quantity > 0) {
+      removeItem(productId, 1)
+    }
   }
 
   if (!productId) {
@@ -70,16 +77,13 @@ const ProductDetailPage = () => {
                 <div className='flex items-center h-full justify-between p-3 rounded-lg w-36'>
                   <button
                     className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                    // onClick={() =>
-                    //   handleRemoveItem(item.productId)
-                    // }
-                  >
+                    onClick={() => handleRemoveItem(product.productId)}>
                     <span className='m-auto text-2xl font-thin'>−</span>
                   </button>
                   <input
                     type='number'
                     className='focus:outline-none h-full text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none"'
-                    value={item?.quantity}
+                    value={item?.quantity ?? 0}
                     onChange={(e) =>
                       handleQuantityChange(
                         product.productId,
@@ -87,6 +91,7 @@ const ProductDetailPage = () => {
                       )
                     }
                   />
+
                   <button
                     data-action='increment'
                     className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'

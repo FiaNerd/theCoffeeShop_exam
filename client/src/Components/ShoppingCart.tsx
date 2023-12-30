@@ -11,20 +11,22 @@ const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
   const { basket } = useStoreContext()
-  const { data: basketItem  } = useBasket()
+  const { data: basketItem } = useBasket()
 
-  const { addToBasket, updateQuantity } = useStoreContext();
+  const { setBasket, addToBasket, updateQuantity, removeItem } =
+    useStoreContext()
 
   const handleAddItem = (productId: string) => {
-    addToBasket(productId);
-  };
+    addToBasket(productId)
+  }
 
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    // Call the updateQuantity function from your context
     updateQuantity(productId, newQuantity)
   }
 
-
+  const handleRemoveItem = (productId: string, newQuantity: number) => {
+    removeItem(productId, newQuantity)
+  }
 
   if (!basketItem) {
     return null
@@ -113,10 +115,12 @@ const ShoppingCart = () => {
                                       <div className='flex flex-row w-20 md:w-32'>
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                                          // onClick={() =>
-                                          //   handleRemoveItem(item.productId)
-                                          // }
-                                        >
+                                          onClick={() =>
+                                            handleRemoveItem(
+                                              item.productId,
+                                              item.quantity
+                                            )
+                                          }>
                                           <span className='m-auto text-2xl font-thin'>
                                             −
                                           </span>
@@ -124,11 +128,11 @@ const ShoppingCart = () => {
                                         <input
                                           type='number'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          value={item.quantity}
+                                          value={item.quantity ?? 0}
                                           onChange={(e) =>
                                             handleQuantityChange(
                                               item?.productId,
-                                              parseInt(e.target.value, 10)
+                                              parseInt(e.target.value)
                                             )
                                           }
                                         />
@@ -143,7 +147,7 @@ const ShoppingCart = () => {
                                           </span>
                                         </button>
                                       </div>
-                                      
+
                                       <div className='flex justify-between mt-2 md:ml-2'>
                                         <button
                                           type='button'

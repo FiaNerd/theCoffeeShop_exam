@@ -13,23 +13,55 @@ const useRemoveItemFromBasket = () => {
   return useMutation({
     mutationFn: (params: RemoveBasketParams) =>
       removeItemFromBasket(params.productId, params.quantity),
-    onSuccess: (removeItem) => {
+    onSuccess: (removedItem) => {
       queryClient.setQueryData<Basket | null>(['basket'], (prevBasket) => {
         if (!prevBasket) {
           return prevBasket
         }
 
-        const updatedBasket = {
+        const updatedBasket: Basket = {
           ...prevBasket,
           items: prevBasket.items.filter(
-            (item) => item.productId !== removeItem.productId
+            (item) => item.productId !== removedItem.productId
           ),
         }
 
-        return updatedBasket;
+        return updatedBasket
       })
     },
   })
 }
 
 export default useRemoveItemFromBasket
+
+// interface RemoveBasketParams {
+//   productId: string
+//   quantity: number
+// }
+
+// const useRemoveItemFromBasket = () => {
+//   const queryClient = useQueryClient()
+
+//   return useMutation({
+//     mutationFn: (params: RemoveBasketParams) =>
+//       removeItemFromBasket(params.productId, params.quantity),
+//     onSuccess: (removeItem) => {
+//       queryClient.setQueryData<Basket | null>(['basket'], (prevBasket) => {
+//         if (!prevBasket) {
+//           return prevBasket
+//         }
+
+//         const updatedBasket = {
+//           ...prevBasket,
+//           items: prevBasket.items.filter(
+//             (item) => item.productId !== removeItem.productId
+//           ),
+//         }
+
+//         return updatedBasket;
+//       })
+//     },
+//   })
+// }
+
+// export default useRemoveItemFromBasket

@@ -2,6 +2,7 @@ import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { Basket } from '../types/Basket.types'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query' // Importera QueryClient och QueryClientProvider
+import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
 
 interface StoreContextValue {
   basket: Basket | null
@@ -30,6 +31,7 @@ export const useStoreContext = () => {
 const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   const [basket, setBasket] = useState<Basket | null>(null)
   const addItemToBasketMutation = useAddItemToBasket()
+  const removeItemFromBasket = useRemoveItemFromBasket()
 
   const addToBasket = async (productId: string) => {
     console.log('Adding item to basket:', productId)
@@ -50,6 +52,7 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   }
 
   const updateQuantity = (productId: string, newQuantity: number) => {
+   
     setBasket((prevBasket) => {
       if (!prevBasket) return prevBasket
 
@@ -65,18 +68,29 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   }
 
   const removeItem = (productId: string, quantity: number) => {
-    if (!basket) return
 
-    const items = [...basket.items]
+    const result = removeItemFromBasket.mutate({
+      productId, 
+      quantity: 1
+    })
 
-    const itemIndex = items.findIndex((i) => i.productId === productId)
-    if (itemIndex >= 0) {
-      items[itemIndex].quantity -= quantity
-      if (items[itemIndex].quantity === 0) items.splice(itemIndex, 1)
-      setBasket((prevState) => {
-        return { ...prevState!, items }
+    console.log(result)
+    
+
+    setBasket((prevBasket) => {
+      if (!prevBasket) return prevBasket
+
+      const updatedItems = prevBasket.items.map((item) => {
+        if (item.productId === productId) {
+          const updatedQuantity = Math.max(0, item.quantity - quantity)
+          return { ...item, quantity: updatedQuantity }
+        }
+
+        return item
       })
-    }
+
+      return { ...prevBasket, items: updatedItems }
+    })
   }
 
   const queryClient = new QueryClient()

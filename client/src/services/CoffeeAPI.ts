@@ -53,7 +53,6 @@ export const getBasket = async () => {
  * Create a items in basket
  */
 export const addItemToBasket = async (productId: string, quantity = 1) => {
-
   const res = await axios.post(
     `${BASE_URL}/Basket?productId=${productId}&quantity=${quantity}`,
     {}
@@ -62,11 +61,16 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
 }
 
 export const removeItemFromBasket = async (productId: string, quantity = 1) => {
-  console.log(`Delete Item with productId: ${productId}, quantity: ${quantity}`)
-  const res = await axios.delete(
-    `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
-    {}
-  )
-  console.log('delete response:', res.data)
-  return res.data
+  try {
+    const res = await axios.delete(
+      `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
+      {}
+    )
+
+    console.log('delete response:', res.data)
+    return res.data
+  } catch (error) {
+    console.error('Error deleting item:', error)
+    throw error
+  }
 }
