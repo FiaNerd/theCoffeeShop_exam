@@ -33,12 +33,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const buyerId = getCookie('buyerId')
-    console.log("buyerId", buyerId)
+    console.log('buyerId', buyerId)
 
     const fetchData = async () => {
       try {
-        if (buyerId) {
-          setBasket(basketItem!)
+        if (buyerId && basketItem) {
+          setBasket(basketItem)
         }
       } catch (error) {
         console.error('Något gick fel:', error)

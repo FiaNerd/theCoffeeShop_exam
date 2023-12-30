@@ -1,6 +1,6 @@
 export type Basket = {
-  basketId: string;
-  buyerId: string;
+  basketId?: string;
+  buyerId?: string;
   items: BasketItems[];
 };
 

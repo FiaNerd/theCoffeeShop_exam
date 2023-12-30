@@ -16,15 +16,15 @@ const ShoppingCart = () => {
 
   const addItemToBasketMutation = useAddItemToBasket()
 
-
   const handleAddItem = async (productId: string) => {
     try {
-      await addItemToBasketMutation.mutateAsync({
+      const result = await addItemToBasketMutation.mutateAsync({
         productId,
         quantity: 1,
       })
+      console.log('Result items', result)
 
-      setBasket(addItemToBasketMutation.data)
+      setBasket(result)
       refetch()
     } catch (error) {
       console.error('Error adding item to basket:', error)
@@ -129,7 +129,8 @@ const ShoppingCart = () => {
                                         <input
                                           type='number'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          /*   value='0' */
+                                          value={item.quantity}
+                                          onChange={(e) => e.target.value}
                                         />
                                         <button
                                           data-action='increment'
