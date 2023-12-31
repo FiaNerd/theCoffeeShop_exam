@@ -28,11 +28,26 @@ const get = async <T>(endpoint: string) => {
 }
 
 /**
- * Get all products
+ * Get products with pagination
+ * @param page The page number to fetch
+ * @param pageSize The number of items per page
  */
-export const getProducts = async () => {
-  return await get<Products>('/products')
-}
+// export const getProducts = async (page = 1, pageSize = 8) => {
+//   console.log('Page', page, 'PageSize', pageSize)
+//   return await get<Products>(`/products?page=${page}&pageSize=${pageSize}`)
+// }
+
+export const getProducts = async (pageParam = 1, pageSize = 8) => {
+  console.log('Page', pageParam, 'PageSize', pageSize);
+  const response = await get<Products>(
+    `/products?page=${pageParam}&pageSize=${pageSize}`
+  );
+
+  return {
+    pages: [{ data: response, nextPage: pageParam + 1 }],
+    pageParams: [pageParam + 1], 
+  };
+};
 
 /**
  * Get single product
@@ -65,11 +80,9 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
  */
 export const removeItemFromBasket = async (productId: string, quantity = 1) => {
   try {
-    console.log('Trying to delete item:', productId, 'with quantity:', quantity)
     const res = await axios.delete(
       `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`
     )
-    console.log('Delete response:', res)
     return res
   } catch (error) {
     console.error('Error deleting item:', error)

@@ -3,6 +3,7 @@ import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useStoreContext } from '../context/StoreProvider'
+
 interface IProps {
   product: Product
 }
