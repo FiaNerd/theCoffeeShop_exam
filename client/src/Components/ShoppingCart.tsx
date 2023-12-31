@@ -29,13 +29,15 @@ const ShoppingCart = () => {
     refetch()
   }
 
+  const subtotal =
+    basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??
+    0
+
+  const deliveryFee = subtotal > 50000 ? 0 : 5000
+
   if (!basketItem) {
     return null
   }
-
-  // if (!basket || basket.items.length === 0) {
-  //   return <h2>Your basket is empty</h2>
-  // }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -184,12 +186,19 @@ const ShoppingCart = () => {
 
                     <div className='border-t border-gray-200 px-4 py-6 sm:px-6'>
                       <div className='flex justify-between text-base font-medium text-gray-900'>
-                        <p>Totalt</p>
-                        <p>245 SEK</p>
+                        <p className='font-bold'>Totalt</p>
+                        <p className='font-bold'>{formatPrice(subtotal)}</p>
                       </div>
-                      <p className='mt-0.5 text-sm text-gray-500'>
-                        Frakt and taxa beräknas i kassan.
+
+                      <p className='flex flex-rows justify-end mt-0.5 font-bold text-gray-500'>
+                        {' '}
+                        {formatPrice(deliveryFee + deliveryFee)}
                       </p>
+
+                      <p className=' text-sm text-gray-500'>
+                        *Gratis frakt för över 500 kr
+                      </p>
+
                       <div className='mt-6'>
                         <Button
                           buttonType='checkout'
