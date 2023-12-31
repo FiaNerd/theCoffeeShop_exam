@@ -52,7 +52,6 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   }
 
   const updateQuantity = (productId: string, newQuantity: number) => {
-   
     setBasket((prevBasket) => {
       if (!prevBasket) return prevBasket
 
@@ -67,30 +66,39 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
     })
   }
 
-  const removeItem = (productId: string, quantity: number) => {
-
-    const result = removeItemFromBasket.mutate({
-      productId, 
-      quantity: 1
-    })
-
-    console.log(result)
-    
-
-    setBasket((prevBasket) => {
-      if (!prevBasket) return prevBasket
-
-      const updatedItems = prevBasket.items.map((item) => {
-        if (item.productId === productId) {
-          const updatedQuantity = Math.max(0, item.quantity - quantity)
-          return { ...item, quantity: updatedQuantity }
-        }
-
-        return item
+  const removeItem = async (
+    productId: string,
+    quantity: number | undefined
+  ) => {
+    try {
+      await removeItemFromBasket.mutateAsync({
+        productId,
+        quantity: quantity || 1, // If quantity is not provided, default to 1
       })
 
-      return { ...prevBasket, items: updatedItems }
-    })
+      setBasket((prevBasket) => {
+        if (!prevBasket) {
+          return prevBasket
+        }
+
+        const updatedItems = prevBasket.items
+          .map((item) => {
+            if (item.productId === productId) {
+              const updatedQuantity = Math.max(
+                0,
+                item.quantity - (quantity || 1)
+              )
+              return { ...item, quantity: updatedQuantity }
+            }
+            return item
+          })
+          .filter((item) => item.quantity > 0)
+
+        return { ...prevBasket, items: updatedItems }
+      })
+    } catch (error) {
+      console.error('Error removing item from basket:', error)
+    }
   }
 
   const queryClient = new QueryClient()

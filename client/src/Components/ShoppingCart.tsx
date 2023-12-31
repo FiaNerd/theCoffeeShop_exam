@@ -11,10 +11,9 @@ const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
 
   const { basket } = useStoreContext()
-  const { data: basketItem } = useBasket()
+  const { data: basketItem, refetch } = useBasket()
 
-  const { setBasket, addToBasket, updateQuantity, removeItem } =
-    useStoreContext()
+  const { addToBasket, updateQuantity, removeItem } = useStoreContext()
 
   const handleAddItem = (productId: string) => {
     addToBasket(productId)
@@ -24,17 +23,19 @@ const ShoppingCart = () => {
     updateQuantity(productId, newQuantity)
   }
 
-  const handleRemoveItem = (productId: string) => {
-    const item = basket?.items.find((item) => item.productId === productId)
-
-    if (item && item.quantity > 0) {
-      removeItem(productId, 1)
-    }
+  const handleRemoveItem = (productId: string, quantity: number) => {
+    console.log('Removing item:', productId, 'with quantity:', quantity)
+    removeItem(productId, quantity)
+    refetch()
   }
 
   if (!basketItem) {
     return null
   }
+
+  // if (!basket || basket.items.length === 0) {
+  //   return <h2>Your basket is empty</h2>
+  // }
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -66,7 +67,9 @@ const ShoppingCart = () => {
                     <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
                       <div className='flex items-start justify-between'>
                         <Dialog.Title className='text-heading uppercase font-medium '>
-                          Din varukorg -
+                          {basket?.items.length === 0
+                            ? 'Din vaurkog är tom'
+                            : 'Din vaurkog'}
                         </Dialog.Title>
                         <div className='ml-3 flex h-7 items-center'>
                           <button
@@ -120,10 +123,7 @@ const ShoppingCart = () => {
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
                                           onClick={() =>
-                                            handleRemoveItem(
-                                              item.productId,
-                                              item.quantity
-                                            )
+                                            handleRemoveItem(item.productId, 1)
                                           }>
                                           <span className='m-auto text-2xl font-thin'>
                                             −
@@ -155,7 +155,13 @@ const ShoppingCart = () => {
                                       <div className='flex justify-between mt-2 md:ml-2'>
                                         <button
                                           type='button'
-                                          className='font-bold text-deep-brown hover:opacity-80'>
+                                          className='font-bold text-deep-brown hover:opacity-80'
+                                          onClick={() =>
+                                            handleRemoveItem(
+                                              item.productId,
+                                              item.quantity
+                                            )
+                                          }>
                                           Ta bort
                                         </button>
                                       </div>
