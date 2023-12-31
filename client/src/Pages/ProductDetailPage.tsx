@@ -88,11 +88,12 @@ const ProductDetailPage = () => {
 
                     <input
                       type='text'
-                      className={`focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none ${
+                      className={
+                        'disabled:text-gray-500 focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                      }
+                      disabled={
                         item?.quantity === 0 || item?.quantity === undefined
-                          ? 'text-gray-500 not-allowed'
-                          : ''
-                      }`}
+                      }
                       value={item?.quantity ?? 0}
                       onChange={(e) =>
                         handleQuantityChange(
@@ -100,13 +101,6 @@ const ProductDetailPage = () => {
                           parseInt(e.target.value)
                         )
                       }
-                      style={{
-                        pointerEvents:
-                          item?.quantity === 0 || item?.quantity === undefined
-                            ? 'none'
-                            : 'auto',
-                        userSelect: 'none',
-                      }}
                     />
 
                     <button
