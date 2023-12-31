@@ -8,10 +8,13 @@ import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
 import Dropdown from './Dropdown'
-import Basket from '../Basket'
+import { getCookie } from '../../utils/getCookie'
+import ShoppingCart from '../ShoppingCart'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
+import { useStoreContext } from '../../context/StoreProvider'
+import useBasket from '../../hooks/useBasket'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,6 +25,28 @@ const Navbar = () => {
 
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
+
+  const { basket, setBasket } = useStoreContext()
+  const { data: basketItem } = useBasket()
+
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
+
+  useEffect(() => {
+    const buyerId = getCookie('buyerId')
+    console.log('buyerId', buyerId)
+
+    const fetchData = async () => {
+      try {
+        if (buyerId && basketItem) {
+          setBasket(basketItem)
+        }
+      } catch (error) {
+        console.error('Something went wrong', error)
+      }
+    }
+
+    fetchData()
+  }, [basketItem, setBasket])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -170,23 +195,23 @@ const Navbar = () => {
             <svg
               className='h-[40px] w-[38px]'
               fill='none'
-              stroke-linecap='round'
-              stroke-linejoin='round'
-              stroke-width='2'
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth='2'
               viewBox='0 0 24 24'
               stroke='currentColor'>
               <path d='M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z'></path>
             </svg>
             <span className='absolute inset-0 object-right-top -mr-6'>
               <div className='inline-flex items-center px-1.5 py-0.5 border-2 border-white rounded-full text-xs font-semibold leading-4 bg-orange text-white hover:bg-light-tan hover:text-deep-brown'>
-                6
+                {itemCount}
               </div>
             </span>
           </button>
         </div>
       </div>
 
-      {openBasket && <Basket />}
+      {openBasket && <ShoppingCart />}
 
       <div>
         {menuOpen &&

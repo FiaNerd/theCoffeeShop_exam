@@ -1,13 +1,20 @@
 import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
-
+import { formatPrice } from '../utils/formatPrice'
+import { useStoreContext } from '../context/StoreProvider'
 interface IProps {
   product: Product
 }
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
+
+  const { addToBasket } = useStoreContext()
+
+  const handleAddItem = (productId: string) => {
+    addToBasket(productId)
+  }
 
   const limitDescription = (text: string, sentenceLimit = 1) => {
     const sentences = text.split('.')
@@ -34,7 +41,7 @@ const CoffeeCard = ({ product }: IProps) => {
 
         <div className='flex flex-col justify-between items-center w-full'>
           <p className='flex text-xl font-bold mb-2 self-end'>
-            {(product.price / 100).toFixed(2)} SEK
+            {formatPrice(product.price)}
           </p>
 
           <div className='flex flex-col w-full justify-between items-center mt-4 sm:mt-0'>
@@ -42,7 +49,8 @@ const CoffeeCard = ({ product }: IProps) => {
               buttonType='create'
               typeAction='submit'
               iconType='cart'
-              className='w-full mb-4'>
+              className='w-full mb-4'
+              onClick={() => handleAddItem(product.productId)}>
               Lägg till
             </Button>
 

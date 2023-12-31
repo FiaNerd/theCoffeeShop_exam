@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import * as CoffeeProducts from '../services/CoffeeAPI'
 
-const useBaskets = () => {
+const useBasket = () => {
   return useQuery({
-    queryKey: ['All baskets'],
-    queryFn: () => CoffeeProducts.getBaskets(),
+    queryKey: ['GetBasket'],
+    queryFn: () => CoffeeProducts.getBasket(),
   })
 }
 
-export default useBaskets
+export default useBasket

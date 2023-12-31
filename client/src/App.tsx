@@ -11,9 +11,11 @@ import PageNotFound from './components/Partial/PageNotFound'
 
 const App = () => {
   return (
-    <div className='flex flex-col min-h-screen'>
+    <div className='conatiner flex flex-col min-h-screen'>
       <Header />
-      <div className='flex justify-center items-center px-4 max-w-[1360px] mx-auto mb-8 mt-4' style={{margin: 'auto'}}>
+      <div
+        className='conatiner px-4 max-w-[1280px] mx-auto mb-8 mt-4'
+        style={{ margin: 'auto' }}>
         <LoadingSpinner />
 
         <Routes>
