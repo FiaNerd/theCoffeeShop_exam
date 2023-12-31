@@ -4,7 +4,7 @@ import { faPlus, faMinus, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
 
 interface IProps {
-  buttonType: 'create' | 'read-more'| 'search' | 'checkout' | 'back'
+  buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back'
   typeAction: 'button' | 'submit'
   iconType?: 'increase' | 'decrease' | 'cart' | 'arrow'
   children?: React.ReactNode
@@ -30,8 +30,7 @@ const Buttons: React.FC<IProps> = ({
         return clsx(
           'py-3',
           'flex items-normal justify-center gap-4',
-          'text-white bg-orange rounded',
-          
+          'text-white bg-orange rounded'
         )
 
       case 'read-more':
@@ -81,7 +80,12 @@ const Buttons: React.FC<IProps> = ({
           </svg>
         )
       case 'arrow':
-        return <FontAwesomeIcon icon={faArrowLeft} className='text-dark-deep-brown hover:text-orange'/>
+        return (
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            className='text-dark-deep-brown hover:text-orange'
+          />
+        )
       default:
         return null
     }
@@ -92,7 +96,7 @@ const Buttons: React.FC<IProps> = ({
       className={clsx(
         'py-3 ',
         'font-bold uppercase',
-        'hover:opacity-80',
+        'hover:opacity-80 cursor-pointer',
         buttonClasses(buttonType),
         className
       )}

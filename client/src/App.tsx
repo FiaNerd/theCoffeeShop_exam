@@ -11,7 +11,7 @@ import PageNotFound from './components/Partial/PageNotFound'
 
 const App = () => {
   return (
-    <div className='conatiner min-h-screen'>
+    <div className='conatiner flex flex-col min-h-screen'>
       <Header />
       <div
         className='conatiner px-4 max-w-[1280px] mx-auto mb-8 mt-4'

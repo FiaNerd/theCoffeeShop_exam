@@ -1,14 +1,14 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { Basket } from '../types/Basket.types'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query' // Importera QueryClient och QueryClientProvider
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query' 
 import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
 
 interface StoreContextValue {
   basket: Basket | null
   setBasket: (basket: Basket) => void
   addToBasket: (productId: string) => void
-  updateQuantity: (productId: string, newQuantity: number) => void // Add this line
+  updateQuantity: (productId: string, newQuantity: number) => void 
   removeItem: (productId: string, quantity: number) => void
 }
 
@@ -73,7 +73,7 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
     try {
       await removeItemFromBasket.mutateAsync({
         productId,
-        quantity: quantity || 1, // If quantity is not provided, default to 1
+        quantity: quantity || 1,
       })
 
       setBasket((prevBasket) => {

@@ -132,7 +132,7 @@ const ShoppingCart = () => {
                                           </span>
                                         </button>
                                         <input
-                                          type='number'
+                                          type='text'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
                                           value={item.quantity ?? 0}
                                           onChange={(e) =>
@@ -203,7 +203,11 @@ const ShoppingCart = () => {
                         <Button
                           buttonType='checkout'
                           typeAction='button'
-                          className=''>
+                          className='disabled:opacity-75'
+                          disabled={
+                            basket?.items.length === 0 ||
+                            basket?.items === undefined
+                          }>
                           Till Kassan
                         </Button>
                       </div>

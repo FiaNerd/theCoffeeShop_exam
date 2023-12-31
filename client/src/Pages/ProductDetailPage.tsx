@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
 import { useStoreContext } from '../context/StoreProvider'
+import { formatPrice } from '../utils/formatPrice'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
@@ -41,7 +42,7 @@ const ProductDetailPage = () => {
     </p>
   ) : (
     <>
-      <div className='w-full flex flex-col md:flex-row mx-auto gap-6 mt-[10em] max-w-[960px]'>
+      <div className='w-full flex flex-col md:flex-row mx-auto gap-6 max-w-[960px]'>
         <img
           src={`http://localhost:5173/src/assets/${product.imageUrl}`}
           className='w-full object-cover mb-4 md:w-1/2 md:mb-0'
@@ -70,45 +71,62 @@ const ProductDetailPage = () => {
 
             <div className='flex flex-col justify-end gap-4 mt-auto'>
               <p className='font-bold text-4xl self-end flex-shrink-0'>
-                {(product.price / 100).toFixed(2)} SEK
+                {formatPrice(product.price)}
               </p>
 
-              <div className='flex items-center w-full gap-5 flex-row sm:justify-between'>
-                <div className='flex items-center h-full justify-between p-3 rounded-lg w-36'>
-                  <button
-                    className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                    onClick={() => handleRemoveItem(product.productId)}>
-                    <span className='m-auto text-2xl font-thin'>−</span>
-                  </button>
-                  <input
-                    type='number'
-                    className='focus:outline-none h-full text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none"'
-                    value={item?.quantity ?? 0}
-                    onChange={(e) =>
-                      handleQuantityChange(
-                        product.productId,
-                        parseInt(e.target.value, 10)
-                      )
-                    }
-                  />
+              <div className='flex flex-row flex-1 items-end text-sm'>
+                <div className='flex flex-row h-auto w-full mb-4 rounded-lg justify-between relative bg-transparent mt-1'>
+                  <div className='flex flex-row w-20 md:w-32'>
+                    <button
+                      className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
+                      onClick={() => handleRemoveItem(product.productId)}
+                      disabled={
+                        item?.quantity === 0 || item?.quantity === undefined
+                      }>
+                      <span className='m-auto text-2xl font-thin'>−</span>
+                    </button>
 
-                  <button
-                    data-action='increment'
-                    className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                    onClick={() => handleAddItem(product.productId)}>
-                    <span className='m-auto text-2xl font-thin'>+</span>
-                  </button>
+                    <input
+                      type='text'
+                      className={`focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none ${
+                        item?.quantity === 0 || item?.quantity === undefined
+                          ? 'text-gray-500 not-allowed'
+                          : ''
+                      }`}
+                      value={item?.quantity ?? 0}
+                      onChange={(e) =>
+                        handleQuantityChange(
+                          product?.productId,
+                          parseInt(e.target.value)
+                        )
+                      }
+                      style={{
+                        pointerEvents:
+                          item?.quantity === 0 || item?.quantity === undefined
+                            ? 'none'
+                            : 'auto',
+                        userSelect: 'none',
+                      }}
+                    />
+
+                    <button
+                      data-action='increment'
+                      className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
+                      onClick={() => handleAddItem(product.productId)}>
+                      <span className='m-auto text-2xl font-thin'>+</span>
+                    </button>
+                  </div>
                 </div>
-
-                <Button
-                  buttonType='create'
-                  typeAction='submit'
-                  iconType='cart'
-                  className='w-full'
-                  onClick={() => handleAddItem(product.productId)}>
-                  Lägg till
-                </Button>
               </div>
+
+              <Button
+                buttonType='create'
+                typeAction='submit'
+                iconType='cart'
+                className='w-full'
+                onClick={() => handleAddItem(product.productId)}>
+                Lägg till
+              </Button>
             </div>
           </div>
         </div>
