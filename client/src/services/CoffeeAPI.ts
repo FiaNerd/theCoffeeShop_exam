@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { Product, Products } from '../types/ProductsAPI.types'
+import { Product } from '../types/ProductsAPI.types'
 import { Basket } from '../types/Basket.types'
+import { PaginatedResponse } from '../types/Pagination.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -19,7 +20,7 @@ const instance = axios.create({
 const get = async <T>(endpoint: string) => {
   try {
     const resp = await instance.get<T>(endpoint)
-    console.log(resp)
+    console.log('Resp ', resp)
     return resp.data
   } catch (error) {
     console.error('Error during GET request:', error)
@@ -28,10 +29,57 @@ const get = async <T>(endpoint: string) => {
 }
 
 /**
- * Get all products
+ * Get products with pagination
+ * @param page The page number to fetch
+ * @param pageSize The number of items per page
  */
-export const getProducts = async () => {
-  return await get<Products>('/products')
+export const getProducts = async (page = 1, pageSize = 12, type = '') => {
+  try {
+    const headers = {
+      Accept: 'application/json',
+    }
+
+    const url = type
+      ? `${BASE_URL}/Products?Type=${type}&PageNumber=${page}&PageSize=${pageSize}`
+      : `${BASE_URL}/Products?PageNumber=${page}&PageSize=${pageSize}`
+
+    console.log('Fetching URL:', url)
+
+    const response = await fetch(url, { headers: headers })
+
+    console.log('URL esponse', response, url)
+
+    if (!response.ok) {
+      throw new Error(`Error fetching products: ${response.statusText}`)
+    }
+
+    const paginationHeaders = response.headers.get('pagination')
+
+    if (!paginationHeaders) {
+      throw new Error('Pagination information not found in header')
+    }
+
+    const paginationData = JSON.parse(paginationHeaders)
+
+    const items = await response.json()
+    console.log('Number of items:', items.length)
+
+    const paginatedResponse: PaginatedResponse<Product> = {
+      items,
+      metaData: {
+        currentPage: paginationData?.currentPage,
+        totalPages: paginationData?.totalPages,
+        pageSize: paginationData?.pageSize.length,
+        totalCount: paginationData?.totalCount,
+      },
+    }
+    console.log('Paginated response', paginatedResponse.metaData.pageSize)
+
+    return paginatedResponse
+  } catch (error) {
+    console.error('Error during GET request:', error)
+    throw error
+  }
 }
 
 /**
@@ -65,11 +113,9 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
  */
 export const removeItemFromBasket = async (productId: string, quantity = 1) => {
   try {
-    console.log('Trying to delete item:', productId, 'with quantity:', quantity)
     const res = await axios.delete(
       `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`
     )
-    console.log('Delete response:', res)
     return res
   } catch (error) {
     console.error('Error deleting item:', error)

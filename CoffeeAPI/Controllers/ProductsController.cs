@@ -17,23 +17,25 @@ public class ProductsController : BaseApiController
       
     }
 
-    [HttpGet]
-public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery]ProductParams productParams)
-{
-    var query = _context.Products
-        .Sort(productParams.OrderBy)
-        .Search(productParams.SearchTerm)
-        .Filter(productParams.Types, productParams.RoastLevels)
-        .AsQueryable();
-    
-        var products = await PagedList<Product>.ToPagedList(query, 
-            productParams.PageNumber, 
-            productParams.PageSize);
+        [HttpGet]
+        public async Task<ActionResult<PagedList<Product>>> GetProducts([FromQuery]ProductParams productParams)
+        {
+            System.Diagnostics.Debug.WriteLine($"PageNumber: {productParams.PageNumber}, PageSize: {productParams.PageSize}");
 
-          Response.AddPaginationHeader(products.ResponseMetaData);
-          
-        return products;
-    }
+            var query = _context.Products
+                .Sort(productParams.OrderBy)
+                .Search(productParams.SearchTerm)
+                .Filter(productParams.Types, productParams.RoastLevels)
+                .AsQueryable();
+            
+                var products = await PagedList<Product>.ToPagedList(query, 
+                    productParams.PageNumber, 
+                    productParams.PageSize);
+
+                Response.AddPaginationHeader(products.ResponseMetaData);
+                
+                return products;
+        }
 
        [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(Guid id)
