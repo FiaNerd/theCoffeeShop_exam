@@ -109,7 +109,8 @@ const Buttons: React.FC<IProps> = ({
       )}
       type={typeAction as 'button' | 'submit'}
       onClick={onClick}
-      disabled={disabled}>
+      disabled={disabled}
+      >
       {renderIcon()}
       {buttonText || children || ''}
     </button>

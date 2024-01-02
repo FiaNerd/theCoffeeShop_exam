@@ -1,33 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react'
 import CoffeeCard from '../components/CoffeeCard'
 import Button from '../components/Partial/Button'
 import useProducts from '../hooks/useProducts'
-
+import { useInView } from 'react-intersection-observer'
+import { useParams } from 'react-router-dom'
 
 const HomePage = () => {
-  const [page, setPage] = useState(1)
-  const pageSize = 8
+  const { type } = useParams()
+  const { inView } = useInView()
 
-
-  const { 
-    data: coffeeProducts, 
-    isLoading, 
-     fetchNextPage,
+  const {
+    data: coffeeProducts,
+    fetchNextPage,
+    isFetchingNextPage,
     hasNextPage,
-    isFetchingNextPage 
-  } = useProducts(page)
+    isLoading,
+  } = useProducts(type || '')
 
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
-  // useEffect(() => {
-  //   const onScroll = (event) => {
+  useEffect(() => {
+    if (!isLoading && !hasNextPage) {
+      console.log('Fetching next page after 5 seconds...')
+      setTimeout(() => {
+        if (!isLoading && !hasNextPage) {
+          fetchNextPage()
+        }
+      }, 5000)
+    }
+  }, [isLoading, hasNextPage, fetchNextPage])
 
-  //   } 
-  //   document.addEventListener("scroll", onScroll)
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
 
-  //   return () => (
-  //     document.removeEventListner("scroll", onScroll)
-  //   )
-  // },[])
+  console.log('coffeeProducts:', coffeeProducts)
 
   return (
     <div>
@@ -40,15 +51,27 @@ const HomePage = () => {
 
       <div className='grid grid-cols-1 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
         {coffeeProducts &&
-          coffeeProducts.map((product) => (
-            <CoffeeCard key={product.productId} product={product} />
-          ))}
+          coffeeProducts.pages.length > 0 &&
+          coffeeProducts.pages
+            .map((page) => page.items)
+            .flat()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            .map((product: any) => (
+              <CoffeeCard key={product.productId} product={product} />
+            ))}
       </div>
-      <div className='flex mx-auto'>
-        <Button buttonType='load-more' typeAction={'button'}>
-          Ladda fler
-        </Button>
-      </div>
+
+      {hasNextPage && (
+        <div className='flex mx-auto justify-center'>
+          <Button
+            buttonType='load-more'
+            typeAction={'button'}
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}>
+            {isFetchingNextPage ? 'Laddar...' : 'Ladda fler'}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

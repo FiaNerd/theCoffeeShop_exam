@@ -1,21 +1,29 @@
 import { useParams } from 'react-router-dom'
 import CoffeeCard from '../components/CoffeeCard'
-import useProducts from '../hooks/useProducts'
 import PageNotFound from '../components/Partial/PageNotFound'
+import { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
+import useProducts from '../hooks/useProducts'
 import Button from '../components/Partial/Button'
 
-interface IProps {
-  page: number
-  pageSize: number
-}
+const ProductPage = () => {
+  const { type, productId } = useParams()
+  const { inView } = useInView()
 
-const ProductPage = ({ page, pageSize }: IProps) => {
   const {
     data: coffeeProducts,
-    isLoading,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
     isError,
-  } = useProducts(page, pageSize)
-  const { type } = useParams()
+    isLoading,
+  } = useProducts(type || '')
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage])
 
   if (isError) {
     return <PageNotFound />
@@ -23,47 +31,92 @@ const ProductPage = ({ page, pageSize }: IProps) => {
 
   const trimmedType = type ?? ''
 
+  console.log('Trimmed Type:', trimmedType)
+
   const filterProducts = () => {
-    return coffeeProducts?.filter((product) => {
+    const allProducts =
+      coffeeProducts?.pages?.flatMap((page) => page.items) ?? []
+
+    console.group('Filtering Products')
+    console.log('All products:', allProducts)
+
+    const normalizedTrimmedType = trimmedType.toLowerCase().trim()
+
+    const filteredProducts = allProducts.filter((product) => {
       const productTypes = product.type.map((productType) =>
         productType.toLowerCase().trim()
       )
 
-      return productTypes.some((productType) =>
-        trimmedType.toLowerCase().includes(productType)
+      console.group('Filtering Products')
+      console.table(
+        allProducts.map((product) => ({
+          productId: product.productId,
+          type: product.type,
+        }))
       )
+
+      const normalizedProductTypes = productTypes.map((productType) =>
+        productType.toLowerCase().trim()
+      )
+
+      const isTypeMatched = normalizedProductTypes.some((productType) =>
+        productType.includes(normalizedTrimmedType)
+      )
+
+      const isProductIdMatched = productId
+        ? String(product.productId) === productId
+        : true
+
+      // console.group('Product')
+      // console.log('Product:', product)
+      // console.log('Product Types:', normalizedProductTypes)
+      // console.log('Is Type Matched:', isTypeMatched)
+      // console.log('Is Product ID Matched:', isProductIdMatched)
+      // console.groupEnd()
+
+      return isTypeMatched && isProductIdMatched
     })
+
+    console.log('Filtered Products:', filteredProducts.length)
+    console.groupEnd()
+
+    return filteredProducts
   }
 
-  const filteredProducts = coffeeProducts ? filterProducts() : []
+  const filteredProducts = filterProducts()
 
   return (
-    <div>
-      {filteredProducts!.length > 0 && (
-        <h1 className='text-dark-deep-brown mb-4 uppercase'>{type}</h1>
+    <>
+      {filteredProducts.length > 0 && (
+        <h1 className='text-dark-deep-brown mb-4 uppercase'>{trimmedType}</h1>
       )}
 
-      {filteredProducts!.length > 0 ? (
-        <>
-          <div className='grid grid-cols-1 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
-            {filteredProducts?.map((product) => (
-              <CoffeeCard key={product.productId} product={product} />
-            ))}
-          </div>
-          <div className='flex mx-auto'>
-            <Button buttonType='load-more' typeAction={'button'}>
-              Ladda fler
-            </Button>
-          </div>
-        </>
+      {filteredProducts.length > 0 ? (
+        <div className='grid grid-cols-1 mb-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown'>
+          {filteredProducts.map((product) => (
+            <CoffeeCard key={product.productId} product={product} />
+          ))}
+        </div>
       ) : (
-        type && (
+        trimmedType && (
           <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
             Inga produkter hittades
           </p>
         )
       )}
-    </div>
+
+      {hasNextPage && (
+        <div className='flex mx-auto justify-center'>
+          <Button
+            buttonType='load-more'
+            typeAction={'button'}
+            disabled={isFetchingNextPage}
+            onClick={() => fetchNextPage()}>
+            {isFetchingNextPage ? 'Laddar...' : 'Ladda fler'}
+          </Button>
+        </div>
+      )}
+    </>
   )
 }
 

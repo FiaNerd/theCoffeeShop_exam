@@ -1,26 +1,21 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import * as CoffeeProducts from '../services/CoffeeAPI';
+import { useInfiniteQuery } from '@tanstack/react-query'
+import * as CoffeeProducts from '../services/CoffeeAPI'
 
-
-const useProducts = (pageSize: number) => {
+const useProducts = (type: string) => {
   return useInfiniteQuery({
-    queryKey: ['products'],
-    queryFn: ({ pageParam = 1 }) => CoffeeProducts.getProducts(pageParam, pageSize),
-    initialPageParam: 1, 
-    getNextPageParam: (lastPage, allPages) => {
-      const nextPage = lastPage.pages.length ? allPages.length + 1 : undefined;
-      return nextPage;
+    queryKey: ['products', type],
+    queryFn: ({ pageParam = 1 }) =>
+    CoffeeProducts.getProducts(pageParam, 12, type),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const { metaData } = lastPage;
+
+      console.log('Last page', lastPage);
+      return metaData.currentPage < metaData.totalPages
+        ? metaData.currentPage + 1
+        : undefined;
     },
   });
 };
-
-
-
-// const useProducts = (page: number, pageSize: number) => {
-//   return useQuery({
-//     queryKey: ['products', page, pageSize],
-//     queryFn: () => CoffeeProducts.getProducts(page, pageSize),
-//   })
-// }
 
 export default useProducts
