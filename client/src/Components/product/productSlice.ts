@@ -23,5 +23,18 @@ export const productSlice = createSlice({
         productsLoaded: false,
         status: 'idle'
     }),
-    reducers: {}
+    reducers: {},
+    extraReducers: (builder => {
+        builder.addCase(fetchProductAsync.pending, (state) => {
+            state.status = 'pendingFetchProducts'
+        })
+        builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+            productsAdapter.setAll(state, action.payload)
+            state.status = 'idle'
+            state.productsLoaded = true
+        })
+        builder.addCase(fetchProductAsync.rejected, (state) => {
+            state.status = 'idle'
+        } )
+    })
 })
