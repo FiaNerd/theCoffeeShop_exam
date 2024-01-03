@@ -12,6 +12,7 @@ interface IProps {
   className?: string
   onClick?: () => void
   disabled?: boolean
+  loading?: boolean
 }
 
 const Buttons: React.FC<IProps> = ({
@@ -23,6 +24,7 @@ const Buttons: React.FC<IProps> = ({
   onClick,
   typeAction,
   disabled,
+  loading,
 }: IProps) => {
   const buttonClasses = (variant: string) => {
     switch (variant) {
@@ -109,9 +111,10 @@ const Buttons: React.FC<IProps> = ({
       )}
       type={typeAction as 'button' | 'submit'}
       onClick={onClick}
-      disabled={disabled}
+      disabled={disabled || loading}
+      
       >
-      {renderIcon()}
+      {loading? "Laddar.." : renderIcon()}
       {buttonText || children || ''}
     </button>
   )

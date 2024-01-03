@@ -2,9 +2,9 @@ import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
-import { useAppDispatch,  } from '../redux/configureStore'
+import { useAppDispatch, useAppSelector,  } from '../redux/configureStore'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
-import { setBasket } from './basket/basketSlice'
+import { addBasketItemAsync, setBasket } from './basket/basketSlice'
 
 interface IProps {
   product: Product
@@ -14,26 +14,27 @@ const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
   const addItemToBasketMutation = useAddItemToBasket()
   const dispatch = useAppDispatch()
+  const { requestStatus } = useAppSelector(state => state.basket)
 
 
-  const handleAddItem = async (productId: string) => {
+  // const handleAddItem = async (productId: string) => {
 
-    console.log('Adding item to basket:', productId)
-    try {
-      const result = await addItemToBasketMutation.mutateAsync({
-        productId,
-        quantity: 1,
-      })
+  //   console.log('Adding item to basket:', productId)
+  //   try {
+  //     const result = await addItemToBasketMutation.mutateAsync({
+  //       productId,
+  //       quantity: 1,
+  //     })
 
-      if (result) {
-        dispatch(setBasket(result))
-      } else {
-        console.error('Error adding item to basket. Empty or invalid response.')
-      }
-    } catch (error) {
-      console.error('Error adding item to basket:', error)
-    }
-  }
+  //     if (result) {
+  //       dispatch(setBasket(result))
+  //     } else {
+  //       console.error('Error adding item to basket. Empty or invalid response.')
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding item to basket:', error)
+  //   }
+  // }
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
     if (!text) {
@@ -75,7 +76,8 @@ const CoffeeCard = ({ product }: IProps) => {
               typeAction='submit'
               iconType='cart'
               className='w-full mb-4'
-              onClick={() => handleAddItem(product.productId)}>
+              loading={requestStatus.includes('pending')}
+              onClick={() => dispatch(addBasketItemAsync({productId: product.productId}))}>
               Lägg till
             </Button>
 

@@ -1,13 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Basket } from '../../types/Basket.types';
+import { addItemToBasket } from '../../services/CoffeeAPI';
 
 interface BasketState {
     basket: Basket | null
+    requestStatus: string
 }
 
 const initialState: BasketState = {
-    basket: null
+    basket: null,
+    requestStatus: 'idle'
 }
+
+export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
+    '/basket/addBasketItemAsync',
+    async ({ productId, quantity = 1 }) => {
+  
+      try {
+        return addItemToBasket(productId, quantity);
+        
+      } catch (error) {
+        console.error('Error adding item to basket:', error);
+        throw error;
+      }
+    }
+  );
+  
 
 export const basketSlice = createSlice({
   name: 'basket',
@@ -39,7 +57,19 @@ export const basketSlice = createSlice({
         }
       },
   },
- 
+  extraReducers: (builder => {
+      builder.addCase(addBasketItemAsync.pending, (state, action) => {
+          console.log("Action", action)
+          state.requestStatus = 'pendingAddItem'
+      })
+      builder.addCase(addBasketItemAsync.fulfilled, (state,action)=> {
+        state.basket = action.payload
+        state.requestStatus = 'idle'
+      })
+      builder.addCase(addBasketItemAsync.rejected, (state)=> {
+        state.requestStatus = 'idle'
+      })
+  })
 });
 
 export const { setBasket, removeItem, updateQuantityInBasket } = basketSlice.actions;
