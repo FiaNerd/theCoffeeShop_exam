@@ -3,16 +3,13 @@ import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
-// import useAddItemToBasket from '../hooks/useAddItemToBasket'
 import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-
-import { ChangeEvent, useState } from 'react'
 import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
-  const { data: product, isLoading, /* refetch */ } = useProduct(productId!)
+  const { data: product, isLoading } = useProduct(productId!)
   const dispatch = useAppDispatch()
   const { basket } = useAppSelector(state => state.basket)
   

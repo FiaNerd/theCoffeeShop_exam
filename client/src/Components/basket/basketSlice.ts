@@ -26,9 +26,9 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
   );
 
 
-  export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity?: number }>(
+  export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
     'basket/removeItemFromBasketAsync',
-    async ({ productId, quantity = 1 }) => {
+    async ({ productId, quantity }) => {
         console.log('Thunk is executing');
         try {
           return await removeItemFromBasket(productId, quantity)
@@ -47,14 +47,6 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
           setBasket: (state, action) => {
             state.basket = action.payload;
           },
-          updateQuantityInBasket: (state, action) => {
-              const { productId, newQuantity } = action.payload;
-              const itemIndex = state.basket?.items.findIndex(item => item.productId === productId);
-          
-              if (itemIndex !== -1 && itemIndex !== undefined) {
-                state.basket!.items[itemIndex].quantity = newQuantity;
-              }
-            },
         },
         extraReducers: (builder) => {
           builder
@@ -79,7 +71,7 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
                 return;
               }
       
-              state.basket!.items[itemIndex].quantity -= quantity!;
+              state.basket!.items[itemIndex].quantity -= quantity;
       
               if (state.basket?.items[itemIndex].quantity === 0) {
                 state.basket.items.splice(itemIndex, 1);
@@ -94,4 +86,4 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
       });
       
 
-export const { setBasket, updateQuantityInBasket } = basketSlice.actions;
+export const { setBasket } = basketSlice.actions;

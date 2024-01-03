@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useState } from 'react'
+import { Fragment,useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '../Partial/Button'
@@ -10,25 +10,7 @@ const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
   const dispatch = useAppDispatch()
   const { basket,  } = useAppSelector(state => state.basket)
-  const [quantity, setQuantity] = useState(0);
 
-  
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    if (parseInt(event.currentTarget.value) >= 0)
-        setQuantity(parseInt(event.currentTarget.value));
-}
-// useEffect(() => {
-//   if (item) setQuantity(item.quantity);
-// }, [ item]);
-  
-  console.log(quantity)
-
-  // useEffect(() => {
-  //   if (basket?.items) {
-  //     console.log(quantities)
-  //     setQuantities(quantities);
-  //   }
-  // }, [basket, quantities]);
 
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;

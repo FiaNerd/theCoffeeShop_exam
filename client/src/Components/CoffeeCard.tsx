@@ -57,8 +57,8 @@ const CoffeeCard = ({ product }: IProps) => {
             typeAction='submit'
             iconType='cart'
             className='w-full mb-4'
-            disabled={requestStatus.includes('pendingAddItem' + product.productId)}
-            isLoading={requestStatus.includes('pendingAddItem' + product.productId)}
+            disabled={requestStatus === 'pendingAddItem' + product.productId}
+            isLoading={requestStatus === 'pendingAddItem' + product.productId}
             onClick={() => {
               dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }));
             }}
