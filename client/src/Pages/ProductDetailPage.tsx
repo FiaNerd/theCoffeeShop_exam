@@ -19,36 +19,11 @@ const ProductDetailPage = () => {
   const item = basket?.items.find(
     (item) => item.productId === product?.productId
     )
-    const [quantity, setQuantity] = useState(item?.quantity || 0);
 
-          // const handleUpdateCart = () => {
-          //   if (!product) {
-          //     return;
-          //   }
-          
-          //   if (!item || quantity > item.quantity) {
-          //     const updateQuantity = item ? quantity + item.quantity : quantity;
-          //     if (product.productId) {
-          //       dispatch(addBasketItemAsync({ productId: product.productId, quantity: updateQuantity }));
-          //     }
-          //   } else {
-          //     const updateQuantity = item.quantity - quantity;
-          //     if (product.productId) {
-          //       dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: updateQuantity }));
-          //     }
-          //   }
-          // };
 
-          const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-            const newQuantity = parseInt(event.target.value) || 0;
-            setQuantity(newQuantity);
-          };
-          
-  
-
-          if (!product) {
-            return <PageNotFound />
-          }
+    if (!product) {
+      return <PageNotFound />
+    }
   
 
   return isLoading || !product ? (
@@ -101,13 +76,10 @@ const ProductDetailPage = () => {
                       <span className='m-auto text-2xl font-thin'>−</span>
                     </button>
 
-                    <input
-                      type='text'
-                      className='disabled:text-gray-500 focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                      disabled={item?.quantity === 0 || item?.quantity === undefined}
-                      value={quantity}
-                      onChange={(e) => handleInputChange(e)}
-                    />
+                    <div className='justify-center focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                        >
+                      {item?.quantity ?? 0}
+                    </div>
 
                     <button
                       data-action='increment'

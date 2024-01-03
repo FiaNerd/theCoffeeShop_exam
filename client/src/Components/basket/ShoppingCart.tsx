@@ -1,37 +1,42 @@
-import { ChangeEvent, Fragment, useState } from 'react'
+import { ChangeEvent, Fragment, useEffect, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '../Partial/Button'
 import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../../utils/formatPrice'
-
-import useBasket from '../../hooks/useBasket'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
-  const { data: basketItem } = useBasket()
   const dispatch = useAppDispatch()
   const { basket,  } = useAppSelector(state => state.basket)
+  const [quantity, setQuantity] = useState(0);
 
   
-  const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
-
-  const handleInputChange = (productId: string, event: ChangeEvent<HTMLInputElement>) => {
-    const newQuantities = { ...quantities, [productId]: parseInt(event.target.value) || 0 };
-    setQuantities(newQuantities);
-  };
-
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    if (parseInt(event.currentTarget.value) >= 0)
+        setQuantity(parseInt(event.currentTarget.value));
+}
+// useEffect(() => {
+//   if (item) setQuantity(item.quantity);
+// }, [ item]);
   
+  console.log(quantity)
+
+  // useEffect(() => {
+  //   if (basket?.items) {
+  //     console.log(quantities)
+  //     setQuantities(quantities);
+  //   }
+  // }, [basket, quantities]);
 
   const subtotal =
-    basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??
-    0
+    basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
 
-  const deliveryFee = subtotal > 50000 ? 0 : 5000
+  const deliveryFee = subtotal > 50000 ? 0 : 5000;
 
-  if (!basketItem) {
-    return null
+  if (!basket) {
+    return null;
   }
 
   return (
@@ -120,29 +125,33 @@ const ShoppingCart = () => {
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
                                           onClick={() =>
-                                            dispatch(removeItemFromBasketAsync({productId: item.productId, quantity: 1}))
+                                            dispatch(
+                                              removeItemFromBasketAsync({
+                                                productId: item.productId,
+                                                quantity: 1,
+                                              })
+                                            )
                                           }>
                                           <span className='m-auto text-2xl font-thin'>
                                             -
                                           </span>
                                         </button>
-                                        <input
-                                          type='text'
-                                          className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          value={quantities}
-                                          onChange={(e) => handleInputChange(item.productId, e)}
-                                        />
+                                          <div className='justify-center focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                                             >
+                                              {item.quantity ?? 0}
+                                          </div>
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                                          
-                                        onClick={() => {
-                                          dispatch(addBasketItemAsync({ productId: item.productId, quantity: 1 }));
-                                        }}
-                                        >
+                                          onClick={() => {
+                                            dispatch(
+                                              addBasketItemAsync({
+                                                productId: item.productId,
+                                                quantity: 1,
+                                              })
+                                            );
+                                          }}>
                                           <span className='m-auto text-2xl font-thin'>+</span>
                                         </button>
-
-
                                       </div>
 
                                       <div className='flex justify-between mt-2 md:ml-2'>
