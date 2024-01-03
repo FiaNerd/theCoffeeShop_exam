@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { ChangeEvent, Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '../Partial/Button'
@@ -6,60 +6,22 @@ import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../../utils/formatPrice'
 
 import useBasket from '../../hooks/useBasket'
-import useAddItemToBasket from '../../hooks/useAddItemToBasket'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
-import { setBasket, removeItem, updateQuantityInBasket } from './basketSlice'
-import useRemoveItemFromBasket from '../../hooks/useRemoveItemFromBasket'
-
+import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
-  const { data: basketItem, refetch } = useBasket()
-  const addItemToBasketMutation = useAddItemToBasket()
-  const removeItemFromBasket = useRemoveItemFromBasket()
+  const { data: basketItem } = useBasket()
   const dispatch = useAppDispatch()
-  const { basket } = useAppSelector(state => state.basket)
+  const { basket,  } = useAppSelector(state => state.basket)
 
-
-  const handleAddItem = async (productId: string) => {
-
-    console.log('Adding item to basket:', productId)
-    try {
-      const result = await addItemToBasketMutation.mutateAsync({
-        productId,
-        quantity: 1,
-      })
-
-      if (result) {
-        dispatch(setBasket(result))
-      } else {
-        console.error('Error adding item to basket. Empty or invalid response.')
-      }
-    } catch (error) {
-      console.error('Error adding item to basket:', error)
-    }
-  }
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    dispatch(updateQuantityInBasket({ productId, newQuantity }))
-  }
-
-
-
-  const handleRemoveItem = (productId: string, quantity: number) => {
-    console.log('Removing item:', productId, 'with quantity:', quantity);
   
-    removeItemFromBasket.mutateAsync({
-      productId,
-      quantity: quantity || 1,
-    })
-      .then(() => {
-        dispatch(removeItem({ productId, quantity }));
-  
-        refetch();
-      })
-      .catch((error) => {
-        console.error('Error removing item:', error);
-      });
+  const [quantities, setQuantities] = useState<{ [productId: string]: number }>({});
+
+  const handleInputChange = (productId: string, event: ChangeEvent<HTMLInputElement>) => {
+    const newQuantities = { ...quantities, [productId]: parseInt(event.target.value) || 0 };
+    setQuantities(newQuantities);
   };
+
   
 
   const subtotal =
@@ -158,33 +120,29 @@ const ShoppingCart = () => {
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
                                           onClick={() =>
-                                            handleRemoveItem(item.productId, 1)
+                                            dispatch(removeItemFromBasketAsync({productId: item.productId, quantity: 1}))
                                           }>
                                           <span className='m-auto text-2xl font-thin'>
-                                            −
+                                            -
                                           </span>
                                         </button>
                                         <input
                                           type='text'
                                           className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          value={item.quantity ?? 0}
-                                          onChange={(e) =>
-                                            handleQuantityChange(
-                                              item?.productId,
-                                              parseInt(e.target.value)
-                                            )
-                                          }
+                                          value={quantities}
+                                          onChange={(e) => handleInputChange(item.productId, e)}
                                         />
                                         <button
-                                          data-action='increment'
                                           className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                                          onClick={() =>
-                                            handleAddItem(item.productId)
-                                          }>
-                                          <span className='m-auto text-2xl font-thin'>
-                                            +
-                                          </span>
+                                          
+                                        onClick={() => {
+                                          dispatch(addBasketItemAsync({ productId: item.productId, quantity: 1 }));
+                                        }}
+                                        >
+                                          <span className='m-auto text-2xl font-thin'>+</span>
                                         </button>
+
+
                                       </div>
 
                                       <div className='flex justify-between mt-2 md:ml-2'>
@@ -192,10 +150,7 @@ const ShoppingCart = () => {
                                           type='button'
                                           className='font-bold text-deep-brown hover:opacity-80'
                                           onClick={() =>
-                                            handleRemoveItem(
-                                              item.productId,
-                                              item.quantity
-                                            )
+                                            dispatch(removeItemFromBasketAsync({productId: item.productId, quantity: item.quantity}))
                                           }>
                                           Ta bort
                                         </button>

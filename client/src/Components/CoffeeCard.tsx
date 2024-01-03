@@ -12,9 +12,7 @@ interface IProps {
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
   const dispatch = useAppDispatch()
-  const { requestStatus, basket } = useAppSelector(state => state.basket)
-  console.log('Request Status:', requestStatus);
-console.log('Basket:', basket);
+  const { requestStatus } = useAppSelector(state => state.basket)
 
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {

@@ -112,9 +112,10 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
  */
 export const removeItemFromBasket = async (productId: string, quantity = 1) : Promise<void> => {
   try {
-    return await axios.delete(
+    const res =  await axios.delete(
       `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`
     )
+    return res.data
   } catch (error) {
     console.error('Error deleting item:', error)
     throw error

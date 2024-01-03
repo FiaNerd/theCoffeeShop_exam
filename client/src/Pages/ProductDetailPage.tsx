@@ -3,69 +3,53 @@ import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
-import useAddItemToBasket from '../hooks/useAddItemToBasket'
-import { removeItem, setBasket, updateQuantityInBasket } from '../components/basket/basketSlice'
-import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
+// import useAddItemToBasket from '../hooks/useAddItemToBasket'
+import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
+
+import { ChangeEvent, useState } from 'react'
+import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
-  const { data: product, isLoading, refetch } = useProduct(productId!)
-
   const navigate = useNavigate()
-
-  const addItemToBasketMutation = useAddItemToBasket()
-  const removeItemFromBasket = useRemoveItemFromBasket()
+  const { data: product, isLoading, /* refetch */ } = useProduct(productId!)
   const dispatch = useAppDispatch()
   const { basket } = useAppSelector(state => state.basket)
-
+  
   const item = basket?.items.find(
     (item) => item.productId === product?.productId
-  )
+    )
+    const [quantity, setQuantity] = useState(item?.quantity || 0);
 
-  const handleAddItem = async (productId: string) => {
+          // const handleUpdateCart = () => {
+          //   if (!product) {
+          //     return;
+          //   }
+          
+          //   if (!item || quantity > item.quantity) {
+          //     const updateQuantity = item ? quantity + item.quantity : quantity;
+          //     if (product.productId) {
+          //       dispatch(addBasketItemAsync({ productId: product.productId, quantity: updateQuantity }));
+          //     }
+          //   } else {
+          //     const updateQuantity = item.quantity - quantity;
+          //     if (product.productId) {
+          //       dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: updateQuantity }));
+          //     }
+          //   }
+          // };
 
-    console.log('Adding item to basket:', productId)
-    try {
-      const result = await addItemToBasketMutation.mutateAsync({
-        productId,
-        quantity: 1,
-      })
-
-      if (result) {
-        console.log("Add item result", result)
-        dispatch(setBasket(result))
-      } else {
-        console.error('Error adding item to basket. Empty or invalid response.')
-      }
-    } catch (error) {
-      console.error('Error adding item to basket:', error)
-    }
-  }
-
-  const handleQuantityChange = (productId: string, quantity: number) => {
-    dispatch(updateQuantityInBasket({productId, quantity}))
-  }
-
-  const handleRemoveItem = (productId: string, quantity: number) => {
-    console.log('Removing item:', productId, 'with quantity:', quantity);
+          const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+            const newQuantity = parseInt(event.target.value) || 0;
+            setQuantity(newQuantity);
+          };
+          
   
-    removeItemFromBasket.mutateAsync({
-      productId,
-      quantity: quantity || 1,
-    })
-      .then(() => {
-        dispatch(removeItem({ productId, quantity }));
-  
-        refetch();
-      })
-      .catch((error) => {
-        console.error('Error removing item:', error);
-      });
-  };
 
-  if (!productId) {
-    return <p className='text-2xl font-bold'>Ogiltigt produkt-ID</p>
-  }
+          if (!product) {
+            return <PageNotFound />
+          }
+  
 
   return isLoading || !product ? (
     <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
@@ -105,12 +89,12 @@ const ProductDetailPage = () => {
                 {formatPrice(product.price)}
               </p>
 
-              <div className='flex flex-row flex-1 items-end text-sm'>
+              <div className='flex flex-row flex-1 items-end text-sm'> 
                 <div className='flex flex-row h-auto w-full mb-4 rounded-lg justify-between relative bg-transparent mt-1'>
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                      onClick={() =>handleRemoveItem(product.productId, 1)}
+                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: 1}))}
                       disabled={
                         item?.quantity === 0 || item?.quantity === undefined
                       }>
@@ -119,25 +103,17 @@ const ProductDetailPage = () => {
 
                     <input
                       type='text'
-                      className={
-                        'disabled:text-gray-500 focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                      }
-                      disabled={
-                        item?.quantity === 0 || item?.quantity === undefined
-                      }
-                      value={item?.quantity ?? 0}
-                      onChange={(e) =>
-                        handleQuantityChange(
-                          product?.productId,
-                          parseInt(e.target.value)
-                        )
-                      }
+                      className='disabled:text-gray-500 focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                      disabled={item?.quantity === 0 || item?.quantity === undefined}
+                      value={quantity}
+                      onChange={(e) => handleInputChange(e)}
                     />
 
                     <button
                       data-action='increment'
                       className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                      onClick={() => handleAddItem(product.productId)}>
+                      onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                      >
                       <span className='m-auto text-2xl font-thin'>+</span>
                     </button>
                   </div>
@@ -149,7 +125,8 @@ const ProductDetailPage = () => {
                 typeAction='submit'
                 iconType='cart'
                 className='w-full'
-                onClick={() => handleAddItem(product.productId)}>
+                onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                >
                 Lägg till
               </Button>
             </div>
