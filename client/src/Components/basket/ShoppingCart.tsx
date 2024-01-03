@@ -4,30 +4,63 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '../Partial/Button'
 import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../../utils/formatPrice'
-import { useStoreContext } from '../../context/StoreProvider'
+
 import useBasket from '../../hooks/useBasket'
+import useAddItemToBasket from '../../hooks/useAddItemToBasket'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { setBasket, removeItem, updateQuantityInBasket } from './basketSlice'
+import useRemoveItemFromBasket from '../../hooks/useRemoveItemFromBasket'
 
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
-
-  const { basket } = useStoreContext()
   const { data: basketItem, refetch } = useBasket()
+  const addItemToBasketMutation = useAddItemToBasket()
+  const removeItemFromBasket = useRemoveItemFromBasket()
+  const dispatch = useAppDispatch()
+  const { basket } = useAppSelector(state => state.basket)
 
-  const { addToBasket, updateQuantity, removeItem } = useStoreContext()
 
-  const handleAddItem = (productId: string) => {
-    addToBasket(productId)
+  const handleAddItem = async (productId: string) => {
+
+    console.log('Adding item to basket:', productId)
+    try {
+      const result = await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      })
+
+      if (result) {
+        dispatch(setBasket(result))
+      } else {
+        console.error('Error adding item to basket. Empty or invalid response.')
+      }
+    } catch (error) {
+      console.error('Error adding item to basket:', error)
+    }
   }
-
   const handleQuantityChange = (productId: string, newQuantity: number) => {
-    updateQuantity(productId, newQuantity)
+    dispatch(updateQuantityInBasket({ productId, newQuantity }))
   }
+
+
 
   const handleRemoveItem = (productId: string, quantity: number) => {
-    console.log('Removing item:', productId, 'with quantity:', quantity)
-    removeItem(productId, quantity)
-    refetch()
-  }
+    console.log('Removing item:', productId, 'with quantity:', quantity);
+  
+    removeItemFromBasket.mutateAsync({
+      productId,
+      quantity: quantity || 1,
+    })
+      .then(() => {
+        dispatch(removeItem({ productId, quantity }));
+  
+        refetch();
+      })
+      .catch((error) => {
+        console.error('Error removing item:', error);
+      });
+  };
+  
 
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??

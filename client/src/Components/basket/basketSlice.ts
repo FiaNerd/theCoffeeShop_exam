@@ -29,8 +29,17 @@ export const basketSlice = createSlice({
         if(state.basket?.items[itemIndex].quantity === 0){
             state.basket.items.splice(itemIndex, 1)
         }
-    }
+    },
+    updateQuantityInBasket: (state, action) => {
+        const { productId, newQuantity } = action.payload;
+        const itemIndex = state.basket?.items.findIndex(item => item.productId === productId);
+    
+        if (itemIndex !== -1 && itemIndex !== undefined) {
+          state.basket!.items[itemIndex].quantity = newQuantity;
+        }
+      },
   },
+ 
 });
 
-export const { setBasket, removeItem } = basketSlice.actions;
+export const { setBasket, removeItem, updateQuantityInBasket } = basketSlice.actions;

@@ -12,7 +12,6 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
-  // const { addToBasket } = useStoreContext()
   const addItemToBasketMutation = useAddItemToBasket()
   const dispatch = useAppDispatch()
 
