@@ -1,36 +1,67 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
-import { useStoreContext } from '../context/StoreProvider'
 import { formatPrice } from '../utils/formatPrice'
+import { useAppDispatch, useAppSelector } from '../redux/configureStore'
+import useAddItemToBasket from '../hooks/useAddItemToBasket'
+import { removeItem, setBasket, updateQuantityInBasket } from '../components/basket/basketSlice'
+import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
-  const { data: product, isLoading } = useProduct(productId!)
+  const { data: product, isLoading, refetch } = useProduct(productId!)
 
   const navigate = useNavigate()
 
-  const { basket, addToBasket, updateQuantity, removeItem } = useStoreContext()
+  const addItemToBasketMutation = useAddItemToBasket()
+  const removeItemFromBasket = useRemoveItemFromBasket()
+  const dispatch = useAppDispatch()
+  const { basket } = useAppSelector(state => state.basket)
 
   const item = basket?.items.find(
     (item) => item.productId === product?.productId
   )
 
-  const handleAddItem = (productId: string) => {
-    addToBasket(productId)
+  const handleAddItem = async (productId: string) => {
+
+    console.log('Adding item to basket:', productId)
+    try {
+      const result = await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      })
+
+      if (result) {
+        console.log("Add item result", result)
+        dispatch(setBasket(result))
+      } else {
+        console.error('Error adding item to basket. Empty or invalid response.')
+      }
+    } catch (error) {
+      console.error('Error adding item to basket:', error)
+    }
   }
 
   const handleQuantityChange = (productId: string, quantity: number) => {
-    updateQuantity(productId, quantity)
+    dispatch(updateQuantityInBasket({productId, quantity}))
   }
 
-  const handleRemoveItem = (productId: string) => {
-    const item = basket?.items.find((item) => item.productId === productId)
-
-    if (item && item.quantity > 0) {
-      removeItem(productId, 1)
-    }
-  }
+  const handleRemoveItem = (productId: string, quantity: number) => {
+    console.log('Removing item:', productId, 'with quantity:', quantity);
+  
+    removeItemFromBasket.mutateAsync({
+      productId,
+      quantity: quantity || 1,
+    })
+      .then(() => {
+        dispatch(removeItem({ productId, quantity }));
+  
+        refetch();
+      })
+      .catch((error) => {
+        console.error('Error removing item:', error);
+      });
+  };
 
   if (!productId) {
     return <p className='text-2xl font-bold'>Ogiltigt produkt-ID</p>
@@ -79,7 +110,7 @@ const ProductDetailPage = () => {
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                      onClick={() => handleRemoveItem(product.productId)}
+                      onClick={() =>handleRemoveItem(product.productId, 1)}
                       disabled={
                         item?.quantity === 0 || item?.quantity === undefined
                       }>
