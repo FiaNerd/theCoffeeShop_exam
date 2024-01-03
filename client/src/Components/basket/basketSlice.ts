@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Basket } from '../../types/Basket.types';
-import { addItemToBasket } from '../../services/CoffeeAPI';
+import { addItemToBasket, removeItemFromBasket } from '../../services/CoffeeAPI';
 
 interface BasketState {
     basket: Basket | null
@@ -17,15 +17,27 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
     async ({ productId, quantity = 1 }) => {
       console.log('Thunk is executing');
       try {
-        const result = await addItemToBasket(productId, quantity);
-        console.log('Async operation succeeded. Result:', result);
-        return result;
+        return await addItemToBasket(productId, quantity);
       } catch (error) {
         console.error('Async operation failed. Error:', error);
         throw error;
       }
     }
   );
+
+
+  export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity?: number }>(
+    'basket/removeItemFromBasketAsync',
+    async ({ productId, quantity = 1 }) => {
+        console.log('Thunk is executing');
+        try {
+          return await removeItemFromBasket(productId, quantity)
+        } catch (error) { 
+          console.error('Async operation failed. Error:', error);
+          throw error;
+        }
+     })
+  
   
   
 
