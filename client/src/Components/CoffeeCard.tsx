@@ -3,8 +3,7 @@ import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector,  } from '../redux/configureStore'
-import useAddItemToBasket from '../hooks/useAddItemToBasket'
-import { addBasketItemAsync, setBasket } from './basket/basketSlice'
+import { addBasketItemAsync } from './basket/basketSlice'
 
 interface IProps {
   product: Product
@@ -12,29 +11,11 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
-  const addItemToBasketMutation = useAddItemToBasket()
   const dispatch = useAppDispatch()
-  const { requestStatus } = useAppSelector(state => state.basket)
+  const { requestStatus, basket } = useAppSelector(state => state.basket)
+  console.log('Request Status:', requestStatus);
+console.log('Basket:', basket);
 
-
-  // const handleAddItem = async (productId: string) => {
-
-  //   console.log('Adding item to basket:', productId)
-  //   try {
-  //     const result = await addItemToBasketMutation.mutateAsync({
-  //       productId,
-  //       quantity: 1,
-  //     })
-
-  //     if (result) {
-  //       dispatch(setBasket(result))
-  //     } else {
-  //       console.error('Error adding item to basket. Empty or invalid response.')
-  //     }
-  //   } catch (error) {
-  //     console.error('Error adding item to basket:', error)
-  //   }
-  // }
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
     if (!text) {
@@ -71,15 +52,23 @@ const CoffeeCard = ({ product }: IProps) => {
           </p>
 
           <div className='flex flex-col w-full justify-between items-center mt-4 sm:mt-0'>
-            <Button
-              buttonType='create'
-              typeAction='submit'
-              iconType='cart'
-              className='w-full mb-4'
-              loading={requestStatus.includes('pending')}
-              onClick={() => dispatch(addBasketItemAsync({productId: product.productId}))}>
-              Lägg till
-            </Button>
+    
+
+          <Button
+            buttonType='create'
+            typeAction='submit'
+            iconType='cart'
+            className='w-full mb-4'
+            disabled={requestStatus.includes('pendingAddItem' + product.productId)}
+            isLoading={requestStatus.includes('pendingAddItem' + product.productId)}
+            onClick={() => {
+              dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }));
+            }}
+          >
+            Lägg till
+          </Button>
+
+
 
             <div className='w-full'>
               <Link to={`/products/${type}/${product.productId}`}>

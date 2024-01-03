@@ -6,7 +6,8 @@ import { basketSlice } from '../components/basket/basketSlice';
 export const store = configureStore({
     reducer: {
         basket: basketSlice.reducer,
-    }
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 })
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,18 +1,18 @@
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faArrowLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
 
 interface IProps {
   buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back' | 'load-more'
   typeAction: 'button' | 'submit'
-  iconType?: 'increase' | 'decrease' | 'cart' | 'arrow'
+  iconType?: 'increase' | 'decrease' | 'cart' | 'arrow' | 'spinner'
   children?: React.ReactNode
   buttonText?: React.ReactNode
   className?: string
   onClick?: () => void
   disabled?: boolean
-  loading?: boolean
+  isLoading?: boolean
 }
 
 const Buttons: React.FC<IProps> = ({
@@ -24,7 +24,7 @@ const Buttons: React.FC<IProps> = ({
   onClick,
   typeAction,
   disabled,
-  loading,
+  isLoading,
 }: IProps) => {
   const buttonClasses = (variant: string) => {
     switch (variant) {
@@ -88,6 +88,7 @@ const Buttons: React.FC<IProps> = ({
             />
           </svg>
         )
+
       case 'arrow':
         return (
           <FontAwesomeIcon
@@ -95,6 +96,8 @@ const Buttons: React.FC<IProps> = ({
             className='text-dark-deep-brown hover:text-orange'
           />
         )
+        case 'spinner':
+          return <FontAwesomeIcon icon={faSpinner} spin className="fa-spin fa-lg" />
       default:
         return null
     }
@@ -111,11 +114,16 @@ const Buttons: React.FC<IProps> = ({
       )}
       type={typeAction as 'button' | 'submit'}
       onClick={onClick}
-      disabled={disabled || loading}
-      
+      disabled={disabled || isLoading}
       >
-      {loading? "Laddar.." : renderIcon()}
-      {buttonText || children || ''}
+      {isLoading ? (
+        <div className="flex items-center justify-center">
+          {renderIcon()}
+        </div>
+      ) : (
+        renderIcon()
+      )}
+      {!isLoading && (buttonText || children || '')}
     </button>
   )
 }

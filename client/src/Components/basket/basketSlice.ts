@@ -15,16 +15,18 @@ const initialState: BasketState = {
 export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
     '/basket/addBasketItemAsync',
     async ({ productId, quantity = 1 }) => {
-  
+      console.log('Thunk is executing');
       try {
-        return addItemToBasket(productId, quantity);
-        
+        const result = await addItemToBasket(productId, quantity);
+        console.log('Async operation succeeded. Result:', result);
+        return result;
       } catch (error) {
-        console.error('Error adding item to basket:', error);
+        console.error('Async operation failed. Error:', error);
         throw error;
       }
     }
   );
+  
   
 
 export const basketSlice = createSlice({
@@ -57,19 +59,20 @@ export const basketSlice = createSlice({
         }
       },
   },
-  extraReducers: (builder => {
-      builder.addCase(addBasketItemAsync.pending, (state, action) => {
-          console.log("Action", action)
-          state.requestStatus = 'pendingAddItem'
+  extraReducers: (builder) => {
+    builder
+      .addCase(addBasketItemAsync.pending, (state, action) => {
+        state.requestStatus = 'pendingAddItem' + action.meta.arg.productId ;
       })
-      builder.addCase(addBasketItemAsync.fulfilled, (state,action)=> {
-        state.basket = action.payload
-        state.requestStatus = 'idle'
+      .addCase(addBasketItemAsync.fulfilled, (state, action) => {
+        state.basket = action.payload;
+        state.requestStatus = 'idle';
       })
-      builder.addCase(addBasketItemAsync.rejected, (state)=> {
-        state.requestStatus = 'idle'
+      .addCase(addBasketItemAsync.rejected, (state) => {
+        state.requestStatus = 'idle';
       })
-  })
+  },
+  
 });
 
 export const { setBasket, removeItem, updateQuantityInBasket } = basketSlice.actions;
