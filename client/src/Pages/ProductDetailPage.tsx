@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
-import Button from '../components/Partial/Button'
+import Button from '../components/partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-import PageNotFound from '../components/Partial/PageNotFound'
+import PageNotFound from '../components/partial/PageNotFound'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
@@ -14,7 +14,7 @@ const ProductDetailPage = () => {
   const { basket } = useAppSelector(state => state.basket)
   
   const item = basket?.items.find(
-    (item) => item.productId === product?.productId
+    (item) => item.productId === product?.id
     )
 
 
@@ -66,7 +66,7 @@ const ProductDetailPage = () => {
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: 1}))}
+                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: 1}))}
                       disabled={
                         item?.quantity === 0 || item?.quantity === undefined
                       }>
@@ -81,7 +81,7 @@ const ProductDetailPage = () => {
                     <button
                       data-action='increment'
                       className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                      onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                      onClick={() => dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
                       >
                       <span className='m-auto text-2xl font-thin'>+</span>
                     </button>
@@ -94,7 +94,7 @@ const ProductDetailPage = () => {
                 typeAction='submit'
                 iconType='cart'
                 className='w-full'
-                onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                onClick={() => dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
                 >
                 Lägg till
               </Button>

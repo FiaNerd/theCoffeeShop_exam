@@ -15,7 +15,7 @@ const useRemoveItemFromBasket = () => {
       removeItemFromBasket(params.productId, params.quantity),
     onSuccess: (result) => {
     
-      const removedItem = result.data
+      const removedItem = result
 
       queryClient.setQueryData<Basket | null>(['basket'], (prevBasket) => {
         if (!prevBasket) {

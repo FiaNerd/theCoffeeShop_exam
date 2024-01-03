@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import useProducts from '../hooks/useProducts'
 import { useInView } from 'react-intersection-observer'
 import { useParams } from 'react-router-dom'
-import Button from '../components/Partial/Button'
-import CoffeeCard from '../components/CoffeeCard'
+import Button from '../components/partial/Button'
+import CoffeeCard from '../components/product/CoffeeCard'
 
 const HomePage = () => {
   const { type } = useParams()
@@ -57,7 +57,7 @@ const HomePage = () => {
             .flat()
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             .map((product: any) => (
-              <CoffeeCard key={product.productId} product={product} />
+              <CoffeeCard key={product.id} product={product} />
             ))}
       </div>
 

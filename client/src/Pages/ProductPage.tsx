@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom'
-import CoffeeCard from '../components/CoffeeCard'
-import PageNotFound from '../components/Partial/PageNotFound'
+import CoffeeCard from '../components/product/CoffeeCard'
+import PageNotFound from '../components/partial/PageNotFound'
 import { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 import useProducts from '../hooks/useProducts'
-import Button from '../components/Partial/Button'
+import Button from '../components/partial/Button'
 
 const ProductPage = () => {
   const { type, productId } = useParams()
@@ -31,48 +31,37 @@ const ProductPage = () => {
 
   const trimmedType = type ?? ''
 
-  console.log('Trimmed Type:', trimmedType)
 
   const filterProducts = () => {
     const allProducts =
       coffeeProducts?.pages?.flatMap((page) => page.items) ?? []
 
-    console.group('Filtering Products')
-    console.log('All products:', allProducts)
 
     const normalizedTrimmedType = trimmedType.toLowerCase().trim()
 
     const filteredProducts = allProducts.filter((product) => {
-      const productTypes = product.type.map((productType) =>
+      const productTypes = product.type.map((productType: string) =>
         productType.toLowerCase().trim()
       )
 
-      console.group('Filtering Products')
-      console.table(
+
         allProducts.map((product) => ({
           productId: product.productId,
           type: product.type,
         }))
-      )
 
-      const normalizedProductTypes = productTypes.map((productType) =>
+
+      const normalizedProductTypes = productTypes.map((productType: string) =>
         productType.toLowerCase().trim()
       )
 
-      const isTypeMatched = normalizedProductTypes.some((productType) =>
+      const isTypeMatched = normalizedProductTypes.some((productType: string) =>
         productType.includes(normalizedTrimmedType)
       )
 
       const isProductIdMatched = productId
         ? String(product.productId) === productId
         : true
-
-      // console.group('Product')
-      // console.log('Product:', product)
-      // console.log('Product Types:', normalizedProductTypes)
-      // console.log('Is Type Matched:', isTypeMatched)
-      // console.log('Is Product ID Matched:', isProductIdMatched)
-      // console.groupEnd()
 
       return isTypeMatched && isProductIdMatched
     })

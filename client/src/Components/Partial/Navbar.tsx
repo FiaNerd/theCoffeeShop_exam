@@ -23,14 +23,11 @@ const Navbar = () => {
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
   const [openBasket, setOpenBasket] = useState(false)
   const [openSearchbar, setOpenSearchbar] = useState(false)
-
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
-
+  
   const dispatch = useAppDispatch()
   const { basket } = useAppSelector(state => state.basket)
-
-  // const { basket, setBasket } = useStoreContext()
   const { data: basketItem } = useBasket()
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)

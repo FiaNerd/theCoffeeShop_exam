@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { Product } from '../types/ProductsAPI.types'
-import Button from './Partial/Button'
-import { formatPrice } from '../utils/formatPrice'
-import { useAppDispatch, useAppSelector,  } from '../redux/configureStore'
-import { addBasketItemAsync } from './basket/basketSlice'
+import { Product } from '../../types/ProductsAPI.types'
+import Button from '../partial/Button'
+import { formatPrice } from '../../utils/formatPrice'
+import { useAppDispatch, useAppSelector,  } from '../../redux/configureStore'
+import { addBasketItemAsync } from '../basket/basketSlice'
 
 interface IProps {
   product: Product
@@ -57,10 +57,10 @@ const CoffeeCard = ({ product }: IProps) => {
             typeAction='submit'
             iconType='cart'
             className='w-full mb-4'
-            disabled={requestStatus === 'pendingAddItem' + product.productId}
-            isLoading={requestStatus === 'pendingAddItem' + product.productId}
+            disabled={requestStatus === 'pendingAddItem' + product.id}
+            isLoading={requestStatus === 'pendingAddItem' + product.id}
             onClick={() => {
-              dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }));
+              dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }));
             }}
           >
             Lägg till
@@ -69,7 +69,7 @@ const CoffeeCard = ({ product }: IProps) => {
 
 
             <div className='w-full'>
-              <Link to={`/products/${type}/${product.productId}`}>
+              <Link to={`/products/${type}/${product.id}`}>
                 <Button buttonType='read-more' typeAction='button'>
                   Läs mer
                 </Button>
