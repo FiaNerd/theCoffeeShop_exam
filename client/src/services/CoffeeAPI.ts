@@ -20,7 +20,6 @@ const instance = axios.create({
 const get = async <T>(endpoint: string) => {
   try {
     const resp = await instance.get<T>(endpoint)
-    console.log('Resp ', resp)
     return resp.data
   } catch (error) {
     console.error('Error during GET request:', error)
@@ -43,11 +42,11 @@ export const getProducts = async (page = 1, pageSize = 12, type = '') => {
       ? `${BASE_URL}/Products?Type=${type}&PageNumber=${page}&PageSize=${pageSize}`
       : `${BASE_URL}/Products?PageNumber=${page}&PageSize=${pageSize}`
 
-    console.log('Fetching URL:', url)
+    // console.log('Fetching URL:', url)
 
     const response = await fetch(url, { headers: headers })
 
-    console.log('URL esponse', response, url)
+    // console.log('URL esponse', response, url)
 
     if (!response.ok) {
       throw new Error(`Error fetching products: ${response.statusText}`)
@@ -62,7 +61,7 @@ export const getProducts = async (page = 1, pageSize = 12, type = '') => {
     const paginationData = JSON.parse(paginationHeaders)
 
     const items = await response.json()
-    console.log('Number of items:', items.length)
+    // console.log('Number of items:', items.length)
 
     const paginatedResponse: PaginatedResponse<Product> = {
       items,
@@ -73,7 +72,7 @@ export const getProducts = async (page = 1, pageSize = 12, type = '') => {
         totalCount: paginationData?.totalCount,
       },
     }
-    console.log('Paginated response', paginatedResponse.metaData.pageSize)
+    // console.log('Paginated response', paginatedResponse.metaData.pageSize)
 
     return paginatedResponse
   } catch (error) {
@@ -121,4 +120,8 @@ export const removeItemFromBasket = async (productId: string, quantity = 1) => {
     console.error('Error deleting item:', error)
     throw error
   }
+}
+
+export const getFilters = async () => {
+  return await get<Product>('/Products/filters')
 }

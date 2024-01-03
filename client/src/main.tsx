@@ -5,6 +5,8 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import StoreProvider from './context/StoreProvider.tsx'
+import { store } from './redux/configureStore.ts'
+import { Provider } from 'react-redux'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,11 +20,13 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <StoreProvider>
+      {/* <StoreProvider> */}
         <BrowserRouter>
+        <Provider store={store} >
           <App />
+        </Provider>
         </BrowserRouter>
-      </StoreProvider>
+      {/* </StoreProvider> */}
     </QueryClientProvider>
   </React.StrictMode>
 )

@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Button from './Partial/Button'
+import Button from '../Partial/Button'
 import { NavLink } from 'react-router-dom'
-import { formatPrice } from '../utils/formatPrice'
-import { useStoreContext } from '../context/StoreProvider'
-import useBasket from '../hooks/useBasket'
+import { formatPrice } from '../../utils/formatPrice'
+import { useStoreContext } from '../../context/StoreProvider'
+import useBasket from '../../hooks/useBasket'
 
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
