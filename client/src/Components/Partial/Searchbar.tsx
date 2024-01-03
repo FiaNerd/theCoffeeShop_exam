@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import Button from './Button'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'

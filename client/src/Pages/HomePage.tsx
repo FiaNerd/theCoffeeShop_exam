@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import CoffeeCard from '../components/CoffeeCard'
-import Button from '../components/Partial/Button'
 import useProducts from '../hooks/useProducts'
 import { useInView } from 'react-intersection-observer'
 import { useParams } from 'react-router-dom'
+import Button from '../components/Partial/Button'
+import CoffeeCard from '../components/CoffeeCard'
 
 const HomePage = () => {
   const { type } = useParams()

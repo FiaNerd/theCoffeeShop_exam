@@ -1,40 +1,27 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import useProduct from '../hooks/useProduct'
 import Button from '../components/Partial/Button'
-import { useStoreContext } from '../context/StoreProvider'
 import { formatPrice } from '../utils/formatPrice'
+import { useAppDispatch, useAppSelector } from '../redux/configureStore'
+import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
+import PageNotFound from '../components/Partial/PageNotFound'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
-  const { data: product, isLoading } = useProduct(productId!)
-
   const navigate = useNavigate()
-
-  const { basket, addToBasket, updateQuantity, removeItem } = useStoreContext()
-
+  const { data: product, isLoading } = useProduct(productId!)
+  const dispatch = useAppDispatch()
+  const { basket } = useAppSelector(state => state.basket)
+  
   const item = basket?.items.find(
     (item) => item.productId === product?.productId
-  )
+    )
 
-  const handleAddItem = (productId: string) => {
-    addToBasket(productId)
-  }
 
-  const handleQuantityChange = (productId: string, quantity: number) => {
-    updateQuantity(productId, quantity)
-  }
-
-  const handleRemoveItem = (productId: string) => {
-    const item = basket?.items.find((item) => item.productId === productId)
-
-    if (item && item.quantity > 0) {
-      removeItem(productId, 1)
+    if (!product) {
+      return <PageNotFound />
     }
-  }
-
-  if (!productId) {
-    return <p className='text-2xl font-bold'>Ogiltigt produkt-ID</p>
-  }
+  
 
   return isLoading || !product ? (
     <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
@@ -74,39 +61,28 @@ const ProductDetailPage = () => {
                 {formatPrice(product.price)}
               </p>
 
-              <div className='flex flex-row flex-1 items-end text-sm'>
+              <div className='flex flex-row flex-1 items-end text-sm'> 
                 <div className='flex flex-row h-auto w-full mb-4 rounded-lg justify-between relative bg-transparent mt-1'>
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                      onClick={() => handleRemoveItem(product.productId)}
+                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: 1}))}
                       disabled={
                         item?.quantity === 0 || item?.quantity === undefined
                       }>
                       <span className='m-auto text-2xl font-thin'>−</span>
                     </button>
 
-                    <input
-                      type='text'
-                      className={
-                        'disabled:text-gray-500 focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                      }
-                      disabled={
-                        item?.quantity === 0 || item?.quantity === undefined
-                      }
-                      value={item?.quantity ?? 0}
-                      onChange={(e) =>
-                        handleQuantityChange(
-                          product?.productId,
-                          parseInt(e.target.value)
-                        )
-                      }
-                    />
+                    <div className='justify-center focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                        >
+                      {item?.quantity ?? 0}
+                    </div>
 
                     <button
                       data-action='increment'
                       className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                      onClick={() => handleAddItem(product.productId)}>
+                      onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                      >
                       <span className='m-auto text-2xl font-thin'>+</span>
                     </button>
                   </div>
@@ -118,7 +94,8 @@ const ProductDetailPage = () => {
                 typeAction='submit'
                 iconType='cart'
                 className='w-full'
-                onClick={() => handleAddItem(product.productId)}>
+                onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                >
                 Lägg till
               </Button>
             </div>

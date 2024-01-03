@@ -1,42 +1,24 @@
-import { Fragment, useState } from 'react'
+import { Fragment,useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Button from './Partial/Button'
+import Button from '../Partial/Button'
 import { NavLink } from 'react-router-dom'
-import { formatPrice } from '../utils/formatPrice'
-import { useStoreContext } from '../context/StoreProvider'
-import useBasket from '../hooks/useBasket'
-
+import { formatPrice } from '../../utils/formatPrice'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
+  const dispatch = useAppDispatch()
+  const { basket,  } = useAppSelector(state => state.basket)
 
-  const { basket } = useStoreContext()
-  const { data: basketItem, refetch } = useBasket()
-
-  const { addToBasket, updateQuantity, removeItem } = useStoreContext()
-
-  const handleAddItem = (productId: string) => {
-    addToBasket(productId)
-  }
-
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    updateQuantity(productId, newQuantity)
-  }
-
-  const handleRemoveItem = (productId: string, quantity: number) => {
-    console.log('Removing item:', productId, 'with quantity:', quantity)
-    removeItem(productId, quantity)
-    refetch()
-  }
 
   const subtotal =
-    basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ??
-    0
+    basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
 
-  const deliveryFee = subtotal > 50000 ? 0 : 5000
+  const deliveryFee = subtotal > 50000 ? 0 : 5000;
 
-  if (!basketItem) {
-    return null
+  if (!basket) {
+    return null;
   }
 
   return (
@@ -125,32 +107,32 @@ const ShoppingCart = () => {
                                         <button
                                           className='bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
                                           onClick={() =>
-                                            handleRemoveItem(item.productId, 1)
+                                            dispatch(
+                                              removeItemFromBasketAsync({
+                                                productId: item.productId,
+                                                quantity: 1,
+                                              })
+                                            )
                                           }>
                                           <span className='m-auto text-2xl font-thin'>
-                                            −
+                                            -
                                           </span>
                                         </button>
-                                        <input
-                                          type='text'
-                                          className='focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
-                                          value={item.quantity ?? 0}
-                                          onChange={(e) =>
-                                            handleQuantityChange(
-                                              item?.productId,
-                                              parseInt(e.target.value)
-                                            )
-                                          }
-                                        />
+                                          <div className='justify-center focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-base cursor-default flex items-center text-gray-700 outline-none'
+                                             >
+                                              {item.quantity ?? 0}
+                                          </div>
                                         <button
-                                          data-action='increment'
                                           className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                                          onClick={() =>
-                                            handleAddItem(item.productId)
-                                          }>
-                                          <span className='m-auto text-2xl font-thin'>
-                                            +
-                                          </span>
+                                          onClick={() => {
+                                            dispatch(
+                                              addBasketItemAsync({
+                                                productId: item.productId,
+                                                quantity: 1,
+                                              })
+                                            );
+                                          }}>
+                                          <span className='m-auto text-2xl font-thin'>+</span>
                                         </button>
                                       </div>
 
@@ -159,10 +141,7 @@ const ShoppingCart = () => {
                                           type='button'
                                           className='font-bold text-deep-brown hover:opacity-80'
                                           onClick={() =>
-                                            handleRemoveItem(
-                                              item.productId,
-                                              item.quantity
-                                            )
+                                            dispatch(removeItemFromBasketAsync({productId: item.productId, quantity: item.quantity}))
                                           }>
                                           Ta bort
                                         </button>
