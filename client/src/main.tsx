@@ -20,13 +20,13 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      {/* <StoreProvider> */}
+      <StoreProvider>
         <BrowserRouter>
         <Provider store={store} >
           <App />
         </Provider>
         </BrowserRouter>
-      {/* </StoreProvider> */}
+      </StoreProvider>
     </QueryClientProvider>
   </React.StrictMode>
 )

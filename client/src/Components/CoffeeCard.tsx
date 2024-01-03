@@ -2,7 +2,9 @@ import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI.types'
 import Button from './Partial/Button'
 import { formatPrice } from '../utils/formatPrice'
-import { useStoreContext } from '../context/StoreProvider'
+import { useAppDispatch,  } from '../redux/configureStore'
+import useAddItemToBasket from '../hooks/useAddItemToBasket'
+import { setBasket } from './basket/basketSlice'
 
 interface IProps {
   product: Product
@@ -10,10 +12,28 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
-  const { addToBasket } = useStoreContext()
+  // const { addToBasket } = useStoreContext()
+  const addItemToBasketMutation = useAddItemToBasket()
+  const dispatch = useAppDispatch()
 
-  const handleAddItem = (productId: string) => {
-    addToBasket(productId)
+
+  const handleAddItem = async (productId: string) => {
+
+    console.log('Adding item to basket:', productId)
+    try {
+      const result = await addItemToBasketMutation.mutateAsync({
+        productId,
+        quantity: 1,
+      })
+
+      if (result) {
+        dispatch(setBasket(result))
+      } else {
+        console.error('Error adding item to basket. Empty or invalid response.')
+      }
+    } catch (error) {
+      console.error('Error adding item to basket:', error)
+    }
   }
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
@@ -61,7 +81,7 @@ const CoffeeCard = ({ product }: IProps) => {
             </Button>
 
             <div className='w-full'>
-              <Link to={`/product/${type}/${product.productId}`}>
+              <Link to={`/products/${type}/${product.productId}`}>
                 <Button buttonType='read-more' typeAction='button'>
                   Läs mer
                 </Button>

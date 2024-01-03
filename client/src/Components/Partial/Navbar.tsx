@@ -13,8 +13,9 @@ import ShoppingCart from '../basket/ShoppingCart'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
-import { useStoreContext } from '../../context/StoreProvider'
 import useBasket from '../../hooks/useBasket'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { setBasket } from '../basket/basketSlice'
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -26,7 +27,10 @@ const Navbar = () => {
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
 
-  const { basket, setBasket } = useStoreContext()
+  const dispatch = useAppDispatch()
+  const { basket } = useAppSelector(state => state.basket)
+
+  // const { basket, setBasket } = useStoreContext()
   const { data: basketItem } = useBasket()
 
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
@@ -38,7 +42,7 @@ const Navbar = () => {
     const fetchData = async () => {
       try {
         if (buyerId && basketItem) {
-          setBasket(basketItem)
+         dispatch(setBasket(basketItem))
         }
       } catch (error) {
         console.error('Something went wrong', error)
@@ -46,7 +50,7 @@ const Navbar = () => {
     }
 
     fetchData()
-  }, [basketItem, setBasket])
+  }, [basketItem, dispatch])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
