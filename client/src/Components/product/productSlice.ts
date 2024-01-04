@@ -12,7 +12,8 @@ const productsAdapter = createEntityAdapter<Product>({
     async (_, ThunkAPI) => {
       try {
         return await getProducts();
-      } catch (error: never) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         console.error(error);
         return ThunkAPI.rejectWithValue({ error: error.data });
       }
