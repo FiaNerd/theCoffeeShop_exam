@@ -25,9 +25,9 @@ namespace CoffeeAPI.Entities
         }
 
         // Method to remove item
-        public void RemoveItem(Guid ProductId, int quantity)
+        public void RemoveItem(Guid productId, int quantity)
         {
-            var item = Items.FirstOrDefault(item => item.ProductId == Id);
+            var item = Items.FirstOrDefault(item => item.ProductId == productId);
 
             if(item == null) 
             {
