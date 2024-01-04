@@ -38,11 +38,12 @@ const productsAdapter = createEntityAdapter<Product>({
     return params
   }
   
-  export const fetchProductsAsync = createAsyncThunk<Products>(
+  export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
     'products/fetchProductsAsync',
     async (_, thunkAPI) => {
+      const params = getAxiosParams(thunkAPI.getState().product.productParams)
       try {
-        return await getProducts();
+        return await getProducts(params);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error(error);

@@ -85,10 +85,11 @@ const get = async <T>(endpoint: string) => {
  * Get single product
  * @param all products
  */
-export const getProducts = async (): Promise<Products | []> => {
-  const res =await get<Products>(`/products`)
-  return res
-}
+export const getProducts = async (params?: URLSearchParams): Promise<Products | []> => {
+  const url = `/products${params ? `?${params.toString()}` : ''}`;
+  const res = await get<Products>(url);
+  return res;
+};
 
 /**
  * Get single product
