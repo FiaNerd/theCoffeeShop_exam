@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Product, Products } from '../types/ProductsAPI.types'
 import { Basket } from '../types/Basket.types'
-import { FilterData } from '../types/FilterData.types'
 // import { PaginatedResponse } from '../types/Pagination.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL

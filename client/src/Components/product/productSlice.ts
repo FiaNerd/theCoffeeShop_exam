@@ -15,6 +15,28 @@ interface ProductState {
 const productsAdapter = createEntityAdapter<Product>({
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
+
+  const getAxiosParams = (productParams: ProductParams) => {
+    const params = new URLSearchParams()
+
+    params.append('pageNumber', productParams.pageNumber.toString())
+    params.append('pageSize', productParams.pageSize.toString())
+    params.append('orderBy', productParams.orderBy)
+
+    if(productParams.searchTerm){
+      params.append('searchTerm', productParams.searchTerm)
+    }
+
+    if(productParams.types){
+      params.append('types', productParams.types.toString())
+    }
+
+    if(productParams.roastLevels){
+      params.append('roastLevels', productParams.roastLevels?.toString())
+    }
+
+    return params
+  }
   
   export const fetchProductsAsync = createAsyncThunk<Products>(
     'products/fetchProductsAsync',
