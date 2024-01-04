@@ -1,5 +1,5 @@
 export type Basket = {
-  basketId: string;
+  Id: string;
   buyerId: string;
   items: BasketItems[];
 };

@@ -7,7 +7,7 @@ namespace CoffeeAPI.Entities
     public class BasketItem
     {
         [Key]
-        public Guid ItemId { get; set; }
+        public Guid Id { get; set; }
         public int Quantity { get; set; }
         
         // Navigation properties

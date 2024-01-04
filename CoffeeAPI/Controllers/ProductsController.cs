@@ -64,7 +64,7 @@ public class ProductsController : BaseApiController
       {
           var products = await _context.Products.ToListAsync();
 
-          var searchTerms = new List<string> { "Hela bönor", "Bryggkaffe", "Press", "Kapslar", "Ekologiskt" };
+          var searchTerms = new List<string> { "Bryggkaffe", "Hela bönor",  "Presskaffe",  "Ekologiskt" };
 
           var filteredProducts = products
               .Where(p => p.Type.Any(term => searchTerms.Contains(term)))

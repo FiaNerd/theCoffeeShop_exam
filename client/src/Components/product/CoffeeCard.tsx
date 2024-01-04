@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
-import { Product } from '../types/ProductsAPI.types'
-import Button from './Partial/Button'
-import { formatPrice } from '../utils/formatPrice'
-import { useAppDispatch, useAppSelector,  } from '../redux/configureStore'
-import { addBasketItemAsync } from './basket/basketSlice'
+import { Product } from '../../types/ProductsAPI.types'
+import Button from '../partial/Button'
+import { formatPrice } from '../../utils/formatPrice'
+import { useAppDispatch, useAppSelector,  } from '../../redux/configureStore'
+import { addBasketItemAsync } from '../basket/basketSlice'
 
 interface IProps {
   product: Product
@@ -12,7 +12,7 @@ interface IProps {
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
   const dispatch = useAppDispatch()
-  const { requestStatus } = useAppSelector(state => state.basket)
+  const { status } = useAppSelector(state => state.basket)
 
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
@@ -28,7 +28,7 @@ const CoffeeCard = ({ product }: IProps) => {
   return (
     <div className='relative flex flex-col rounded-xl bg-white bg-clip-border overflow-hidden shadow-md'>
       <img
-        src={`http://localhost:5173/src/assets${product.imageUrl}`}
+        src={`${product.imageUrl}`}
         className='w-full object-cover'
         alt={product.name}
       />
@@ -57,19 +57,17 @@ const CoffeeCard = ({ product }: IProps) => {
             typeAction='submit'
             iconType='cart'
             className='w-full mb-4'
-            disabled={requestStatus === 'pendingAddItem' + product.productId}
-            isLoading={requestStatus === 'pendingAddItem' + product.productId}
+            disabled={status === 'pendingAddItem' + product.id}
+            isLoading={status === 'pendingAddItem' + product.id}
             onClick={() => {
-              dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }));
+              dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }));
             }}
           >
             Lägg till
           </Button>
 
-
-
             <div className='w-full'>
-              <Link to={`/products/${type}/${product.productId}`}>
+              <Link to={`/products/${type}/${product.id}`}>
                 <Button buttonType='read-more' typeAction='button'>
                   Läs mer
                 </Button>

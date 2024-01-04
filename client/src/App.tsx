@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
-import Header from './components/Partial/Header'
-import Footer from './components/Partial/Footer'
-import HomePage from './pages/HomePage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import ProductPage from './pages/ProductPage'
-import LoadingSpinner from './components/Partial/LoadingSpinner'
-import PageNotFound from './components/Partial/PageNotFound'
+import Header from './components/partial/Header'
+import Footer from './components/partial/Footer'
+import LoadingSpinner from './components/partial/LoadingSpinner'
+import PageNotFound from './components/partial/PageNotFound'
+import ProductDetailPage from './Pages/ProductDetailPage'
+import HomePage from './Pages/HomePage'
+import ProductTypePage from './Pages/ProductTypePage'
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
             path='/products/:type/:productId'
             element={<ProductDetailPage />}
           />
-          <Route path='/products/:type' element={<ProductPage />} />
+          <Route path='/products/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>

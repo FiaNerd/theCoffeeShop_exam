@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import logo from '../../assets/images/coffeebean_logo.png'
+// import logo from "../../public/images/coffeebean_logo.png";
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
@@ -13,11 +13,12 @@ import ShoppingCart from '../basket/ShoppingCart'
 import useClickOutside from '../../hooks/useClickoutside'
 import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
-import useBasket from '../../hooks/useBasket'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { setBasket } from '../basket/basketSlice'
 
 const Navbar = () => {
+  const logo = "/images/coffeebean_logo.png";
+  
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
@@ -26,31 +27,28 @@ const Navbar = () => {
 
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
-
+  
   const dispatch = useAppDispatch()
-  const { basket } = useAppSelector(state => state.basket)
+  const { basket }  = useAppSelector(state => state.basket)
 
-  // const { basket, setBasket } = useStoreContext()
-  const { data: basketItem } = useBasket()
-
-  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
+  const itemCount = (basket?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 
   useEffect(() => {
     const buyerId = getCookie('buyerId')
-    console.log('buyerId', buyerId)
 
     const fetchData = async () => {
       try {
-        if (buyerId && basketItem) {
-         dispatch(setBasket(basketItem))
+        if (buyerId && basket) {
+         dispatch(setBasket(basket))
         }
+
       } catch (error) {
         console.error('Something went wrong', error)
       }
     }
 
     fetchData()
-  }, [basketItem, dispatch])
+  }, [basket, dispatch])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -215,7 +213,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {openBasket && <ShoppingCart />}
+      {openBasket && basket && basket.items.length > 0 && <ShoppingCart />}
 
       <div>
         {menuOpen &&

@@ -30,7 +30,7 @@ namespace CoffeeAPI.Entities
 
 
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity)
+        public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity = 1)
         {
             var basket = await RetrieveBasket() ?? CreateBasket();
 
@@ -44,7 +44,7 @@ namespace CoffeeAPI.Entities
 
             if(product == null)
             {
-                return NotFound();
+                return BadRequest(new ProblemDetails{Title = "Product Not Found"});
             }
 
             basket.AddItem(product, quantity);
@@ -62,35 +62,61 @@ namespace CoffeeAPI.Entities
 
 
         [HttpDelete]
-        public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity)
+        public async Task<ActionResult> RemoveBasketItem(Guid productId, int quantity = 1)
         {
-            if (quantity <= 0)
+            try
             {
-                // Negative quantity is not allowed
-                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+                if (quantity <= 0)
+                {
+                    // Negative quantity is not allowed
+                    return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+                }
+                Console.WriteLine($"DELETE request received for Product ID: {productId}, Quantity: {quantity}");
+
+                // Get basket from basket methods
+                var basket = await RetrieveBasket();
+
+                if (basket == null)
+                {
+                    return NotFound();
+                }
+
+                Console.WriteLine($"DELETE request received for Basket: {basket}, Quantity: {quantity}");
+
+                // Remove item from basket and reduce quantity
+                basket.RemoveItem(productId, quantity);
+
+                // Save changes
+                var result = await _context.SaveChangesAsync() > 0;
+
+                if (result)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(new ProblemDetails { Title = "Unable to save changes to the database." });
+                }
             }
-
-            // Get basket from basket methods
-            var basket = await RetrieveBasket();
-
-            if (basket == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                    Console.WriteLine($"Error processing DELETE request: {ex.Message}");
+
+                    var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+                    {
+                        Title = "Problem removing item from the basket",
+                        Detail = ex.Message, 
+                        Status = 400
+                    };
+
+                        Console.WriteLine($"Error processing DELETE request: {ex.Message}");
+    
+                        return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket", Detail = ex.Message });
+
+                    return BadRequest(problemDetails);
             }
-
-            // Remove item from basket and reduce quantity
-            basket.RemoveItem(productId, quantity);
-
-            // Save changes
-            var result = await _context.SaveChangesAsync() > 0;
-
-            if (result)
-            {
-                return Ok();
-            }
-
-            return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket" });
         }
+
 
 
 
@@ -135,7 +161,7 @@ namespace CoffeeAPI.Entities
         {
             return new BasketDto
             {
-                BasketDtoId = basket.BasketId,
+                Id = basket.Id,
                 BuyerId = basket.BuyerId,
                 Items = basket.Items.Select(item => new BasketItemDto
                 {

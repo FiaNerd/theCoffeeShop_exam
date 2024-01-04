@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMugHot } from '@fortawesome/free-solid-svg-icons'
-import NotFound from '../../assets/images/404-not-found.png'
 
 const PageNotFound = () => {
+  const NotFound = '/images/404-not-found.png'
   return (
     <div className='mx-auto items-center justify-center'>
       <h1 className='text-center mb-4'>

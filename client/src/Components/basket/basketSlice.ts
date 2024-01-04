@@ -4,23 +4,24 @@ import { addItemToBasket, removeItemFromBasket } from '../../services/CoffeeAPI'
 
 interface BasketState {
     basket: Basket | null
-    requestStatus: string
+    status: string
 }
 
 const initialState: BasketState = {
     basket: null,
-    requestStatus: 'idle'
+    status: 'idle'
 }
 
 export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
     '/basket/addBasketItemAsync',
-    async ({ productId, quantity = 1 }) => {
+    async ({ productId, quantity = 1 }, ThunkAPI) => {
       console.log('Thunk is executing');
       try {
         return await addItemToBasket(productId, quantity);
-      } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         console.error('Async operation failed. Error:', error);
-        throw error;
+        return ThunkAPI.rejectWithValue({error: error.data})
       }
     }
   );
@@ -28,17 +29,18 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
 
   export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
     'basket/removeItemFromBasketAsync',
-    async ({ productId, quantity }) => {
-        console.log('Thunk is executing');
-        try {
-          return await removeItemFromBasket(productId, quantity)
-        } catch (error) { 
-          console.error('Async operation failed. Error:', error);
-          throw error;
-        }
-     })
+    async ({ productId, quantity }, ThunkAPI) => {
+      console.log('Thunk is executing');
+      try {
+        await removeItemFromBasket(productId, quantity);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        console.error('Async operation failed. Error:', error);
+        return ThunkAPI.rejectWithValue({error: error.data})
+      }
+    }
+  );
   
-
 
      export const basketSlice = createSlice({
         name: 'basket',
@@ -51,36 +53,41 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
         extraReducers: (builder) => {
           builder
             .addCase(addBasketItemAsync.pending, (state, action) => {
-              state.requestStatus = 'pendingAddItem' + action.meta.arg.productId;
+              state.status = 'pendingAddItem' + action.meta.arg.productId;
             })
             .addCase(addBasketItemAsync.fulfilled, (state, action) => {
+              console.log('Basket after adding item:', state.basket);
               state.basket = action.payload;
-              state.requestStatus = 'idle';
+              state.status = 'idle';
             })
-            .addCase(addBasketItemAsync.rejected, (state) => {
-              state.requestStatus = 'idle';
+            .addCase(addBasketItemAsync.rejected, (state, action) => {
+              state.status = 'idle';
+              console.log(action.payload)
             })
             .addCase(removeItemFromBasketAsync.pending, (state, action) => {
-              state.requestStatus = 'pendingRemoveItem' + action.meta.arg.productId;
+              state.status = 'pendingRemoveItem' + action.meta.arg.productId;
             })
             .addCase(removeItemFromBasketAsync.fulfilled, (state, action) => {
               const { productId, quantity } = action.meta.arg;
+
               const itemIndex = state.basket?.items.findIndex(item => item.productId === productId);
       
               if (itemIndex === -1 || itemIndex === undefined) {
                 return;
               }
-      
+
               state.basket!.items[itemIndex].quantity -= quantity;
       
               if (state.basket?.items[itemIndex].quantity === 0) {
                 state.basket.items.splice(itemIndex, 1);
               }
       
-              state.requestStatus = 'idle';
+              state.status = 'idle';
             })
-            .addCase(removeItemFromBasketAsync.rejected, (state) => {
-              state.requestStatus = 'idle';
+            .addCase(removeItemFromBasketAsync.rejected, (state, action) => {
+              console.error('Error removing item:', action.error);
+              console.log(action.payload)
+              state.status = 'idle';
             });
         },
       });

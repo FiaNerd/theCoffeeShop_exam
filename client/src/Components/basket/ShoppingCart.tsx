@@ -1,7 +1,7 @@
 import { Fragment,useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Button from '../Partial/Button'
+import Button from '../partial/Button'
 import { NavLink } from 'react-router-dom'
 import { formatPrice } from '../../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
@@ -9,7 +9,7 @@ import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
   const dispatch = useAppDispatch()
-  const { basket,  } = useAppSelector(state => state.basket)
+  const { basket  } = useAppSelector(state => state.basket)
 
 
   const subtotal =

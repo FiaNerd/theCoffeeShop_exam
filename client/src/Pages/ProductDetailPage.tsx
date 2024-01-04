@@ -1,37 +1,67 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import useProduct from '../hooks/useProduct'
-import Button from '../components/Partial/Button'
+import Button from '../components/partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-import PageNotFound from '../components/Partial/PageNotFound'
+import {  fetchProductAsync, productSelectors } from '../components/product/productSlice'
+import LoadingSpinner from '../components/partial/LoadingSpinner'
+import { useEffect, useState } from 'react'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
-  const { data: product, isLoading } = useProduct(productId!)
   const dispatch = useAppDispatch()
-  const { basket } = useAppSelector(state => state.basket)
-  
+  const { basket, /* status */ } = useAppSelector(state => state.basket)
+  const { status: productStatus } = useAppSelector(state => state.product)
+  const product = useAppSelector(state => productSelectors.selectById(state, productId!))
+  const [ quantity, setQuantity ] = useState(0)
+
+  console.log(productId)
+
   const item = basket?.items.find(
-    (item) => item.productId === product?.productId
+    (item) => item.productId === product?.id
     )
 
+    useEffect(() => {
+      if (item) {
+        setQuantity(item.quantity);
+      }
+    }, [item, quantity]);
+    
+    useEffect(() => {
+      if (!product && productId) {
+        dispatch(fetchProductAsync(productId));
+      }
+    }, [productId, product, dispatch]);
+   
 
-    if (!product) {
-      return <PageNotFound />
+    // const handleUpdateCart = () => {
+    //   if (!product) {
+    //     return;
+    //   }
+
+    //   if (!item || quantity > item?.quantity) {
+    //     const updatedQuantity = item ? quantity - item.quantity : quantity;
+
+    //     dispatch(addBasketItemAsync({ productId: product.id, quantity: updatedQuantity }));
+    //     console.log("update", updatedQuantity)
+    //   } else if (item.quantity > quantity) {
+    //     const updatedQuantity = item.quantity - quantity;
+
+    //     dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: updatedQuantity }));
+    //     console.log("Quantity", quantity);
+    //   }
+    // }
+     
+    if (productStatus.includes('pending')){ 
+      return <LoadingSpinner />
     }
-  
 
-  return isLoading || !product ? (
-    <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
-      {isLoading ? 'Laddar...' : 'Ingen produkt hittades'}
-    </p>
-  ) : (
+  return (
     <>
       <div className='w-full flex flex-col md:flex-row mx-auto gap-6 max-w-[960px]'>
         <img
-          src={`http://localhost:5173/src/assets/${product.imageUrl}`}
+          src={`${product.imageUrl}`}
           className='w-full object-cover mb-4 md:w-1/2 md:mb-0'
           alt={product.name}
         />
@@ -66,9 +96,10 @@ const ProductDetailPage = () => {
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
-                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.productId, quantity: 1}))}
+                      // onClick={handleUpdateCart}
+                      onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: 1}))}
                       disabled={
-                        item?.quantity === 0 || item?.quantity === undefined
+                        quantity === 0 || item?.quantity === undefined
                       }>
                       <span className='m-auto text-2xl font-thin'>−</span>
                     </button>
@@ -81,7 +112,7 @@ const ProductDetailPage = () => {
                     <button
                       data-action='increment'
                       className='bg-deep-red text-white w-20 hover:opacity-80 rounded-r cursor-pointer'
-                      onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                      onClick={() => dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
                       >
                       <span className='m-auto text-2xl font-thin'>+</span>
                     </button>
@@ -94,9 +125,9 @@ const ProductDetailPage = () => {
                 typeAction='submit'
                 iconType='cart'
                 className='w-full'
-                onClick={() => dispatch(addBasketItemAsync({ productId: product.productId, quantity: 1 }))}
+                onClick={() => dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
                 >
-                Lägg till
+                {item ? 'Updater kundvagnen' : 'Lägg till'}
               </Button>
             </div>
           </div>

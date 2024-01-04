@@ -2,7 +2,7 @@ namespace CoffeeAPI.Entities
 {
     public class Basket
     {
-        public Guid BasketId { get; set; }
+        public Guid Id { get; set; }
         public Guid BuyerId { get; set; }
         public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 
@@ -10,13 +10,13 @@ namespace CoffeeAPI.Entities
         public void AddItem(Product product, int quantity)
         {
            
-            if(Items.All(item => item.ProductId != product.ProductId))
+            if(Items.All(item => item.ProductId != product.Id))
             {
                 Items.Add(new BasketItem{ Product = product, Quantity = quantity });
                 return;
             }
 
-            var existingItem = Items.FirstOrDefault(item => item.ProductId == product.ProductId);
+            var existingItem = Items.FirstOrDefault(item => item.ProductId == product.Id);
 
             if(existingItem != null)
             {
@@ -25,9 +25,9 @@ namespace CoffeeAPI.Entities
         }
 
         // Method to remove item
-        public void RemoveItem(Guid ProductId, int quantity)
+        public void RemoveItem(Guid productId, int quantity)
         {
-            var item = Items.FirstOrDefault(item => item.ProductId == ProductId);
+            var item = Items.FirstOrDefault(item => item.ProductId == productId);
 
             if(item == null) 
             {
@@ -37,7 +37,7 @@ namespace CoffeeAPI.Entities
             item.Quantity -= quantity;
 
 
-            if (item.Quantity <= 0)
+            if (item.Quantity == 0)
             {
                 Items.Remove(item);
             }
