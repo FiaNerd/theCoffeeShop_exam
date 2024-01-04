@@ -29,14 +29,15 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
   export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
     'basket/removeItemFromBasketAsync',
     async ({ productId, quantity }) => {
-        console.log('Thunk is executing');
-        try {
-          return await removeItemFromBasket(productId, quantity)
-        } catch (error) { 
-          console.error('Async operation failed. Error:', error);
-          throw error;
-        }
-     })
+      console.log('Thunk is executing');
+      try {
+        await removeItemFromBasket(productId, quantity);
+      } catch (error) {
+        console.error('Async operation failed. Error:', error);
+        throw error;
+      }
+    }
+  );
   
 
 
@@ -65,12 +66,13 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
             })
             .addCase(removeItemFromBasketAsync.fulfilled, (state, action) => {
               const { productId, quantity } = action.meta.arg;
+              
               const itemIndex = state.basket?.items.findIndex(item => item.productId === productId);
       
               if (itemIndex === -1 || itemIndex === undefined) {
                 return;
               }
-      
+
               state.basket!.items[itemIndex].quantity -= quantity;
       
               if (state.basket?.items[itemIndex].quantity === 0) {
@@ -79,7 +81,8 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
       
               state.requestStatus = 'idle';
             })
-            .addCase(removeItemFromBasketAsync.rejected, (state) => {
+            .addCase(removeItemFromBasketAsync.rejected, (state, action) => {
+              console.error('Error removing item:', action.error);
               state.requestStatus = 'idle';
             });
         },

@@ -3,20 +3,58 @@ import Button from '../components/partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-import { productSelectors } from '../components/product/productSlice'
+import {  fetchProductAsync, productSelectors } from '../components/product/productSlice'
+import LoadingSpinner from '../components/partial/LoadingSpinner'
+import { useEffect, useState } from 'react'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
-  // const { data: product, isLoading } = useProduct(productId!)
   const dispatch = useAppDispatch()
-  const { basket } = useAppSelector(state => state.basket)
+  const { basket, status } = useAppSelector(state => state.basket)
+  const { status: productStatus } = useAppSelector(state => state.product)
   const product = useAppSelector(state => productSelectors.selectById(state, productId!))
-  
+  const [ quantity, setQuantity ] = useState(0)
+
+
   const item = basket?.items.find(
     (item) => item.productId === product?.id
     )
 
+    useEffect(() => {
+      if (item) {
+        setQuantity(item.quantity);
+      }
+    }, [item]);
+    
+    useEffect(() => {
+      if (!product && productId) {
+        dispatch(fetchProductAsync(productId));
+      }
+    }, [productId, product, dispatch]);
+   
+
+    // const handleUpdateCart = () => {
+    //   if (!product) {
+    //     return;
+    //   }
+
+    //   if (!item || quantity > item?.quantity) {
+    //     const updatedQuantity = item ? quantity - item.quantity : quantity;
+
+    //     dispatch(addBasketItemAsync({ productId: product.id, quantity: updatedQuantity }));
+    //     console.log("update", updatedQuantity)
+    //   } else if (item.quantity > quantity) {
+    //     const updatedQuantity = item.quantity - quantity;
+
+    //     dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: updatedQuantity }));
+    //     console.log("Quantity", quantity);
+    //   }
+    // }
+     
+    if (productStatus.includes('pending')){ 
+      return <LoadingSpinner />
+    }
 
   return (
     <>
@@ -57,9 +95,10 @@ const ProductDetailPage = () => {
                   <div className='flex flex-row w-20 md:w-32'>
                     <button
                       className='disabled:opacity-75 bg-deep-red text-white w-20 hover:opacity-80 h-full rounded-l cursor-pointer outline-none'
+                      // onClick={handleUpdateCart}
                       onClick={() => dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: 1}))}
                       disabled={
-                        item?.quantity === 0 || item?.quantity === undefined
+                        quantity === 0 || item?.quantity === undefined
                       }>
                       <span className='m-auto text-2xl font-thin'>−</span>
                     </button>
@@ -87,7 +126,7 @@ const ProductDetailPage = () => {
                 className='w-full'
                 onClick={() => dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }))}
                 >
-                Lägg till
+                {item ? 'Updater kundvagnen' : 'Lägg till'}
               </Button>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom'
-import heroImg from '../assets/images/hero_section.jpg'
 
 const HeroSection = () => {
   const heroImg = '/images/hero_section.jpg'
