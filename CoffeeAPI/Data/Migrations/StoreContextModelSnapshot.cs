@@ -19,21 +19,21 @@ namespace CoffeeAPI.Data.Migrations
 
             modelBuilder.Entity("CoffeeAPI.Entities.Basket", b =>
                 {
-                    b.Property<Guid>("BasketId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("BuyerId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("BasketId");
+                    b.HasKey("Id");
 
                     b.ToTable("Baskets");
                 });
 
             modelBuilder.Entity("CoffeeAPI.Entities.BasketItem", b =>
                 {
-                    b.Property<Guid>("ItemId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -46,7 +46,7 @@ namespace CoffeeAPI.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("ItemId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BasketId");
 
@@ -57,7 +57,7 @@ namespace CoffeeAPI.Data.Migrations
 
             modelBuilder.Entity("CoffeeAPI.Entities.Product", b =>
                 {
-                    b.Property<Guid>("ProductId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
@@ -91,7 +91,7 @@ namespace CoffeeAPI.Data.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ProductId");
+                    b.HasKey("Id");
 
                     b.ToTable("Products");
                 });

@@ -15,19 +15,19 @@ namespace CoffeeAPI.Data.Migrations
                 name: "Baskets",
                 columns: table => new
                 {
-                    BasketId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     BuyerId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Baskets", x => x.BasketId);
+                    table.PrimaryKey("PK_Baskets", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     BlendDescription = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
@@ -41,32 +41,32 @@ namespace CoffeeAPI.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.ProductId);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "BasketItems",
                 columns: table => new
                 {
-                    ItemId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
                     ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
                     BasketId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BasketItems", x => x.ItemId);
+                    table.PrimaryKey("PK_BasketItems", x => x.Id);
                     table.ForeignKey(
                         name: "FK_BasketItems_Baskets_BasketId",
                         column: x => x.BasketId,
                         principalTable: "Baskets",
-                        principalColumn: "BasketId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BasketItems_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
-                        principalColumn: "ProductId",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 

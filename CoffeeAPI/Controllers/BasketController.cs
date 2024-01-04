@@ -135,7 +135,7 @@ namespace CoffeeAPI.Entities
         {
             return new BasketDto
             {
-                BasketDtoId = basket.BasketId,
+                Id = basket.Id,
                 BuyerId = basket.BuyerId,
                 Items = basket.Items.Select(item => new BasketItemDto
                 {

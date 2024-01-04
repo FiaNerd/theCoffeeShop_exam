@@ -1,5 +1,3 @@
-import { EntityState } from "@reduxjs/toolkit"
-
 export type Product = {
   id: string
   name: string
@@ -16,8 +14,3 @@ export type Product = {
 
 export type Products = Product[]
 
-export interface ProductsData extends EntityState<Product, string> {
-  selectedProductId?: string | number;
-  loading: boolean;
-  error?: string | null;
-}
