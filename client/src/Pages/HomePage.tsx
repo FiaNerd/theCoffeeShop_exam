@@ -1,20 +1,26 @@
 import CoffeeCard from '../components/product/CoffeeCard'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
-import {  fetchProductsAsync, productSelectors } from '../components/product/productSlice'
+import {  fetchFilters, fetchProductsAsync, productSelectors } from '../components/product/productSlice'
 import { useEffect } from 'react'
 
 const HomePage = () => {
  
   const products = useAppSelector(productSelectors.selectAll)
-  const { productsLoaded } = useAppSelector(state => state.product)
+  const { productsLoaded, filtersLoaded } = useAppSelector(state => state.product)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if(!productsLoaded){
-      dispatch(fetchProductsAsync())
+    if (!productsLoaded) {
+      dispatch(fetchProductsAsync());
     }
-  },[dispatch, productsLoaded])
-
+  }, [dispatch, productsLoaded]);
+  
+  useEffect(() => {
+    if (!filtersLoaded) {
+      dispatch(fetchFilters());
+    }
+  }, [dispatch, filtersLoaded]);
+  
   return (
     <div>
       <h1

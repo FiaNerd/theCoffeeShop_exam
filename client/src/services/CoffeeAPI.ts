@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { Product, Products } from '../types/ProductsAPI.types'
 import { Basket } from '../types/Basket.types'
+import { FilterData } from '../types/FilterData.types'
 // import { PaginatedResponse } from '../types/Pagination.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
@@ -137,5 +138,11 @@ export const removeItemFromBasket = async (productId: string, quantity = 1) : Pr
 }
 
 export const getFilters = async () => {
-  return await get<Product>('/Products/filters')
+  try {
+    return await get<FilterData>('/products/filters')
+
+  } catch (error) {
+    console.error('Error fetching filters:', error)
+    throw error
+  }
 }

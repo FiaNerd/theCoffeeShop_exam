@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import Button from './Button'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
-import FilterTypes from './FilterTypes'
+import FilterTypes from './FilterProducts'
 import FilterRoastLevel from './FilterRoastLevel'
 
 interface IProps {
