@@ -85,10 +85,11 @@ const get = async <T>(endpoint: string) => {
  * Get single product
  * @param all products
  */
-export const getProducts = async (): Promise<Products | []> => {
-  const res =await get<Products>(`/products`)
-  return res
-}
+export const getProducts = async (params?: URLSearchParams): Promise<Products | []> => {
+  const url = `/products${params ? `?${params.toString()}` : ''}`;
+  const res = await get<Products>(url);
+  return res;
+};
 
 /**
  * Get single product
@@ -137,5 +138,11 @@ export const removeItemFromBasket = async (productId: string, quantity = 1) : Pr
 }
 
 export const getFilters = async () => {
-  return await get<Product>('/Products/filters')
+  try {
+    return await get<Product>('/products/filters')
+
+  } catch (error) {
+    console.error('Error fetching filters:', error)
+    throw error
+  }
 }

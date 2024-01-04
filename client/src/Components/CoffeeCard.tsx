@@ -1,9 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
-import { Product } from '../../types/ProductsAPI.types'
-import Button from '../partial/Button'
-import { formatPrice } from '../../utils/formatPrice'
-import { useAppDispatch, useAppSelector,  } from '../../redux/configureStore'
-import { addBasketItemAsync } from '../basket/basketSlice'
+import { Product } from '../types/ProductsAPI.types'
+import Button from './Partial/Button'
+import { formatPrice } from '../utils/formatPrice'
+import { useStoreContext } from '../context/StoreProvider'
 
 interface IProps {
   product: Product
@@ -11,9 +10,11 @@ interface IProps {
 
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
-  const dispatch = useAppDispatch()
-  const { status } = useAppSelector(state => state.basket)
+  const { addToBasket } = useStoreContext()
 
+  const handleAddItem = (productId: string) => {
+    addToBasket(productId)
+  }
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
     if (!text) {
@@ -26,7 +27,7 @@ const CoffeeCard = ({ product }: IProps) => {
   }
 
   return (
-    <div className='relative flex flex-col rounded-xl bg-white bg-clip-border overflow-hidden shadow-md'>
+    <div className='relative flex flex-col roundeds-xl bg-white bg-clip-border overflow-hidden shadow-md'>
       <img
         src={`${product.imageUrl}`}
         className='w-full object-cover'
@@ -50,21 +51,14 @@ const CoffeeCard = ({ product }: IProps) => {
           </p>
 
           <div className='flex flex-col w-full justify-between items-center mt-4 sm:mt-0'>
-    
-
-          <Button
-            buttonType='create'
-            typeAction='submit'
-            iconType='cart'
-            className='w-full mb-4'
-            disabled={status === 'pendingAddItem' + product.id}
-            isLoading={status === 'pendingAddItem' + product.id}
-            onClick={() => {
-              dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }));
-            }}
-          >
-            Lägg till
-          </Button>
+            <Button
+              buttonType='create'
+              typeAction='submit'
+              iconType='cart'
+              className='w-full mb-4'
+              onClick={() => handleAddItem(product.id)}>
+              Lägg till
+            </Button>
 
             <div className='w-full'>
               <Link to={`/products/${type}/${product.id}`}>

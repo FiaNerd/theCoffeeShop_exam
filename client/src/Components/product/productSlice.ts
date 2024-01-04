@@ -1,47 +1,113 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Product, Products } from "../../types/ProductsAPI.types";
+import { Product, ProductParams, Products } from "../../types/ProductsAPI.types";
 import { RootState } from "../../redux/configureStore";
-import { getProduct, getProducts } from "../../services/CoffeeAPI";
+import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
+
+interface ProductState {
+  productsLoaded: boolean
+  filtersLoaded: boolean
+  status: string
+  types: string[]
+  roastLevels: string[]
+  productParams: ProductParams
+}
 
 const productsAdapter = createEntityAdapter<Product>({
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
+
+  const getAxiosParams = (productParams: ProductParams) => {
+    const params = new URLSearchParams()
+
+    params.append('pageNumber', productParams.pageNumber.toString())
+    params.append('pageSize', productParams.pageSize.toString())
+    params.append('orderBy', productParams.orderBy)
+
+    if(productParams.searchTerm){
+      params.append('searchTerm', productParams.searchTerm)
+    }
+
+    if(productParams.types){
+      params.append('types', productParams.types.toString())
+    }
+
+    if(productParams.roastLevels){
+      params.append('roastLevels', productParams.roastLevels?.toString())
+    }
+
+    return params
+  }
   
-  export const fetchProductsAsync = createAsyncThunk<Products>(
+  export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
     'products/fetchProductsAsync',
-    async (_, ThunkAPI) => {
+    async (_, thunkAPI) => {
+      const params = getAxiosParams(thunkAPI.getState().product.productParams)
       try {
-        return await getProducts();
-      } catch (error: never) {
+        return await getProducts(params);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
         console.error(error);
-        return ThunkAPI.rejectWithValue({ error: error.data });
+        return thunkAPI.rejectWithValue({ error: error.data });
       }
     }
   )
   
   export const fetchProductAsync = createAsyncThunk<Product, string, { rejectValue: { error: string } }>(
     'products/fetchProductAsync',
-    async (productId, ThunkAPI) => {
+    async (productId, thunkAPI) => {
       try {
         const product = await getProduct(productId);
         return product as Product;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error:any) {
         console.error(error);
-        return ThunkAPI.rejectWithValue({ error: error.data });
+        return thunkAPI.rejectWithValue({ error: error.data });
       }
     }
   );
   
+  export const fetchFilters = createAsyncThunk(
+    'product/fetchFilters',
+    async (_, thunkAPI) => {
+      try {
+        const response = await getFilters();
+        console.log('Response from getFilters:', response); 
+        return response;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error:any) {
+        return thunkAPI.rejectWithValue({ error: error.data });
+      }
+    }
+  );
+
+  const initParams = () => {
+    return{
+      pageNumber: 1,
+      pageSize: 12,
+      orderBy: "name",
+    }
+  }  
   
   
   export const productSlice = createSlice({
     name: 'product',
-      initialState: productsAdapter.getInitialState({
+      initialState: productsAdapter.getInitialState<ProductState>({
       productsLoaded: false,
+      filtersLoaded: false,
       status: 'idle',
+      types: [] as string[],
+      roastLevels: [] as string[],
+      productParams: initParams()
     }),
-    reducers: {},
+    reducers: {
+      setProductParamas: (state, action) => {
+        state.productsLoaded = false
+        state.productParams = {...state.productParams, ...action.payload}
+      },
+      resetProductParams: (state) => {
+        state.productParams = initParams()
+      } 
+    },
     extraReducers: (builder) => {
       builder.addCase(fetchProductsAsync.pending, (state) => {
         state.status = 'pendingFetchProducts';
@@ -68,10 +134,27 @@ const productsAdapter = createEntityAdapter<Product>({
         console.log(action)
         state.status = 'idle'
       })
+      builder.addCase(fetchFilters.pending, (state) => {
+        state.status = 'pendingFetchFilters'
+      })
+      builder.addCase(fetchFilters.fulfilled, (state, action) => {
+        console.log('Action payload in fetchFilters.fulfilled:', action.payload);
+        state.types = action.payload.types;
+        state.roastLevels = action.payload.roastLevel;
+        state.status = 'idle';
+        state.filtersLoaded = true;
+      });
+      
+    builder.addCase(fetchFilters.rejected, (state, action) => {
+      state.status = 'idle'; 
+      console.log(action.payload)
+    })
     },
   });
   
   export const productSelectors = productsAdapter.getSelectors(
     (state: RootState) => state.product
   );
+
+  export const { setProductParamas, resetProductParams } = productSlice.actions
   
