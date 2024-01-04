@@ -4,7 +4,6 @@ import { RootState } from "../../redux/configureStore";
 import { getProducts } from "../../services/CoffeeAPI";
 
 const productsAdapter = createEntityAdapter<Product>({
-    selectId: (product: Product) => product.id,
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
   
@@ -22,7 +21,7 @@ const productsAdapter = createEntityAdapter<Product>({
   
   export const productSlice = createSlice({
     name: 'product',
-    initialState: productsAdapter.getInitialState({
+      initialState: productsAdapter.getInitialState({
       productsLoaded: false,
       status: 'idle',
     }),
