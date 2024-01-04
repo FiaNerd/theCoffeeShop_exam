@@ -1,13 +1,10 @@
 import { useParams } from 'react-router-dom'
-// import useProducts from '../hooks/useProducts'
 import CoffeeCard from '../components/product/CoffeeCard'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import { useEffect } from 'react'
 import { fetchProductsAsync, productSelectors } from '../components/product/productSlice'
 
 const ProductPage = () => {
-  // const { data: coffeeProducts } = useProducts()
-
   const { type } = useParams()
   const products = useAppSelector(productSelectors.selectAll)
   const { productsLoaded } = useAppSelector(state => state.product)
@@ -18,11 +15,6 @@ const ProductPage = () => {
       dispatch(fetchProductsAsync())
     }
   },[dispatch, productsLoaded])
-
-  console.log(products, dispatch)
-
-
-  console.log("Type", type)
 
   const trimmedType = type ?? ''
 

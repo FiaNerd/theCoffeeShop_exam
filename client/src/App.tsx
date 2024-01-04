@@ -7,7 +7,7 @@ import LoadingSpinner from './components/partial/LoadingSpinner'
 import PageNotFound from './components/partial/PageNotFound'
 import ProductDetailPage from './Pages/ProductDetailPage'
 import HomePage from './Pages/HomePage'
-import ProductPage from './Pages/ProductPage'
+import ProductTypePage from './Pages/ProductTypePage'
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
             path='/products/:type/:productId'
             element={<ProductDetailPage />}
           />
-          <Route path='/products/:type' element={<ProductPage />} />
+          <Route path='/products/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
