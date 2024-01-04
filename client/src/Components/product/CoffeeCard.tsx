@@ -28,7 +28,7 @@ const CoffeeCard = ({ product }: IProps) => {
   return (
     <div className='relative flex flex-col rounded-xl bg-white bg-clip-border overflow-hidden shadow-md'>
       <img
-        src={`http://localhost:5173/src/assets${product.imageUrl}`}
+        src={`${product.imageUrl}`}
         className='w-full object-cover'
         alt={product.name}
       />

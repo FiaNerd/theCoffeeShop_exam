@@ -1,37 +1,28 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import useProduct from '../hooks/useProduct'
 import Button from '../components/partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-import PageNotFound from '../components/partial/PageNotFound'
+import { productSelectors } from '../components/product/productSlice'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
-  const { data: product, isLoading } = useProduct(productId!)
+  // const { data: product, isLoading } = useProduct(productId!)
   const dispatch = useAppDispatch()
   const { basket } = useAppSelector(state => state.basket)
+  const product = useAppSelector(state => productSelectors.selectById(state, productId!))
   
   const item = basket?.items.find(
     (item) => item.productId === product?.id
     )
 
 
-    if (!product) {
-      return <PageNotFound />
-    }
-  
-
-  return isLoading || !product ? (
-    <p className={`text-2xl font-bold ${isLoading ? 'hidden' : ''}`}>
-      {isLoading ? 'Laddar...' : 'Ingen produkt hittades'}
-    </p>
-  ) : (
+  return (
     <>
       <div className='w-full flex flex-col md:flex-row mx-auto gap-6 max-w-[960px]'>
         <img
-          src={`http://localhost:5173/src/assets/${product.imageUrl}`}
+          src={`${product.imageUrl}`}
           className='w-full object-cover mb-4 md:w-1/2 md:mb-0'
           alt={product.name}
         />

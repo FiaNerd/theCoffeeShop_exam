@@ -86,16 +86,23 @@ const get = async <T>(endpoint: string) => {
  * @param all products
  */
 export const getProducts = async (): Promise<Products | []> => {
-  return await get<Products>(`/products`)
+  const res =await get<Products>(`/products`)
+  return res
 }
+
 /**
  * Get single product
  * @param guid get GUID
  */
-export const getProduct = async (guid: string) => {
-  return await get<Product>(`/products/${guid}`)
-}
-
+export const getProduct = async (guid: string): Promise<Product | null> => {
+  try {
+    const res = await get<Product>(`/products/${guid}`);
+    return res;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 /**
  * Get all basket
  */

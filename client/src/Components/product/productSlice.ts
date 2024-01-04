@@ -1,14 +1,14 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { Product, Products } from "../../types/ProductsAPI.types";
 import { RootState } from "../../redux/configureStore";
-import { getProducts } from "../../services/CoffeeAPI";
+import { getProduct, getProducts } from "../../services/CoffeeAPI";
 
 const productsAdapter = createEntityAdapter<Product>({
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
   
-  export const fetchProductAsync = createAsyncThunk<Products>(
-    'products/fetchProductAsync',
+  export const fetchProductsAsync = createAsyncThunk<Products>(
+    'products/fetchProductsAsync',
     async () => {
       try {
         return await getProducts();
@@ -19,6 +19,20 @@ const productsAdapter = createEntityAdapter<Product>({
     }
   );
   
+  export const fetchProductAsync = createAsyncThunk<Product | null, string>(
+    'products/fetchProductAsync',
+    async (productId) => {
+      try {
+        const product = await getProduct(productId!);
+        return product;
+      } catch (error) { 
+        console.error(error);
+        return null;
+      }
+    }
+  );
+  
+  
   export const productSlice = createSlice({
     name: 'product',
       initialState: productsAdapter.getInitialState({
@@ -27,17 +41,29 @@ const productsAdapter = createEntityAdapter<Product>({
     }),
     reducers: {},
     extraReducers: (builder) => {
-      builder.addCase(fetchProductAsync.pending, (state) => {
+      builder.addCase(fetchProductsAsync.pending, (state) => {
         state.status = 'pendingFetchProducts';
       });
-      builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+      builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {
         productsAdapter.setAll(state, action.payload);
         state.status = 'idle';
         state.productsLoaded = true;
       });
-      builder.addCase(fetchProductAsync.rejected, (state) => {
+      builder.addCase(fetchProductsAsync.rejected, (state) => {
         state.status = 'idle';
       });
+      builder.addCase(fetchProductAsync.pending, (state) => {
+        state.status = "pendingFetchProduct"
+      })
+      builder.addCase(fetchProductAsync.fulfilled, (state, action) => {
+        if (action.payload) {
+          productsAdapter.upsertOne(state, action.payload);
+        }
+        state.status = "idle"
+      })
+      builder.addCase(fetchProductAsync.rejected, (state) => {
+        state.status = 'idle'
+      })
     },
   });
   

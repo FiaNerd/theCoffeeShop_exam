@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import logo from '../../assets/images/coffeebean_logo.png'
+// import logo from "../../public/images/coffeebean_logo.png";
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
@@ -17,6 +17,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { setBasket } from '../basket/basketSlice'
 
 const Navbar = () => {
+  const logo = "/images/coffeebean_logo.png";
+  
   const [menuOpen, setMenuOpen] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)

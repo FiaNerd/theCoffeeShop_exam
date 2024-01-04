@@ -1,6 +1,6 @@
 import CoffeeCard from '../components/product/CoffeeCard'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
-import { fetchProductAsync, productSelectors } from '../components/product/productSlice'
+import {  fetchProductsAsync, productSelectors } from '../components/product/productSlice'
 import { useEffect } from 'react'
 
 const HomePage = () => {
@@ -11,7 +11,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if(!productsLoaded){
-      dispatch(fetchProductAsync())
+      dispatch(fetchProductsAsync())
     }
   },[dispatch, productsLoaded])
 

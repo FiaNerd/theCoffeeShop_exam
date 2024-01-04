@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import heroImg from '../assets/images/hero_section.jpg'
 
 const HeroSection = () => {
+  const heroImg = '/images/hero_section.jpg'
   return (
     <div className='mx-auto items-center mb-8'>
       <div className='relative'>
