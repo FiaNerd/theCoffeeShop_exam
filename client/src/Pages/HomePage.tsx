@@ -2,6 +2,7 @@ import CoffeeCard from '../components/product/CoffeeCard'
 import { useAppDispatch, useAppSelector } from '../redux/configureStore'
 import {  fetchFilters, fetchProductsAsync, productSelectors } from '../components/product/productSlice'
 import { useEffect } from 'react'
+import Button from '../components/partial/Button'
 
 const HomePage = () => {
  
@@ -35,6 +36,15 @@ const HomePage = () => {
               <CoffeeCard key={product.id} product={product} />
             ))}
       </div>
+
+      <div className='flex mx-auto justify-center'>
+          <Button
+            buttonType='load-more'
+            typeAction={'button'}
+            onClick={() => console.log("Click")}>
+              Ladda fler
+          </Button>
+        </div>
     </div>
   )
 }
