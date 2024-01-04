@@ -4,8 +4,8 @@ export type Product = {
   blendDescription: string
   description: string
   imageUrl: string
-  type: string[]
-  roastLevel: string
+  types: string[]
+  roastLevel: string[]
   price: number
   quantityInStock: number
   createdDate?: Date

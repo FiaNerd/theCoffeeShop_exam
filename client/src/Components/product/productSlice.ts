@@ -92,7 +92,7 @@ const productsAdapter = createEntityAdapter<Product>({
       builder.addCase(fetchFilters.fulfilled, (state, action) => {
         console.log('Action payload in fetchFilters.fulfilled:', action.payload);
         state.types = action.payload.types;
-        state.roastLevels = action.payload.roastLevels;
+        state.roastLevels = action.payload.roastLevel;
         state.status = 'idle';
         state.filtersLoaded = true;
       });

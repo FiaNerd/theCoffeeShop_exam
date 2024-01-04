@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useRef } from 'react'
-import Button from './Button'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
-import FilterTypes from './FilterProducts'
-import FilterRoastLevel from './FilterRoastLevel'
+import Button from './Button'
+import FilterProducts from './FilterProducts'
 
 interface IProps {
   openSearchbar: boolean
@@ -39,8 +38,7 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
         </div>
 
         <SortProducts />
-        <FilterTypes />
-        <FilterRoastLevel />
+        <FilterProducts />
 
         <div className='flex flex-col items-center gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
           <button type='button' onClick={onCloseSearchbar}>
