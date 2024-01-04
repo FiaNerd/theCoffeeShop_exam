@@ -1,7 +1,16 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Product, Products } from "../../types/ProductsAPI.types";
+import { Product, ProductParams, Products } from "../../types/ProductsAPI.types";
 import { RootState } from "../../redux/configureStore";
 import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
+
+interface ProductState {
+  productsLoaded: boolean
+  filtersLoaded: boolean
+  status: string
+  types: string[]
+  roastLevels: string[]
+  productParams: ProductParams
+}
 
 const productsAdapter = createEntityAdapter<Product>({
     sortComparer: (a, b) => a.name.localeCompare(b.name),
@@ -47,19 +56,35 @@ const productsAdapter = createEntityAdapter<Product>({
       }
     }
   );
-  
+
+  const initParams = () => {
+    return{
+      pageNumber: 1,
+      pageSize: 12,
+      orderBy: "name",
+    }
+  }  
   
   
   export const productSlice = createSlice({
     name: 'product',
-      initialState: productsAdapter.getInitialState({
+      initialState: productsAdapter.getInitialState<ProductState>({
       productsLoaded: false,
       filtersLoaded: false,
+      status: 'idle',
       types: [] as string[],
       roastLevels: [] as string[],
-      status: 'idle',
+      productParams: initParams()
     }),
-    reducers: {},
+    reducers: {
+      setProductParamas: (state, action) => {
+        state.productsLoaded = false
+        state.productParams = {...state.productParams, ...action.payload}
+      },
+      resetProductParams: (state) => {
+        state.productParams = initParams()
+      } 
+    },
     extraReducers: (builder) => {
       builder.addCase(fetchProductsAsync.pending, (state) => {
         state.status = 'pendingFetchProducts';
@@ -107,4 +132,6 @@ const productsAdapter = createEntityAdapter<Product>({
   export const productSelectors = productsAdapter.getSelectors(
     (state: RootState) => state.product
   );
+
+  export const { setProductParamas, resetProductParams } = productSlice.actions
   
