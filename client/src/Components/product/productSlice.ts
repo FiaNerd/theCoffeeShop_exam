@@ -9,28 +9,30 @@ const productsAdapter = createEntityAdapter<Product>({
   
   export const fetchProductsAsync = createAsyncThunk<Products>(
     'products/fetchProductsAsync',
-    async () => {
+    async (_, ThunkAPI) => {
       try {
         return await getProducts();
-      } catch (error) {
-        console.log(error);
-        return [];
+      } catch (error: never) {
+        console.error(error);
+        return ThunkAPI.rejectWithValue({ error: error.data });
+      }
+    }
+  )
+  
+  export const fetchProductAsync = createAsyncThunk<Product, string, { rejectValue: { error: string } }>(
+    'products/fetchProductAsync',
+    async (productId, ThunkAPI) => {
+      try {
+        const product = await getProduct(productId);
+        return product as Product;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error:any) {
+        console.error(error);
+        return ThunkAPI.rejectWithValue({ error: error.data });
       }
     }
   );
   
-  export const fetchProductAsync = createAsyncThunk<Product | null, string>(
-    'products/fetchProductAsync',
-    async (productId) => {
-      try {
-        const product = await getProduct(productId!);
-        return product;
-      } catch (error) { 
-        console.error(error);
-        return null;
-      }
-    }
-  );
   
   
   export const productSlice = createSlice({
@@ -49,7 +51,8 @@ const productsAdapter = createEntityAdapter<Product>({
         state.status = 'idle';
         state.productsLoaded = true;
       });
-      builder.addCase(fetchProductsAsync.rejected, (state) => {
+      builder.addCase(fetchProductsAsync.rejected, (state, action) => {
+        console.log(action.payload)
         state.status = 'idle';
       });
       builder.addCase(fetchProductAsync.pending, (state) => {
@@ -61,7 +64,8 @@ const productsAdapter = createEntityAdapter<Product>({
         }
         state.status = "idle"
       })
-      builder.addCase(fetchProductAsync.rejected, (state) => {
+      builder.addCase(fetchProductAsync.rejected, (state, action) => {
+        console.log(action)
         state.status = 'idle'
       })
     },

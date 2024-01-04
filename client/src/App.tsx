@@ -3,11 +3,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
 import Header from './components/partial/Header'
 import Footer from './components/partial/Footer'
-import HomePage from './pages/HomePage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import ProductPage from './pages/ProductPage'
 import LoadingSpinner from './components/partial/LoadingSpinner'
 import PageNotFound from './components/partial/PageNotFound'
+import ProductDetailPage from './Pages/ProductDetailPage'
+import HomePage from './Pages/HomePage'
+import ProductPage from './Pages/ProductPage'
 
 const App = () => {
   return (

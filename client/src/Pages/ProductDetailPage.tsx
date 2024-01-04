@@ -11,11 +11,12 @@ const ProductDetailPage = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-  const { basket, status } = useAppSelector(state => state.basket)
+  const { basket, /* status */ } = useAppSelector(state => state.basket)
   const { status: productStatus } = useAppSelector(state => state.product)
   const product = useAppSelector(state => productSelectors.selectById(state, productId!))
   const [ quantity, setQuantity ] = useState(0)
 
+  console.log(productId)
 
   const item = basket?.items.find(
     (item) => item.productId === product?.id
@@ -25,7 +26,7 @@ const ProductDetailPage = () => {
       if (item) {
         setQuantity(item.quantity);
       }
-    }, [item]);
+    }, [item, quantity]);
     
     useEffect(() => {
       if (!product && productId) {

@@ -9,7 +9,7 @@ import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
   const dispatch = useAppDispatch()
-  const { basket,  } = useAppSelector(state => state.basket)
+  const { basket  } = useAppSelector(state => state.basket)
 
 
   const subtotal =

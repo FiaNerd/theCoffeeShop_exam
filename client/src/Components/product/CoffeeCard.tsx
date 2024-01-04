@@ -12,7 +12,7 @@ interface IProps {
 const CoffeeCard = ({ product }: IProps) => {
   const { type } = useParams()
   const dispatch = useAppDispatch()
-  const { requestStatus } = useAppSelector(state => state.basket)
+  const { status } = useAppSelector(state => state.basket)
 
 
   const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
@@ -57,8 +57,8 @@ const CoffeeCard = ({ product }: IProps) => {
             typeAction='submit'
             iconType='cart'
             className='w-full mb-4'
-            disabled={requestStatus === 'pendingAddItem' + product.id}
-            isLoading={requestStatus === 'pendingAddItem' + product.id}
+            disabled={status === 'pendingAddItem' + product.id}
+            isLoading={status === 'pendingAddItem' + product.id}
             onClick={() => {
               dispatch(addBasketItemAsync({ productId: product.id, quantity: 1 }));
             }}

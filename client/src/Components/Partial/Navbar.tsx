@@ -213,7 +213,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {openBasket && <ShoppingCart />}
+      {openBasket && basket && basket.items.length > 0 && <ShoppingCart />}
 
       <div>
         {menuOpen &&
