@@ -11,10 +11,10 @@ import Dropdown from './Dropdown'
 import { getCookie } from '../../utils/getCookie'
 import ShoppingCart from '../basket/ShoppingCart'
 import useClickOutside from '../../hooks/useClickoutside'
-import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { setBasket } from '../basket/basketSlice'
+import SearchBar from './Searchbar'
 
 const Navbar = () => {
   const logo = "/images/coffeebean_logo.png";

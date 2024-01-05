@@ -2,9 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
-import SortProducts from './SortProducts'
-import SearchProducts from '../partial/SearchProducts'
-import FilterProducts from '../partial/FilterProducts'
+import SearchProducts from './SearchProducts'
+import SortProducts from '../searchbar/SortProducts'
+import FilterProducts from './FilterProducts'
 
 interface IProps {
   openSearchbar: boolean
