@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { Product } from '../../types/ProductsAPI.types'
+import { Product } from '../../types/ProductsAPI'
 import Button from '../partial/Button'
 import { formatPrice } from '../../utils/formatPrice'
 import { useAppDispatch, useAppSelector,  } from '../../redux/configureStore'
@@ -38,7 +38,7 @@ const CoffeeCard = ({ product }: IProps) => {
           {product.types && Array.isArray(product.types) && (
             <p className='font-bold mb-2'>Typ: {product.types.join(' ')}</p>
           )}
-          <p className='font-bold mb-2'>Sort: {product.roastLevel}</p>
+          <p className='font-bold mb-2'>{product.roastLevel}</p>
           <p className='text-paragraph mb-4'>
             {limitDescription(product.description)}
           </p>

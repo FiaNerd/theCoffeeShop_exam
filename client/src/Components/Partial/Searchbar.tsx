@@ -3,8 +3,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
-import Button from './Button'
 import FilterProducts from './FilterProducts'
+import SearchProducts from './SearchProducts'
 
 interface IProps {
   openSearchbar: boolean
@@ -23,20 +23,7 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
         openSearchbar ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
       <div className='bg-deep-red p-4 shadow-md w-full'>
-        <div className='w-full md:max-w-[70%] flex items-center mx-auto mb-8'>
-          <input
-            type='text'
-            placeholder='Hitta ditt kaffe...'
-            className='flex-1 py-3 px-3 border rounded focus:outline-none focus:ring focus:border-orange'
-          />
-          <Button
-            buttonType='search'
-            typeAction='button'
-            onClick={onCloseSearchbar}>
-            Sök nu
-          </Button>
-        </div>
-
+        <SearchProducts onCloseSearch={onCloseSearchbar} onCloseEnterSearch={onCloseSearchbar}/>
         <SortProducts />
         <FilterProducts />
 

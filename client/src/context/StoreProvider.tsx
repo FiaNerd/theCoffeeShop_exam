@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
-import { Basket } from '../types/Basket.types'
+import { Basket } from '../types/Basket'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query' 
 import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
