@@ -1,14 +1,19 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
-import { useAppDispatch } from "../../redux/configureStore";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
 import { setProductParamas } from "../product/productSlice";
 import Button from "./Button";
 
-const SearchProducts = () => {
+interface IProps {
+  onCloseSearch: () => void
+}
+
+const SearchProducts = ({ onCloseSearch }: IProps) => {
+  const { productParams } = useAppSelector(state => state.product)
   const dispatch = useAppDispatch();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState(productParams.searchTerm);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch(setProductParamas({ searchTerm }));
+    dispatch(setProductParamas({ searchTerm: event.target.value}))
       setSearchTerm(event.target.value);
   };
 
@@ -19,10 +24,9 @@ const SearchProducts = () => {
     }
   };
 
-  const onClickSeacrh = () => {
-    dispatch(setProductParamas({ searchTerm }));
-    setSearchTerm(""); 
-  };
+    const onClickSeacrh = () => {
+        setSearchTerm(""); 
+    };
 
 
   return (
@@ -31,11 +35,14 @@ const SearchProducts = () => {
         type="text"
         placeholder="Hitta ditt kaffe..."
         className="flex-1 py-3 px-3 border rounded focus:outline-none focus:ring focus:border-orange"
-        value={searchTerm}
-        onChange={(event) => handleSearch(event)}
+        value={searchTerm || ""}
+        onChange={handleSearch}
         onKeyDown={(event) => handleKeyDown(event)}
       />
-      <Button buttonType="search" typeAction="button" onClick={onClickSeacrh}>
+      {/* <Button buttonType="search" typeAction="button" onClick={}>
+        Sök nu
+      </Button> */}
+      <Button buttonType="search" typeAction="button" onClick={onCloseSearch}>
         Sök nu
       </Button>
     </div>

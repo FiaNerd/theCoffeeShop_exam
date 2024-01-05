@@ -23,7 +23,7 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
         openSearchbar ? 'opacity-100' : 'opacity-0 pointer-events-none'
       }`}>
       <div className='bg-deep-red p-4 shadow-md w-full'>
-        <SearchProducts />
+        <SearchProducts onCloseSearch={onCloseSearchbar}/>
         <SortProducts />
         <FilterProducts />
 

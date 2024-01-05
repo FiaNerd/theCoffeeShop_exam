@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { addItemToBasket } from '../services/CoffeeAPI'
-import { Basket } from '../types/Basket.types'
+import { Basket } from '../types/Basket'
 
 interface CreateBasketParams {
   productId: string

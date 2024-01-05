@@ -1,5 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Product, ProductParams, Products } from "../../types/ProductsAPI.types";
+import { Product, ProductParams, Products } from "../../types/ProductsAPI";
 import { RootState } from "../../redux/configureStore";
 import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
 
