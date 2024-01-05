@@ -1,6 +1,7 @@
 import { useEffect, } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
 import { fetchFilters, fetchProductsAsync } from "../product/productSlice";
+import FilterCheckGroup from "../partial/FilterCheckGroup";
 
 
 
@@ -27,7 +28,8 @@ const FilterProducts = () => {
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Typer
         </div>
-        {types ? (
+        <FilterCheckGroup />
+        {/* {types && (
           types.map((type, index) => (
             <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
               <input
@@ -40,16 +42,14 @@ const FilterProducts = () => {
               <div className='title px-2 my-auto'>{type}</div>
             </label>
           ))
-        ) : (
-          <span>No types available</span>
-        )}
+        )  } */}
       </div>
 
       <div className='main w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Rostning
         </div>
-        {roastLevels ? (
+        {roastLevels && (
           roastLevels.map((roastLevel, index) => (
             <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
               <input
@@ -61,8 +61,6 @@ const FilterProducts = () => {
               <div className='title px-2 my-auto'>{roastLevel}</div>
             </label>
           ))
-        ) : (
-          <span>No roast levels available</span>
         )}
       </div>
     </>
