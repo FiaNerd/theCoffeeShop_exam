@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from "../../redux/configureStore";
 import { setProductParamas } from "../product/productSlice";
-import SortButtonGroup from "./SortButtonGroup";
+import SortButtonGroup from "../partial/SortButtonGroup";
 
  const sortOptions = [
   { value: 'name', label: 'Sortera: a - ö' },
