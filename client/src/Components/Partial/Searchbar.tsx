@@ -3,7 +3,6 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
-import Button from './Button'
 import FilterProducts from './FilterProducts'
 import SearchProducts from './SearchProducts'
 
