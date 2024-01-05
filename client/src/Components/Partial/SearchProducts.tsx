@@ -1,6 +1,6 @@
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
-import { setProductParamas } from "../product/productSlice";
+import { clearSearchTerm, setProductParamas } from "../product/productSlice";
 import Button from "./Button";
 
 interface IProps {
@@ -9,28 +9,40 @@ interface IProps {
 }
 
 const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {
-  const { productParams } = useAppSelector(state => state.product)
+  const { productParams } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch();
   const [searchTerm, setSearchTerm] = useState(productParams.searchTerm);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    dispatch(setProductParamas({ searchTerm: event.target.value}))
-      setSearchTerm(event.target.value);
+    event.preventDefault();
+    dispatch(setProductParamas({ searchTerm: event.target.value }));
+    setSearchTerm(event.target.value);
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-        event.preventDefault()
-        setSearchTerm(""); 
-        onCloseEnterSearch()
+      event.preventDefault();
+      performSearch();
     }
   };
 
-    const onClickSeacrh = () => {
-        setSearchTerm(""); 
-        onCloseSearch()
-    };
+  const onClickSearch = () => {
+    performSearch();
+  };
 
+  const performSearch = () => {
+    dispatch(setProductParamas({ searchTerm }));
+    setSearchTerm("");
+    onCloseSearch();
+    onCloseEnterSearch()
+  };
+
+  useEffect(() => {
+    if(!searchTerm){
+      setSearchTerm("")
+    }
+  },[searchTerm])
+  
 
   return (
     <div className="w-full md:max-w-[70%] flex items-center mx-auto mb-8">
@@ -42,10 +54,7 @@ const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {
         onChange={handleSearch}
         onKeyDown={handleKeyDown}
       />
-      {/* <Button buttonType="search" typeAction="button" onClick={}>
-        Sök nu
-      </Button> */}
-      <Button buttonType="search" typeAction="button" onClick={onClickSeacrh}>
+      <Button buttonType="search" typeAction="button" onClick={onClickSearch}>
         Sök nu
       </Button>
     </div>
