@@ -20,7 +20,7 @@ const ProductPage = () => {
 
   const filterProducts = () => {
     return products?.filter((products) => {
-      const productTypes = products.type.map((productType) =>
+      const productTypes = products.types.map((productType) =>
         productType.toLowerCase().trim()
       )
 

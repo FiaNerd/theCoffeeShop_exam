@@ -1,6 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
-import { clearSearchTerm, setProductParamas } from "../product/productSlice";
+import { setProductParamas } from "../product/productSlice";
 import Button from "./Button";
 
 interface IProps {
