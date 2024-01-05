@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from './SortProducts'
 import SearchProducts from '../partial/SearchProducts'
-import FilterProducts from './FilterProducts'
+import FilterProducts from '../partial/FilterProducts'
 
 interface IProps {
   openSearchbar: boolean
