@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { Product } from '../types/ProductsAPI'
-import Button from './Partial/Button'
+import Button from '../components/partial/Button'
 import { formatPrice } from '../utils/formatPrice'
 import { useStoreContext } from '../context/StoreProvider'
 
