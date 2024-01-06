@@ -18,6 +18,7 @@ const productsAdapter = createEntityAdapter<Product>({
 
   const getAxiosParams = (productParams: ProductParams) => {
     const params = new URLSearchParams()
+    console.log(productParams.types)
 
     params.append('pageNumber', productParams.pageNumber.toString())
     params.append('pageSize', productParams.pageSize.toString())

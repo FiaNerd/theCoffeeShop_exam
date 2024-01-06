@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-// import logo from "../../public/images/coffeebean_logo.png";
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'

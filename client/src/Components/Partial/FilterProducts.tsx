@@ -14,14 +14,12 @@ const FilterProducts = () => {
       dispatch(fetchProductsAsync());
     }
   }, [dispatch, productsLoaded]);
-  
+
   useEffect(() => {
     if (!filtersLoaded) {
       dispatch(fetchFilters());
     }
   }, [dispatch, filtersLoaded]);
-
-  console.log(types)
 
   return (
     <>
@@ -29,43 +27,18 @@ const FilterProducts = () => {
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Typer
         </div>
-        <FilterCheckGroup types={types} checked={productParams.types} onChange={(type: string[]) => dispatch(setProductParamas({ types: type }))} />
-      </div>
-
-        {/* {types ? (
-          types.map((type, index) => (
-            <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
-              <input
-                  type='checkbox'
-                  // onChange={() => handleFilterChange(type)}
-                  // checked={selectFilter.includes(type)}
-                />
-
-
-              <div className='title px-2 my-auto'>{type}</div>
-            </label>
-          ))
-        ) : (
-          <span>No types available</span>
+        {types &&(
+          <FilterCheckGroup items={types} checked={productParams.types} onChange={(types: string[]) => dispatch(setProductParamas({ types: types }))} />
         )}
-      </div> */}
+      </div>
 
       <div className='main w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Rostning
         </div>
-        {roastLevels ? (
-          roastLevels.map((roastLevel, index) => (
-            <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
-              <input
-                type='checkbox'
-                // onChange={() => handleFilterChange(roastLevel)}
-                // checked={selectFilter.includes(roastLevel)}
-              />
-
-              <div className='title px-2 my-auto'>{roastLevel}</div>
-            </label>
-          ))
+        {roastLevels &&
+          roastLevels ? (
+          <FilterCheckGroup items={roastLevels} checked={productParams.roastLevels} onChange={(roastLevels: string[]) => dispatch(setProductParamas({ roastLevels: roastLevels }))} />
         ) : (
           <span>No roast levels available</span>
         )}

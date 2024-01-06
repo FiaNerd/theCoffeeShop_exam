@@ -20,6 +20,7 @@ const CoffeeCard = ({ product }: IProps) => {
     if (!text) {
       return ''
     }
+    console.log("",  product)
 
     const sentences = text.split('.')
     const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
@@ -36,8 +37,8 @@ const CoffeeCard = ({ product }: IProps) => {
       <div className='p-6 flex flex-col justify-between flex-1'>
         <div>
           <h3 className='text-sub-title font-bold mb-2'>{product.name}</h3>
-          {product.types && Array.isArray(product.types) && (
-            <p className='font-bold mb-2'>Typ: {product.types.join(' ')}</p>
+          {product.type && Array.isArray(product.type) && (
+            <p className='font-bold mb-2'>Typ: {product.type.join(' ')}</p>
           )}
           <p className='font-bold mb-2'>Sort: {product.roastLevel}</p>
           <p className='text-paragraph mb-4'>

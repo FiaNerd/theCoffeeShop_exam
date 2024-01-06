@@ -16,7 +16,6 @@ const ProductDetailPage = () => {
   const product = useAppSelector(state => productSelectors.selectById(state, productId!))
   const [ quantity, setQuantity ] = useState(0)
 
-  console.log(productId)
 
   const item = basket?.items.find(
     (item) => item.productId === product?.id
