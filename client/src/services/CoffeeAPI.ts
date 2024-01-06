@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { Product, Products } from '../types/ProductsAPI'
 import { Basket } from '../types/Basket'
-// import { PaginatedResponse } from '../types/Pagination.types'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'

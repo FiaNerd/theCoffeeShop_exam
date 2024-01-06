@@ -1,12 +1,12 @@
-import { useEffect, } from "react";
+import { useEffect} from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
-import { fetchFilters, fetchProductsAsync } from "../product/productSlice";
-
+import { fetchFilters, fetchProductsAsync, setProductParamas } from "../product/productSlice";
+import FilterCheckGroup from "./FilterCheckGroup";
 
 
 const FilterProducts = () => {
 
-  const { productsLoaded, filtersLoaded, types, roastLevels } = useAppSelector(state => state.product)
+  const { productsLoaded, filtersLoaded, types, roastLevels, productParams } = useAppSelector(state => state.product)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const FilterProducts = () => {
       dispatch(fetchProductsAsync());
     }
   }, [dispatch, productsLoaded]);
-  
+
   useEffect(() => {
     if (!filtersLoaded) {
       dispatch(fetchFilters());
@@ -23,25 +23,12 @@ const FilterProducts = () => {
 
   return (
     <>
-      <div className='main w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
+       <div className='main w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Typer
         </div>
-        {types ? (
-          types.map((type, index) => (
-            <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
-              <input
-                  type='checkbox'
-                  // onChange={() => handleFilterChange(type)}
-                  // checked={selectFilter.includes(type)}
-                />
-
-
-              <div className='title px-2 my-auto'>{type}</div>
-            </label>
-          ))
-        ) : (
-          <span>No types available</span>
+        {types &&(
+          <FilterCheckGroup items={types} checked={productParams.types} onChange={(types: string[]) => dispatch(setProductParamas({ types: types }))} />
         )}
       </div>
 
@@ -49,18 +36,9 @@ const FilterProducts = () => {
         <div className='title py-3 my-auto px-5 bg-orange text-white text-sm font-semibold md:mr-3'>
           Rostning
         </div>
-        {roastLevels ? (
-          roastLevels.map((roastLevel, index) => (
-            <label key={index} className='flex checkbox p-2 cursor-pointer font-extralight text-white'>
-              <input
-                type='checkbox'
-                // onChange={() => handleFilterChange(roastLevel)}
-                // checked={selectFilter.includes(roastLevel)}
-              />
-
-              <div className='title px-2 my-auto'>{roastLevel}</div>
-            </label>
-          ))
+        {roastLevels &&
+          roastLevels ? (
+          <FilterCheckGroup items={roastLevels} checked={productParams.roastLevels} onChange={(roastLevels: string[]) => dispatch(setProductParamas({ roastLevels: roastLevels }))} />
         ) : (
           <span>No roast levels available</span>
         )}

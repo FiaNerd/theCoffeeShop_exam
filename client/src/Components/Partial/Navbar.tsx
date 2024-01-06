@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
 import '@fortawesome/fontawesome-svg-core/styles.css'
-// import logo from "../../public/images/coffeebean_logo.png";
 import { NavLink } from 'react-router-dom'
 import Hamburger from './Hamburger'
 import { menuItems } from '../../router/Navigation'
@@ -11,10 +10,10 @@ import Dropdown from './Dropdown'
 import { getCookie } from '../../utils/getCookie'
 import ShoppingCart from '../basket/ShoppingCart'
 import useClickOutside from '../../hooks/useClickoutside'
-import SearchBar from './Searchbar'
 import { Transition } from '@headlessui/react'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { setBasket } from '../basket/basketSlice'
+import SearchBar from './Searchbar'
 
 const Navbar = () => {
   const logo = "/images/coffeebean_logo.png";
