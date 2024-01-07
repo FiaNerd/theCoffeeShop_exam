@@ -1,8 +1,14 @@
+using System.Data;
+using System.Text;
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
 using CoffeeAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +22,34 @@ builder.Services.AddDbContext<StoreContext>(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Include 'SecurityScheme' to use JWT Authentication
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Put Bearer + your token in the box below",
 
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+});
+
+// builder.Services.AddCors();s
 // CORS configuration
 builder.Services.AddCors(options =>
 {
@@ -31,19 +63,32 @@ builder.Services.AddCors(options =>
 });
 
 
-
-
 // Adds and configures the identity system for the specified User type
-builder.Services.AddIdentity<User, IdentityRole>(opt =>
+builder.Services.AddIdentityCore<User>(opt =>
 {
     // Configure identity 
     // The email has to be unique
     opt.User.RequireUniqueEmail = true;
 })
-.AddEntityFrameworkStores<StoreContext>();
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>();
 
 // Authentication and Authorization
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+    {
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+            .GetBytes(builder.Configuration["JWTSettings:TokenKey"]))
+
+        };
+    });
+
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 
@@ -54,10 +99,19 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+     app.UseSwaggerUI(c => 
+    {
+        // This makes so we dont have past in a tooken everytime we refresh browser
+        c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+    });
 }
 
 app.UseCors("AllowCors");
+// app.UseCors(opt =>
+// {
+//     opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173");
+// });
+
 
 app.UseHttpsRedirection();
 
@@ -67,11 +121,12 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+// app.UseEndpoints(endpoints =>
+// {
+//     endpoints.MapControllers();
+// });
 
+app.MapControllers();
 // Create the database
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();

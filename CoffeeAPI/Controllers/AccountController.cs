@@ -1,6 +1,7 @@
 using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
 using CoffeeAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ namespace CoffeeAPI.Controllers
             return new UserDto
             {
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
             };
         }
 
@@ -54,5 +55,36 @@ namespace CoffeeAPI.Controllers
 
             return StatusCode(201);
         }
+
+            [Authorize]
+            [HttpGet("currentUser")]
+            public async Task<ActionResult<UserDto>> GetCurrentUser()
+            {
+            try
+            {
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                Console.WriteLine($"Current username: {User.Identity.Name}");
+                Console.WriteLine($"User found: {user != null}");
+
+
+                if (user == null)
+                {
+                    Console.WriteLine("User not found.");
+                    return NotFound("User not found.");
+                }
+
+                return new UserDto
+                {
+                    Email = user.Email,
+                    Token = await _tokenService.GenerateToken(user)
+                };
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }
