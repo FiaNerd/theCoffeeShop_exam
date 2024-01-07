@@ -29,6 +29,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+
+
+
 // Adds and configures the identity system for the specified User type
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -41,6 +44,7 @@ builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
