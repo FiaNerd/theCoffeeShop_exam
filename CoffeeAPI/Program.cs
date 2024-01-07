@@ -33,9 +33,11 @@ builder.Services.AddCors(options =>
 
 
 // Adds and configures the identity system for the specified User type
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
 {
     // Configure identity 
+    // The email has to be unique
+    opt.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<StoreContext>();
 
