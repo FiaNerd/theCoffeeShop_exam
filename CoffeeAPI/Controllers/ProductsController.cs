@@ -1,4 +1,3 @@
-using System.Text.Json;
 using API.Extensions;
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;

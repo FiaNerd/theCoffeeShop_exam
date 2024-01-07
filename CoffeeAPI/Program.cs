@@ -1,31 +1,46 @@
-using Microsoft.EntityFrameworkCore;
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<StoreContext>(opt =>
-    opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
+// Configure SQLite database
+builder.Services.AddDbContext<StoreContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+// CORS configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowCors", builder =>
+    {
+        builder.AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials()
+               .WithOrigins("http://localhost:5173");
+    });
+});
 
-builder.Services.AddCors();
+// Adds and configures the identity system for the specified User type
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    // Configure identity 
+})
+.AddEntityFrameworkStores<StoreContext>();
 
-//Adds and configures the identity system for the specified User type
-builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<StoreContext>();
+// Authentication and Authorization
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -34,30 +49,31 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(opt => 
-{
-    // AllowCredential is for allowing the client to pass cookie, otherwhise this would not work
-    app.UseCors(opt => opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:5173"));
-});
-
+app.UseCors("AllowCors");
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowCors");
+app.UseRouting();
 
-// app.UseAuthorization();
+// Authentication and Authorization middleware
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 // Create the database
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StoreContext>();
+var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
 {
-     context.Database.Migrate();
-     DbInitializer.Initialize(context);
+    await context.Database.MigrateAsync();
+    await DbInitializer.Initialize(context, userManager);
 }
 catch (Exception ex)
 {

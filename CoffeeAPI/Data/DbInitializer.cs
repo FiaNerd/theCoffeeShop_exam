@@ -8,26 +8,27 @@ namespace CoffeeAPI.Data
     {
         public static async Task Initialize(StoreContext context, UserManager<User> userManager)
         {
-             if (!userManager.Users.Any())
-        {
-            var user = new User
+              if (!userManager.Users.Any())
             {
-                UserName = "user",
-                Email = "user@nomail.com"
-            };
+                var user = new User
+                {
+                    UserName = "user",
+                    Email = "user@nomail.com"
+                };
 
-             await userManager.CreateAsync(user, "Pa$$w0rd");
-             await userManager.AddToRoleAsync(user, "Member");
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+                await userManager.AddToRoleAsync(user, "Member");
 
-              var admin = new User
-            {
-                UserName = "admin",
-                Email = "admin@nomail.com"
-            };
+                var admin = new User
+                {
+                    UserName = "admin",
+                    Email = "admin@nomail.com"
+                };
 
-            await userManager.CreateAsync(admin, "Pa$$w0rd");
-            await userManager.AddToRolesAsync(admin, new[] { "Member", "Admin" });
-        }
+                await userManager.CreateAsync(admin, "Pa$$w0rd");
+                await userManager.AddToRolesAsync(admin, new[] { "Admin", "Member" });
+            }
+
 
             if(context.Products.Any())
             {
