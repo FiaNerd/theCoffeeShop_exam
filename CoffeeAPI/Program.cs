@@ -1,5 +1,6 @@
 using CoffeeAPI.Data;
 using CoffeeAPI.Entities;
+using CoffeeAPI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +45,7 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
 // Authentication and Authorization
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
 

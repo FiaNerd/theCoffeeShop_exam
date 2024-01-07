@@ -5,7 +5,7 @@ using CoffeeAPI.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace API.Services;
+namespace CoffeeAPI.Services;
 
 public class TokenService
 {
