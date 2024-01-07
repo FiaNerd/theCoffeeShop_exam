@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using CoffeeAPI.Data;
+using CoffeeAPI.Entities;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,13 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 builder.Services.AddCors();
+
+//Adds and configures the identity system for the specified User type
+builder.Services.AddIdentityCore<User>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<StoreContext>();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
