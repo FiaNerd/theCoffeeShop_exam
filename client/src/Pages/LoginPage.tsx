@@ -1,7 +1,6 @@
 import { FieldValues, useForm } from 'react-hook-form';
 import { NavLink } from 'react-router-dom';
 import Buttons from '../components/partial/Button';
-import { login } from '../services/CoffeeAPI';
 
 interface FormValues {
   username: string;
@@ -20,12 +19,7 @@ const LoginPage = () => {
 
 
   const onSubmitLogin = async (data: FieldValues) => {
-    try {
-      return await login(data);
-      
-    } catch (error) {
-      console.error('Error when trying to login', error);
-    }
+   
   };
 
   return (
