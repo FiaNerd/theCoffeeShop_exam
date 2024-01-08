@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/configureStore";
 import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
-import { Product, ProductParams, Products } from "../../types/ProductsAPI";
+import { Product, ProductParams, Products } from "../../types/products";
 
 interface ProductState {
   productsLoaded: boolean

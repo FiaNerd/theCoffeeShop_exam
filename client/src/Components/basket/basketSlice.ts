@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { addItemToBasket, removeItemFromBasket } from '../../services/CoffeeAPI';
-import { Basket } from '../../types/Basket';
+import { Basket } from '../../types/basket';
 
 interface BasketState {
     basket: Basket | null

@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector, } from '../../redux/configureStore'
-import { Product } from '../../types/ProductsAPI'
+import { Product } from '../../types/products'
 import { formatPrice } from '../../utils/formatPrice'
 import { addBasketItemAsync } from '../basket/basketSlice'
 import Button from '../partial/Button'

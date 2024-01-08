@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import { PropsWithChildren, createContext, useContext, useState } from 'react'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
 import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
-import { Basket } from '../types/Basket'
+import { Basket } from '../types/basket'
 
 interface StoreContextValue {
   basket: Basket | null
