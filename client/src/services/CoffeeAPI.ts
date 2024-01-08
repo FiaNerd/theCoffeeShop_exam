@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { Product, Products } from '../types/ProductsAPI'
 import { Basket } from '../types/Basket'
+import { Product, Products } from '../types/ProductsAPI'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -25,60 +25,6 @@ const get = async <T>(endpoint: string) => {
     throw error
   }
 }
-
-// /**
-//  * Get products with pagination
-//  * @param page The page number to fetch
-//  * @param pageSize The number of items per page
-//  */
-// export const getProducts = async (page = 1, pageSize = 12, type = '') => {
-//   try {
-//     const headers = {
-//       Accept: 'application/json',
-//     }
-
-//     const url = type
-//       ? `${BASE_URL}/Products?Type=${type}&PageNumber=${page}&PageSize=${pageSize}`
-//       : `${BASE_URL}/Products?PageNumber=${page}&PageSize=${pageSize}`
-
-//     // console.log('Fetching URL:', url)
-
-//     const response = await fetch(url, { headers: headers })
-
-//     // console.log('URL esponse', response, url)
-
-//     if (!response.ok) {
-//       throw new Error(`Error fetching products: ${response.statusText}`)
-//     }
-
-//     const paginationHeaders = response.headers.get('pagination')
-
-//     if (!paginationHeaders) {
-//       throw new Error('Pagination information not found in header')
-//     }
-
-//     const paginationData = JSON.parse(paginationHeaders)
-
-//     const items = await response.json()
-//     // console.log('Number of items:', items.length)
-
-//     const paginatedResponse: PaginatedResponse<Product> = {
-//       items,
-//       metaData: {
-//         currentPage: paginationData?.currentPage,
-//         totalPages: paginationData?.totalPages,
-//         pageSize: paginationData?.pageSize.length,
-//         totalCount: paginationData?.totalCount,
-//       },
-//     }
-//     // console.log('Paginated response', paginatedResponse.metaData.pageSize)
-
-//     return paginatedResponse
-//   } catch (error) {
-//     console.error('Error during GET request:', error)
-//     throw error
-//   }
-// }
 
 /**
  * Get single product
@@ -143,5 +89,38 @@ export const getFilters = async () => {
   } catch (error) {
     console.error('Error fetching filters:', error)
     throw error
+  }
+}
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Login = async (values: any) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/Account/login`, values)
+    console.log("Data", response.data, "Values", values)
+    return response.data
+  } catch (error) {
+    console.log("Error when trying to login")
+  }
+}
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Register = async (values: any) => {
+  try {
+    const response = await axios.post(`/account/register`, values)
+    return response.data
+  } catch (error) {
+    console.log("Error when trying to create a account")
+  }
+}
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const currentUser = async () => {
+  try {
+    return await get(`/account/currentUser`)
+  } catch (error) {
+    console.log("Error when fetching currenUser")
   }
 }

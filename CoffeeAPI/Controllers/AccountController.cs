@@ -63,13 +63,10 @@ namespace CoffeeAPI.Controllers
             try
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                Console.WriteLine($"Current username: {User.Identity.Name}");
-                Console.WriteLine($"User found: {user != null}");
-
+        
 
                 if (user == null)
                 {
-                    Console.WriteLine("User not found.");
                     return NotFound("User not found.");
                 }
 
@@ -81,7 +78,6 @@ namespace CoffeeAPI.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
                 return StatusCode(500, "Internal server error");
             }
         }

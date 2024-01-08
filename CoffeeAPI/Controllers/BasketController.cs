@@ -71,7 +71,6 @@ namespace CoffeeAPI.Entities
                     // Negative quantity is not allowed
                     return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
                 }
-                Console.WriteLine($"DELETE request received for Product ID: {productId}, Quantity: {quantity}");
 
                 // Get basket from basket methods
                 var basket = await RetrieveBasket();
@@ -81,7 +80,6 @@ namespace CoffeeAPI.Entities
                     return NotFound();
                 }
 
-                Console.WriteLine($"DELETE request received for Basket: {basket}, Quantity: {quantity}");
 
                 // Remove item from basket and reduce quantity
                 basket.RemoveItem(productId, quantity);
@@ -100,17 +98,13 @@ namespace CoffeeAPI.Entities
             }
             catch (Exception ex)
             {
-                    Console.WriteLine($"Error processing DELETE request: {ex.Message}");
 
                     var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
                     {
                         Title = "Problem removing item from the basket",
                         Detail = ex.Message, 
                         Status = 400
-                    };
-
-                        Console.WriteLine($"Error processing DELETE request: {ex.Message}");
-    
+                    };    
                         return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket", Detail = ex.Message });
 
                     return BadRequest(problemDetails);

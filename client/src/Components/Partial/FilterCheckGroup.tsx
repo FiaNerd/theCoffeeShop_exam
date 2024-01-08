@@ -10,7 +10,6 @@ interface IProps {
     const [checkedItems, setCheckedItems] = useState(checked || []);
   
     const handleCheckedChange = (value: string) => {
-        console.log('Before:', checkedItems);
         const currentIndex = checkedItems.indexOf(value);
         let newChecked: string[] = [];
       
@@ -20,7 +19,6 @@ interface IProps {
           newChecked = checkedItems.filter(item => item !== value);
         }
       
-        console.log('After:', newChecked);
         setCheckedItems(newChecked);
         onChange(newChecked);
     };

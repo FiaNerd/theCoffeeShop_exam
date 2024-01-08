@@ -1,10 +1,10 @@
-import React from 'react'
+import { faArrowLeft, faMinus, faPlus, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faMinus, faArrowLeft, faSpinner } from '@fortawesome/free-solid-svg-icons'
 import clsx from 'clsx'
+import React from 'react'
 
 interface IProps {
-  buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back' | 'load-more'
+  buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back' | 'load-more' | 'loginOrRegister'
   typeAction: 'button' | 'submit'
   iconType?: 'increase' | 'decrease' | 'cart' | 'arrow' | 'spinner'
   children?: React.ReactNode
@@ -26,6 +26,7 @@ const Buttons: React.FC<IProps> = ({
   disabled,
   isLoading,
 }: IProps) => {
+  console.log("Diabled", disabled);
   const buttonClasses = (variant: string) => {
     switch (variant) {
       case 'create':
@@ -45,14 +46,18 @@ const Buttons: React.FC<IProps> = ({
       case 'checkout':
         return clsx(
           'w-full flex items-center justify-center',
-          'text-center text-white bg-orange'
+          'text-center text-white',
+          {
+            'bg-orange border-2 border-orange hover:opacity-80 hover:border-2 hover:border-white': !disabled && !isLoading,
+            'bg-orange opacity-60': disabled || isLoading,
+          }
         )
 
       case 'back':
         return clsx(
           'flex flex-rows gap-2',
           'items-center text-center text-dark-deep-brown hover:text-orange'
-        )
+        );
 
       case 'search':
         return clsx(
@@ -61,17 +66,27 @@ const Buttons: React.FC<IProps> = ({
           'font-bold bg-orange rounded'
         )
 
-        case 'load-more':
+      case 'load-more':
         return clsx(
           'px-6 py-2',
           'text-center text-dark-deep-brown',
           'border-orange border-2 rounded hover:border-opacity-80'
         )
 
+      case 'loginOrRegister':
+        return clsx(
+          'px-4 py-2',
+          'text-white font-light tracking-wider',
+          'rounded',
+          {
+            'bg-orange hover:opacity-80': !disabled && !isLoading,
+            'bg-orange opacity-60': disabled || isLoading,
+          }
+        );
       default:
         return ''
     }
-  }
+  };
 
   const renderIcon = () => {
     switch (iconType) {
@@ -110,7 +125,8 @@ const Buttons: React.FC<IProps> = ({
         'font-bold uppercase',
         'hover:opacity-80 cursor-pointer',
         buttonClasses(buttonType),
-        className
+        className,
+        { 'pointer-events-none': disabled || isLoading }
       )}
       type={typeAction as 'button' | 'submit'}
       onClick={onClick}

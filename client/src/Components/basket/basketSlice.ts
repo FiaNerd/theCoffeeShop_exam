@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { Basket } from '../../types/Basket';
 import { addItemToBasket, removeItemFromBasket } from '../../services/CoffeeAPI';
+import { Basket } from '../../types/Basket';
 
 interface BasketState {
     basket: Basket | null
@@ -15,7 +15,6 @@ const initialState: BasketState = {
 export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
     '/basket/addBasketItemAsync',
     async ({ productId, quantity = 1 }, ThunkAPI) => {
-      console.log('Thunk is executing');
       try {
         return await addItemToBasket(productId, quantity);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +29,6 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
   export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
     'basket/removeItemFromBasketAsync',
     async ({ productId, quantity }, ThunkAPI) => {
-      console.log('Thunk is executing');
       try {
         await removeItemFromBasket(productId, quantity);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -85,7 +83,6 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
               state.status = 'idle';
             })
             .addCase(removeItemFromBasketAsync.rejected, (state, action) => {
-              console.error('Error removing item:', action.error);
               console.log(action.payload)
               state.status = 'idle';
             });
