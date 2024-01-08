@@ -9,13 +9,6 @@ const LoginPage = () => {
   });
 
   const [ error, setError ] = useState("")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    //   const handleLoginChange = (event:any) => {
-    //     const { name, value } = event.target
-
-    //     setValues({...values, [ name ]: value})
-    //   }
-
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUsernameChange = (event: any) => {

@@ -25,7 +25,7 @@ const App = () => {
           <Route path='/products/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
          
-          <Route path="/konot/logga-in" element={<LoginPage />} /> 
+          <Route path="/konto/logga-in" element={<LoginPage />} /> 
    
           <Route path="/konto/register" element={<RegisterPage />} /> 
           <Route path='*' element={<PageNotFound />} />
