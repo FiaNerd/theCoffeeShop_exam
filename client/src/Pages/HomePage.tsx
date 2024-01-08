@@ -23,7 +23,7 @@ const HomePage = () => {
   }, [dispatch, filtersLoaded]);
   
   return (
-    <div className='flex-1 container max-w-[1280px] mx-auto mb-4 mt-8'>
+    <div className='px-4 container max-w-[1280px] mx-auto mb-4 mt-8'>
       <h1
         className='text-dark-deep-brown mb-4 to uppercase'>
         Vårt kaffe

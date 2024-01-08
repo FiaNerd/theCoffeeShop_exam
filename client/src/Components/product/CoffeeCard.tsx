@@ -67,7 +67,7 @@ const CoffeeCard = ({ product }: IProps) => {
           </Button>
 
             <div className='w-full'>
-              <Link to={`/products/${type}/${product.id}`}>
+              <Link to={`/produkt/${type}/${product.id}`}>
                 <Button buttonType='read-more' typeAction='button'>
                   Läs mer
                 </Button>

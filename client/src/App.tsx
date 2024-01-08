@@ -15,14 +15,15 @@ const App = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
+      <div className='flex-1'>
         <LoadingSpinner />
 
         <Routes>
           <Route
-            path='/products/:type/:productId'
+            path='/produkt/:type/:productId'
             element={<ProductDetailPage />}
           />
-          <Route path='/products/:type' element={<ProductTypePage />} />
+          <Route path='/produkt/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
          
           <Route path="/konto/logga-in" element={<LoginPage />} /> 
@@ -30,6 +31,7 @@ const App = () => {
           <Route path="/konto/register" element={<RegisterPage />} /> 
           <Route path='*' element={<PageNotFound />} />
         </Routes>
+        </div>
       <Footer />
 
       <ReactQueryDevtools initialIsOpen={false} position='bottom' />
