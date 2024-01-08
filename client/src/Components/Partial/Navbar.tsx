@@ -32,6 +32,7 @@ const Navbar = () => {
   
   const dispatch = useAppDispatch()
   const { basket }  = useAppSelector(state => state.basket)
+  const { user }  = useAppSelector(state => state.account)
 
   const itemCount = (basket?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 
@@ -248,15 +249,14 @@ const Navbar = () => {
             />
           </NavLink>
 
-          {openProfile && (
+          {user ? openProfile && (
               <SignedInMenu />
-           
-          )}
+          ): null}
         </div>
 
         </div>
       </div>
-      
+
       { openBasket && <ShoppingCart /> }
 
       <div>
