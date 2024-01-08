@@ -15,7 +15,6 @@ const App = () => {
   return (
     <div className='flex flex-col min-h-screen'>
       <Header />
-      <div className='flex-1 container px-4 max-w-[1280px] mx-auto mb-8 mt-4'>
         <LoadingSpinner />
 
         <Routes>
@@ -25,11 +24,12 @@ const App = () => {
           />
           <Route path='/products/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
+         
           <Route path="/login" element={<LoginPage />} /> 
+   
           <Route path="/register" element={<RegisterPage />} /> 
           <Route path='*' element={<PageNotFound />} />
         </Routes>
-      </div>
       <Footer />
 
       <ReactQueryDevtools initialIsOpen={false} position='bottom' />

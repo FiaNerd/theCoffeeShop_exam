@@ -209,7 +209,7 @@ const Navbar = () => {
               </div>
             </span>
           </button>
-          <NavLink to='/products/login'>
+          <NavLink to='/login'>
             <FontAwesomeIcon icon={faUser}  className='text-white text-4xl cursor-pointer items-center hover:opacity-80'/>
           </NavLink>
         </div>
