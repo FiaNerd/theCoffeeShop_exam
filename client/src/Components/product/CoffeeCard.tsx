@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router-dom'
+import { useAppDispatch, useAppSelector, } from '../../redux/configureStore'
 import { Product } from '../../types/ProductsAPI'
-import Button from '../partial/Button'
 import { formatPrice } from '../../utils/formatPrice'
-import { useAppDispatch, useAppSelector,  } from '../../redux/configureStore'
 import { addBasketItemAsync } from '../basket/basketSlice'
+import Button from '../partial/Button'
 
 interface IProps {
   product: Product
@@ -35,8 +35,8 @@ const CoffeeCard = ({ product }: IProps) => {
       <div className='p-6 flex flex-col justify-between flex-1'>
         <div>
           <h3 className='text-sub-title font-bold mb-2'>{product.name}</h3>
-          {product.types && Array.isArray(product.types) && (
-            <p className='font-bold mb-2'>Typ: {product.types.join(' ')}</p>
+          {product.type && Array.isArray(product.type) && (
+            <p className='font-bold mb-2'>Typ: {product.type.join(' ')}</p>
           )}
           <p className='font-bold mb-2'>{product.roastLevel}</p>
           <p className='text-paragraph mb-4'>

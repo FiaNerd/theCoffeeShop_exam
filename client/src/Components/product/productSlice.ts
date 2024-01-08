@@ -1,7 +1,7 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Product, ProductParams, Products } from "../../types/ProductsAPI";
 import { RootState } from "../../redux/configureStore";
 import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
+import { Product, ProductParams, Products } from "../../types/ProductsAPI";
 
 interface ProductState {
   productsLoaded: boolean
@@ -18,7 +18,6 @@ const productsAdapter = createEntityAdapter<Product>({
 
   const getAxiosParams = (productParams: ProductParams) => {
     const params = new URLSearchParams()
-    console.log(productParams.types)
 
     params.append('pageNumber', productParams.pageNumber.toString())
     params.append('pageSize', productParams.pageSize.toString())
@@ -72,7 +71,6 @@ const productsAdapter = createEntityAdapter<Product>({
     async (_, thunkAPI) => {
       try {
         const response = await getFilters();
-        console.log('Response from getFilters:', response); 
         return response;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error:any) {
@@ -139,8 +137,7 @@ const productsAdapter = createEntityAdapter<Product>({
         state.status = 'pendingFetchFilters'
       })
       builder.addCase(fetchFilters.fulfilled, (state, action) => {
-        console.log('Action payload in fetchFilters.fulfilled:', action.payload);
-        state.types = action.payload.types;
+        state.types = action.payload.type;
         state.roastLevels = action.payload.roastLevel;
         state.status = 'idle';
         state.filtersLoaded = true;

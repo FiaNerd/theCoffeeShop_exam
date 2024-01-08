@@ -1,18 +1,18 @@
+import '@fortawesome/fontawesome-svg-core/styles.css'
+import { faMagnifyingGlass, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Transition } from '@headlessui/react'
 import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons'
-import '@fortawesome/fontawesome-svg-core/styles.css'
 import { NavLink } from 'react-router-dom'
-import Hamburger from './Hamburger'
+import useClickOutside from '../../hooks/useClickoutside'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { menuItems } from '../../router/Navigation'
-import Dropdown from './Dropdown'
 import { getCookie } from '../../utils/getCookie'
 import ShoppingCart from '../basket/ShoppingCart'
-import useClickOutside from '../../hooks/useClickoutside'
-import { Transition } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { setBasket } from '../basket/basketSlice'
+import Dropdown from './Dropdown'
+import Hamburger from './Hamburger'
 import SearchBar from './Searchbar'
 
 const Navbar = () => {
@@ -209,6 +209,9 @@ const Navbar = () => {
               </div>
             </span>
           </button>
+          <NavLink to='/products/login'>
+            <FontAwesomeIcon icon={faUser}  className='text-white text-4xl cursor-pointer items-center hover:opacity-80'/>
+          </NavLink>
         </div>
       </div>
 

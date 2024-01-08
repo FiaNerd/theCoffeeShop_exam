@@ -1,8 +1,8 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
-import { Basket } from '../types/Basket'
 import useAddItemToBasket from '../hooks/useAddItemToBasket'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query' 
 import useRemoveItemFromBasket from '../hooks/useRemoveItemFromBasket'
+import { Basket } from '../types/Basket'
 
 interface StoreContextValue {
   basket: Basket | null
@@ -34,7 +34,6 @@ const StoreProvider = ({ children }: PropsWithChildren<any>) => {
   const removeItemFromBasket = useRemoveItemFromBasket()
 
   const addToBasket = async (productId: string) => {
-    console.log('Adding item to basket:', productId)
     try {
       const result = await addItemToBasketMutation.mutateAsync({
         productId,
