@@ -1,10 +1,10 @@
-import { Fragment,useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import Button from '../partial/Button'
+import { Fragment, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { formatPrice } from '../../utils/formatPrice'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { formatPrice } from '../../utils/formatPrice'
+import Button from '../partial/Button'
 import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
@@ -196,7 +196,8 @@ const ShoppingCart = () => {
                           <button
                             type='button'
                             className='font-bold text-deep-brown hover:opacity-80'
-                            onClick={() => setOpen(false)}>
+                            onClick={() => setOpen(false)}
+                            >
                             Fortsätta shoppa
                           </button>
                         </p>
