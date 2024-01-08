@@ -96,7 +96,8 @@ export const getFilters = async () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const Login = async (values: any) => {
   try {
-    const response = await axios.post(`/account/login`, values)
+    const response = await axios.post(`${BASE_URL}/Account/login`, values)
+    console.log("Data", response.data, "Values", values)
     return response.data
   } catch (error) {
     console.log("Error when trying to login")

@@ -209,7 +209,7 @@ const Navbar = () => {
               </div>
             </span>
           </button>
-          <NavLink to='/login'>
+          <NavLink to='/konot/logga-in'>
             <FontAwesomeIcon icon={faUser}  className='text-white text-4xl cursor-pointer items-center hover:opacity-80'/>
           </NavLink>
         </div>

@@ -25,9 +25,9 @@ const App = () => {
           <Route path='/products/:type' element={<ProductTypePage />} />
           <Route path='/' element={<HomePage />} />
          
-          <Route path="/login" element={<LoginPage />} /> 
+          <Route path="/konot/logga-in" element={<LoginPage />} /> 
    
-          <Route path="/register" element={<RegisterPage />} /> 
+          <Route path="/konto/register" element={<RegisterPage />} /> 
           <Route path='*' element={<PageNotFound />} />
         </Routes>
       <Footer />
