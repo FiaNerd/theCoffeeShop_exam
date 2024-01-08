@@ -128,7 +128,7 @@ const Navbar = () => {
           className='hover:text-light-tan md:hidden'>
           <Hamburger />
         </button>
-        <NavLink to='/' className='cursor-pointer'>
+        <NavLink to='/produkter' className='cursor-pointer'>
           <img src={logo} alt='coffebean logo' className='w-40' />
         </NavLink>
         <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''} `}>

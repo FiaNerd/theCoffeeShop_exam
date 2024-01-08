@@ -1,6 +1,8 @@
 import { FieldValues, useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { signInUser } from '../components/account/accountSlice';
 import Buttons from '../components/partial/Button';
+import { useAppDispatch } from '../redux/configureStore';
 
 interface FormValues {
   username: string;
@@ -9,6 +11,7 @@ interface FormValues {
 
 const LoginPage = () => {
   const bg_img = '/images/coffeebean_logo.png';
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -17,9 +20,17 @@ const LoginPage = () => {
     mode: "onChange"
   });
 
+  const dispatch = useAppDispatch()
+
 
   const onSubmitLogin = async (data: FieldValues) => {
-   
+    try {
+      await dispatch(signInUser(data))
+      navigate('/produkter')
+
+    } catch (error) {
+      console.log("Couldn't login", error)
+    }
   };
 
   return (

@@ -11,7 +11,7 @@ const initialState : AccountState = {
     user: null
 }
 
-export const signInUser = createAsyncThunk<User, {data: FieldValues}>(
+export const signInUser = createAsyncThunk<User,  FieldValues>(
     'account/signInUser',
     async (data, thunkApi) => {
         try {
