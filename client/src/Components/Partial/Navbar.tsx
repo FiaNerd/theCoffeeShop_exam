@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { menuItems } from '../../router/Navigation'
 import { getCookie } from '../../utils/getCookie'
 import SignedInMenu from '../account/SignedInMenu'
+import { fetchCurrentUser } from '../account/accountSlice'
 import ShoppingCart from '../basket/ShoppingCart'
 import { setBasket } from '../basket/basketSlice'
 import Dropdown from './Dropdown'
@@ -38,6 +39,8 @@ const Navbar = () => {
 
   useEffect(() => {
     const buyerId = getCookie('buyerId')
+
+    dispatch(fetchCurrentUser())
 
     const fetchData = async () => {
       try {
@@ -150,7 +153,7 @@ const Navbar = () => {
           className='hover:text-light-tan md:hidden'>
           <Hamburger />
         </button>
-        <NavLink to='/produkter' className='cursor-pointer'>
+        <NavLink to='/' className='cursor-pointer'>
           <img src={logo} alt='coffebean logo' className='w-40' />
         </NavLink>
         <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''} `}>
@@ -238,6 +241,7 @@ const Navbar = () => {
           onMouseEnter={handleMouseEnterProfile}
           onMouseLeave={handleMouseLeaveProfile}
         >
+          {!user ? (
           <NavLink
             to="/konto/logga-in"
             className="flex items-center"
@@ -247,7 +251,12 @@ const Navbar = () => {
               icon={faUser}
               className='text-white text-4xl cursor-pointer hover:opacity-80'
             />
-          </NavLink>
+            </NavLink>
+            ): 
+            <FontAwesomeIcon
+              icon={faUser}
+              className='text-white text-4xl cursor-pointer hover:opacity-80'
+            />}
 
           {user ? openProfile && (
               <SignedInMenu />

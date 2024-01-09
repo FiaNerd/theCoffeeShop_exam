@@ -7,11 +7,11 @@ interface MenuItem {
 export const menuItems: MenuItem[] = [
   {
     title: 'KAFFE',
-    url: '/produkter',
+    url: '/',
     subMenu: [
       {
         title: 'All Kaffe',
-        url: '/produkter',
+        url: '/',
       },
       {
         title: 'Bryggkaffe',

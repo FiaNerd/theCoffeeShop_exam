@@ -26,7 +26,7 @@ const LoginPage = () => {
   const onSubmitLogin = async (data: FieldValues) => {
     try {
       await dispatch(signInUser(data))
-      navigate('/produkter')
+      navigate('/')
 
     } catch (error) {
       console.log("Couldn't login", error)

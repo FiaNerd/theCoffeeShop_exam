@@ -17,18 +17,18 @@ const SignedInMenu = () => {
 
         <hr className="border-gray-200 dark:border-orange " />
         
-        <NavLink to="#" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white">
+        <NavLink to="#" className="block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white">
             Din profil
         </NavLink>
         
-        <NavLink to="#" className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white">
+        <NavLink to="#" className="block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white">
             Dina ordrar
         </NavLink>
 
         <hr className="border-gray-200 dark:border-orange " />
 
         <NavLink 
-            to="/produkter" 
+            to="/" 
             className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white"
             onClick={() => dispatch(signOut())}
             >
