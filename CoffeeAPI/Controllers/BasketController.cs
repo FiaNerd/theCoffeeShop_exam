@@ -112,22 +112,20 @@ namespace CoffeeAPI.Entities
         }
 
 
-
-
-        private async Task<Basket> RetrieveBasket()
+        private async Task<Basket> RetrieveBasket(Guid buyerId)
         {
-            var buyerIdString = Request.Cookies["buyerId"];
-
-            if (Guid.TryParse(buyerIdString, out Guid buyerIdGuid))
+            if (buyerId == Guid.Empty)
             {
-                return await _context.Baskets
-                                .Include(i => i.Items)
-                                .ThenInclude(p => p.Product)
-                                .FirstOrDefaultAsync(x => x.BuyerId == buyerIdGuid);
+                Response.Cookies.Delete("buyerId");
+                return null;
             }
 
-            return null;
+            return await _context.Baskets
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
         }
+
 
         private Basket CreateBasket()
         {
