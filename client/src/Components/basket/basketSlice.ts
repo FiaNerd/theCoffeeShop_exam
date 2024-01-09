@@ -13,51 +13,51 @@ const initialState: BasketState = {
     status: 'idle'
 }
 
-export const fetchBasketAsync = createAsyncThunk<Basket>(
-  'basket/fetchBasketAsync',
-  async (_, thunkAPI) => {
-      try {
-          return await getBasket()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-          return thunkAPI.rejectWithValue({ error: error.data });
-      }
-  },
-  {
-      condition: () => {
-          if (!getCookie('buyerId')) {
-            return false
-          }
-      }
-  }
-)
-
-export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
-    '/basket/addBasketItemAsync',
-    async ({ productId, quantity = 1 }, ThunkAPI) => {
-      try {
-        return await addItemToBasket(productId, quantity);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        console.error('Async operation failed. Error:', error);
-        return ThunkAPI.rejectWithValue({error: error.data})
-      }
+  export const fetchBasketAsync = createAsyncThunk<Basket>(
+    'basket/fetchBasketAsync',
+    async (_, thunkAPI) => {
+        try {
+            return await getBasket()
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data });
+        }
+    },
+    {
+        condition: () => {
+            if (!getCookie('buyerId')) {
+              return false
+            }
+        }
     }
-  );
+  )
 
-
-  export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
-    'basket/removeItemFromBasketAsync',
-    async ({ productId, quantity }, ThunkAPI) => {
-      try {
-        await removeItemFromBasket(productId, quantity);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        console.error('Async operation failed. Error:', error);
-        return ThunkAPI.rejectWithValue({error: error.data})
+  export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; quantity?: number }>(
+      '/basket/addBasketItemAsync',
+      async ({ productId, quantity = 1 }, ThunkAPI) => {
+        try {
+          return await addItemToBasket(productId, quantity);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          console.error('Async operation failed. Error:', error);
+          return ThunkAPI.rejectWithValue({error: error.data})
+        }
       }
-    }
-  );
+    );
+
+
+    export const removeItemFromBasketAsync = createAsyncThunk<void, { productId: string, quantity: number }>(
+      'basket/removeItemFromBasketAsync',
+      async ({ productId, quantity }, ThunkAPI) => {
+        try {
+          await removeItemFromBasket(productId, quantity);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          console.error('Async operation failed. Error:', error);
+          return ThunkAPI.rejectWithValue({error: error.data})
+        }
+      }
+    )
   
 
      export const basketSlice = createSlice({
@@ -67,6 +67,9 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
           setBasket: (state, action) => {
             state.basket = action.payload;
           },
+          clearBasket: (state) => {
+              state.basket = null;
+          }
         },
         extraReducers: (builder) => {
           builder
@@ -111,4 +114,4 @@ export const addBasketItemAsync = createAsyncThunk<Basket, { productId: string; 
       });
       
 
-export const { setBasket } = basketSlice.actions;
+export const { setBasket, clearBasket } = basketSlice.actions;

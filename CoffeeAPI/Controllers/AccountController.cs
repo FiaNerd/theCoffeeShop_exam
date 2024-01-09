@@ -1,5 +1,6 @@
 using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
+using CoffeeAPI.Extensions;
 using CoffeeAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,7 +13,7 @@ namespace CoffeeAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
-         private readonly StoreContext _context;
+        private readonly StoreContext _context;
 
         public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
@@ -46,7 +47,7 @@ namespace CoffeeAPI.Controllers
         {
             Email = user.Email,
             Token = await _tokenService.GenerateToken(user),
-            Basket = anonymousBasket != null ? anonymousBasket.MapBasketToDto() : userBasket?.MapBasketToDto()
+            Basket = anonymousBasket != null ? anonymousBasket.ResponseMapBasketToDto() : userBasket?.ResponseMapBasketToDto()
         };
 
         }

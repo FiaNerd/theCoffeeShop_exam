@@ -1,5 +1,5 @@
-using API.DTOs;
-using API.Entities;
+using CoffeeAPI.DTOs;
+using CoffeeAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;

@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
+import { clearBasket } from "../basket/basketSlice";
 import { signOut } from "./accountSlice";
 
 const SignedInMenu = () => {
@@ -30,7 +31,10 @@ const SignedInMenu = () => {
         <NavLink 
             to="/" 
             className="block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white"
-            onClick={() => dispatch(signOut())}
+            onClick={() =>{ 
+                dispatch(signOut())
+                dispatch(clearBasket())
+            }}
             >
              Logga ut 
         </NavLink>
