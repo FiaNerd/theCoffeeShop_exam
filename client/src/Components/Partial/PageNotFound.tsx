@@ -1,11 +1,11 @@
-import { NavLink } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMugHot } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { NavLink } from 'react-router-dom'
 
 const PageNotFound = () => {
   const NotFound = '/images/404-not-found.png'
   return (
-    <div className='mx-auto items-center justify-center'>
+    <div className='flex flex-col p-4  h-[calc(94vh-148px)] mx-auto my-auto items-center justify-center'>
       <h1 className='text-center mb-4'>
         Hoppsan! Det ser ut som om kaffet och sidan gick på en gemensam paus.
       </h1>
