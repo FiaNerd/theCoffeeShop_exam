@@ -25,7 +25,7 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return ResponseMapBasketToDto(basket);
+            return basket.ResponseMapBasketToDto(basket);
         }
 
 
@@ -54,7 +54,7 @@ namespace CoffeeAPI.Entities
             if(result)
             {
                 // Add loaction header to the response
-                return CreatedAtRoute("GetBasket", ResponseMapBasketToDto(basket));
+                return CreatedAtRoute("GetBasket", basket.ResponseMapBasketToDto());
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
