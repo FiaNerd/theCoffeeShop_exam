@@ -27,20 +27,6 @@ const Navbar = () => {
   const [ openSearchbar, setOpenSearchbar ] = useState(false)
   const [ openProfile, setOpenProfile ] = useState(false)
 
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
   
@@ -168,41 +154,39 @@ const Navbar = () => {
         </NavLink>
        
         <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''}`}>
-  <ul className='flex md:gap-8'>
-    {menuItems
-      .filter(menu => !menu.mobileOnly) // Filtrera bort element med mobileOnly-flaggan
-      .map((menu, index) => (
-        <li
-          key={index}
-          className='relative'
-          onMouseEnter={() => handleMouseEnter(menu.title)}
-          onMouseLeave={handleMouseLeave}
-        >
-          <NavLink
-            to={menu.url}
-            end
-            style={{
-              color: 'text-light-tan',
-            }}
-            className={`text-white font-heading text-3xl font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan ${
-              menu.title === 'Logga in' || menu.title === 'Skapa konto' ? 'text-sm' : ''
-            }`}
-          >
-            {menu.title}
-          </NavLink>
-
-          {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
-            <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
-              <Dropdown subMenuItems={menu.subMenu} onCloseDropdown={closeDropdown} />
-            </div>
-          )}
-        </li>
-      ))}
-  </ul>
-</div>
+          <ul className='flex md:gap-8'>
+            {menuItems
+              .filter(menu => !menu.mobileOnly)
+              .map((menu, index) => (
+                <li
+                  key={index}
+                  className='relative'
+                  onMouseEnter={() => handleMouseEnter(menu.title)}
+                  onMouseLeave={handleMouseLeave}
+                >
+                <NavLink
+                  to={menu.url}
+                  end
+                  style={{
+                    color: 'text-light-tan',
+                  }}
+                  className={`text-white font-heading ${menu.title === 'Logga in' || menu.title === 'Skapa konto' ? 'text-sm x' : 'text-3xl'} font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}
+                >
+                  {menu.title}
+                </NavLink>
 
 
-  
+
+                  {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
+                    <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
+                      <Dropdown subMenuItems={menu.subMenu} onCloseDropdown={closeDropdown} />
+                    </div>
+                  )}
+                </li>
+              ))}
+          </ul>
+        </div>
+
         <div className='flex gap-2 md:gap-6 items-center'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}

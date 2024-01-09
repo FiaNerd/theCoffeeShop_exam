@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { addItemToBasket, getBasket, removeItemFromBasket } from '../../services/CoffeeAPI';
-import { Basket } from '../../types/basketAPI';
+import { Basket } from '../../types/basket';
 import { getCookie } from '../../utils/getCookie';
 
 interface BasketState {

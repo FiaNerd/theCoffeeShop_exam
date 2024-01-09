@@ -13,7 +13,7 @@ export const menuItems: MenuItem[] = [
       {
         title: 'All Kaffe',
         url: '/',
-        mobileOnly: true
+        mobileOnly: false
       },
       {
         title: 'Bryggkaffe',

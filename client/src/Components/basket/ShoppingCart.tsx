@@ -6,34 +6,16 @@ import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { formatPrice } from '../../utils/formatPrice'
 import Button from '../partial/Button'
 import { addBasketItemAsync, removeItemFromBasketAsync } from './basketSlice'
+
 const ShoppingCart = () => {
   const [open, setOpen] = useState(true)
   const dispatch = useAppDispatch()
   const { basket  } = useAppSelector(state => state.basket)
 
-
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
 
   const deliveryFee = subtotal > 50000 ? 0 : 5000;
-
-  // useEffect(() => {
-  //   dispatch(fetchCurrentUser())
-
-  //   const fetchData = async () => {
-  //     try {
-  //       if (basket)
-  //        {
-  //        dispatch(setBasket(basket))
-  //       }
-
-  //     } catch (error) {
-  //       console.error('Something went wrong', error)
-  //     }
-  //   }
-
-  //   fetchData()
-  // }, [basket, dispatch])
 
   return (
     <Transition.Root show={open} as={Fragment}>

@@ -72,7 +72,6 @@ export const getProduct = async (guid: string) : Promise<Product | null> => {
  */
 export const getBasket = async () => {
   const response =  await get<Basket>('/basket')
-  console.log(response.data)
   return response
 }
 
