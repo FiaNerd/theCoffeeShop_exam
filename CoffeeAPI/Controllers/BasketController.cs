@@ -1,3 +1,4 @@
+using API.Extensions;
 using CoffeeAPI.Controllers;
 using CoffeeAPI.Data;
 using CoffeeAPI.DTOs;
@@ -55,6 +56,7 @@ namespace CoffeeAPI.Entities
             {
                 // Add loaction header to the response
                 return CreatedAtRoute("GetBasket", basket.ResponseMapBasketToDto());
+
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
@@ -168,5 +170,25 @@ namespace CoffeeAPI.Entities
 
             return basket;
         }
+
+
+        //   public BasketDto ResponseMapBasketToDto(Basket basket)
+        // {
+        //     return new BasketDto
+        //     {
+        //         Id = basket.Id,
+        //         BuyerId = basket.BuyerId,
+        //         Items = basket.Items.Select(item => new BasketItemDto
+        //         {
+        //             ProductId = item.ProductId,
+        //             Name = item.Product.Name,
+        //             Price = item.Product.Price,
+        //             ImageUrl = item.Product.ImageUrl,
+        //             Type = item.Product.Type,
+        //             RoastLevel = item.Product.RoastLevel,
+        //             Quantity = item.Quantity
+        //         }).ToList()
+        //     };
+        // } 
     }
 }

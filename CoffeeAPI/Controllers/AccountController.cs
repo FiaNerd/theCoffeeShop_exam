@@ -1,3 +1,4 @@
+using API.Extensions;
 using CoffeeAPI.Data;
 using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;

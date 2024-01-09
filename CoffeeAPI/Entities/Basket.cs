@@ -44,10 +44,5 @@ namespace CoffeeAPI.Entities
                 Items.Remove(item);
             }
         }
-
-        internal BasketDto ResponseMapBasketToDto()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
