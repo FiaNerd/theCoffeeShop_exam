@@ -18,7 +18,7 @@ namespace CoffeeAPI.Entities
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
-            Basket basket = await RetrieveBasket();
+            Basket basket = await RetrieveBasket(GetBuyerId());
 
             if (basket == null)
             {
@@ -32,7 +32,7 @@ namespace CoffeeAPI.Entities
         [HttpPost] // api/basket?productId=1&quantity=2
         public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity = 1)
         {
-            var basket = await RetrieveBasket() ?? CreateBasket();
+            var basket = await RetrieveBasket(GetBuyerId()) ?? CreateBasket();
 
             if (quantity < 0)
             {
@@ -73,7 +73,7 @@ namespace CoffeeAPI.Entities
                 }
 
                 // Get basket from basket methods
-                var basket = await RetrieveBasket();
+                var basket = await RetrieveBasket(GetBuyerId());
 
                 if (basket == null)
                 {
@@ -99,13 +99,13 @@ namespace CoffeeAPI.Entities
             catch (Exception ex)
             {
 
-                    var problemDetails = new Microsoft.AspNetCore.Mvc.ProblemDetails
+                    var problemDetails = new ProblemDetails
                     {
                         Title = "Problem removing item from the basket",
                         Detail = ex.Message, 
                         Status = 400
                     };    
-                        return BadRequest(new ProblemDetails { Title = "Problem removing item from the basket", Detail = ex.Message });
+                      
 
                     return BadRequest(problemDetails);
             }
@@ -126,7 +126,25 @@ namespace CoffeeAPI.Entities
                 .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
         }
 
+        private Guid GetBuyerId()
+        {
+            // Trying to get from the identity 
+            if (Guid.TryParse(User.Identity?.Name, out Guid buyerIdFromIdentity))
+            {
+                return buyerIdFromIdentity;
+            }
 
+            // If the identity dons't exist, try get from Cookies
+            if (Guid.TryParse(Request.Cookies["buyerId"], out Guid buyerIdFromCookies))
+            {
+                return buyerIdFromCookies;
+            }
+            
+            // If not valid is returned, return Guid.Empty
+            return Guid.Empty;
+        }
+
+            
         private Basket CreateBasket()
         {
             var buyerId = Guid.NewGuid().ToString();
