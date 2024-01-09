@@ -25,7 +25,7 @@ namespace CoffeeAPI.Entities
                 return NotFound();
             }
 
-            return ResponseMapBasketToDto(basket);
+            return basket.ResponseMapBasketToDto();
         }
 
 
@@ -54,7 +54,7 @@ namespace CoffeeAPI.Entities
             if(result)
             {
                 // Add loaction header to the response
-                return CreatedAtRoute("GetBasket", ResponseMapBasketToDto(basket));
+                return CreatedAtRoute("GetBasket", basket.ResponseMapBasketToDto());
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
@@ -147,8 +147,10 @@ namespace CoffeeAPI.Entities
             
         private Basket CreateBasket()
         {
+            // if the user logedin and created a basket, then setting buyerid to the user name
             var buyerId = User.Identity?.Name;
              
+             // if not user is Logedin, set it to guid
              if (string.IsNullOrEmpty(buyerId))
             {
                 buyerId = Guid.NewGuid().ToString();
@@ -166,24 +168,5 @@ namespace CoffeeAPI.Entities
 
             return basket;
         }
-
-         private BasketDto ResponseMapBasketToDto(Basket basket)
-        {
-            return new BasketDto
-            {
-                Id = basket.Id,
-                BuyerId = basket.BuyerId,
-                Items = basket.Items.Select(item => new BasketItemDto
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    ImageUrl = item.Product.ImageUrl,
-                    Type = item.Product.Type,
-                    RoastLevel = item.Product.RoastLevel,
-                    Quantity = item.Quantity
-                }).ToList()
-            };
-        } 
     }
 }

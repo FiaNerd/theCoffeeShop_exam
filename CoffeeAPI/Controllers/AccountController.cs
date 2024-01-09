@@ -1,9 +1,11 @@
+using CoffeeAPI.Data;
 using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
 using CoffeeAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeAPI.Controllers
 {
@@ -11,10 +13,12 @@ namespace CoffeeAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
-        public AccountController(UserManager<User> userManager, TokenService tokenService)
+        private readonly StoreContext _context;
+        public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
-            _tokenService = tokenService;
             _userManager = userManager;
+            _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -22,17 +26,38 @@ namespace CoffeeAPI.Controllers
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
 
-            if(user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+            if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
             {
                 return Unauthorized();
+            }
+
+            var userBasket = await RetrieveBasket(loginDto.Username);
+            var anonymousBasket = await RetrieveBasket(Request.Cookies["buyerId"]);
+
+            if (anonymousBasket != null)
+            {
+                if (userBasket != null)
+                {
+                    _context.Baskets.Remove(userBasket);
+                }
+
+                if (Guid.TryParse(user.UserName, out Guid buyerIdGuid))
+                {
+                    anonymousBasket.BuyerId = buyerIdGuid;
+                    Response.Cookies.Delete("buyerId");
+                    await _context.SaveChangesAsync();
+                }
             }
 
             return new UserDto
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
+                Basket = anonymousBasket != null ? anonymousBasket.ResponseMapBasketToDto() : userBasket?.ResponseMapBasketToDto()
             };
         }
+
+
 
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterDto registerDto)
@@ -81,6 +106,26 @@ namespace CoffeeAPI.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+       private async Task<Basket> RetrieveBasket(string buyerId)
+        {
+            if (string.IsNullOrEmpty(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+
+            if (Guid.TryParse(buyerId, out Guid buyerGuid))
+            {
+                return await _context.Baskets
+                    .Include(i => i.Items)
+                    .ThenInclude(p => p.Product)
+                    .FirstOrDefaultAsync(basket => basket.BuyerId == buyerGuid);
+            }
+
+            return null;
+        }
+
 
     }
 }

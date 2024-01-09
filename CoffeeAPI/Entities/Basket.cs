@@ -1,3 +1,5 @@
+using CoffeeAPI.DTOs;
+
 namespace CoffeeAPI.Entities
 {
     public class Basket
@@ -41,6 +43,11 @@ namespace CoffeeAPI.Entities
             {
                 Items.Remove(item);
             }
+        }
+
+        internal BasketDto ResponseMapBasketToDto()
+        {
+            throw new NotImplementedException();
         }
     }
 }
