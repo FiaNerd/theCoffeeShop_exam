@@ -28,7 +28,7 @@ const App = () => {
          
           <Route path="/konto/logga-in" element={<LoginPage />} /> 
    
-          <Route path="/konto/register" element={<RegisterPage />} /> 
+          <Route path="/konto/registrera" element={<RegisterPage />} /> 
           <Route path='*' element={<PageNotFound />} />
         </Routes>
         </div>

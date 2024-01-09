@@ -125,9 +125,10 @@ export const login = async (values: any) => {
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const register = async (values: any) => {
+export const registerUser = async (values: any) => {
   try {
-    const response = await axios.post(`/account/register`, values)
+    const response = await axios.post(`${BASE_URL}/account/register`, values)
+    console.log("RSPONSE", response.data)
     return response.data
   } catch (error) {
     console.log("Error when trying to create a account")
