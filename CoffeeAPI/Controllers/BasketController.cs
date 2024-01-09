@@ -18,21 +18,21 @@ namespace CoffeeAPI.Entities
         [HttpGet(Name = "GetBasket")]
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
-            Basket basket = await RetrieveBasket();
+            Basket basket = await RetrieveBasket(GetBuyerId());
 
             if (basket == null)
             {
                 return NotFound();
             }
 
-            return ResponseMapBasketToDto(basket);
+            return basket.ResponseMapBasketToDto(basket);
         }
 
 
         [HttpPost] // api/basket?productId=1&quantity=2
         public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity = 1)
         {
-            var basket = await RetrieveBasket() ?? CreateBasket();
+            var basket = await RetrieveBasket(GetBuyerId()) ?? CreateBasket();
 
             if (quantity < 0)
             {
@@ -54,7 +54,7 @@ namespace CoffeeAPI.Entities
             if(result)
             {
                 // Add loaction header to the response
-                return CreatedAtRoute("GetBasket", ResponseMapBasketToDto(basket));
+                return CreatedAtRoute("GetBasket", basket.ResponseMapBasketToDto());
             }
 
             return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
@@ -73,7 +73,7 @@ namespace CoffeeAPI.Entities
                 }
 
                 // Get basket from basket methods
-                var basket = await RetrieveBasket();
+                var basket = await RetrieveBasket(GetBuyerId());
 
                 if (basket == null)
                 {
@@ -112,62 +112,41 @@ namespace CoffeeAPI.Entities
         }
 
 
-
-
-        private async Task<Basket> RetrieveBasket()
+        private async Task<Basket> RetrieveBasket(string buyerId)
         {
-            var buyerIdString = Request.Cookies["buyerId"];
-
-            if (Guid.TryParse(buyerIdString, out Guid buyerIdGuid))
+            if (string.IsNullOrEmpty(buyerId))
             {
-                return await _context.Baskets
-                                .Include(i => i.Items)
-                                .ThenInclude(p => p.Product)
-                                .FirstOrDefaultAsync(x => x.BuyerId == buyerIdGuid);
+                Response.Cookies.Delete("buyerId");
+                return null;
             }
 
-            return null;
+            return await _context.Baskets
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
         }
 
-        private Basket CreateBasket()
+
+        private string GetBuyerId()
         {
-            var buyerId = Guid.NewGuid().ToString();
+            return User.Identity?.Name ?? Request.Cookies["buyerId"];
+        }
 
-            var cookieOptions = new CookieOptions
+
+         private Basket CreateBasket()
+        {
+            var buyerId = User.Identity?.Name;
+
+            if (string.IsNullOrEmpty(buyerId))
             {
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(30)
-            };
+                buyerId = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
+                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            }
 
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-
-            var basket = new Basket
-            {
-                BuyerId = new Guid(buyerId)
-            };
-
+            var basket = new Basket { BuyerId = buyerId };
             _context.Baskets.Add(basket);
-
             return basket;
         }
-
-         private BasketDto ResponseMapBasketToDto(Basket basket)
-        {
-            return new BasketDto
-            {
-                Id = basket.Id,
-                BuyerId = basket.BuyerId,
-                Items = basket.Items.Select(item => new BasketItemDto
-                {
-                    ProductId = item.ProductId,
-                    Name = item.Product.Name,
-                    Price = item.Product.Price,
-                    ImageUrl = item.Product.ImageUrl,
-                    Type = item.Product.Type,
-                    RoastLevel = item.Product.RoastLevel,
-                    Quantity = item.Quantity
-                }).ToList()
-            };
-        } 
     }
 }
