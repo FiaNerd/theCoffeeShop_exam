@@ -1,7 +1,8 @@
 import { FieldValues, useForm } from 'react-hook-form';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { signInUser } from '../components/account/accountSlice';
 import Buttons from '../components/partial/Button';
-import { Login } from '../services/CoffeeAPI';
+import { useAppDispatch } from '../redux/configureStore';
 
 interface FormValues {
   username: string;
@@ -10,6 +11,7 @@ interface FormValues {
 
 const LoginPage = () => {
   const bg_img = '/images/coffeebean_logo.png';
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -18,21 +20,16 @@ const LoginPage = () => {
     mode: "onChange"
   });
 
-  console.log('isSubmitting:', isSubmitting);
-console.log('isValid:', isValid);
-console.log("Is Error", errors)
+  const dispatch = useAppDispatch()
 
-
-  console.log(isValid)
 
   const onSubmitLogin = async (data: FieldValues) => {
     try {
-      const response = await Login(data);
-      if (response.success) {
-        console.log('Login successful');
-      }
+      await dispatch(signInUser(data))
+      navigate('/')
+
     } catch (error) {
-      console.error('Error when trying to login', error);
+      console.log("Couldn't login", error)
     }
   };
 

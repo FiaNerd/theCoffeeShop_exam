@@ -1,6 +1,8 @@
-import axios from 'axios'
-import { Basket } from '../types/Basket'
-import { Product, Products } from '../types/ProductsAPI'
+import axios from 'axios';
+import { store } from '../redux/configureStore';
+import { Basket } from '../types/basket';
+import { Product, Products } from '../types/products';
+import { User } from '../types/user';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -15,6 +17,22 @@ const instance = axios.create({
     Accept: 'application/json',
   },
 })
+
+// Axios interceptor to dynamically add an Authorization header
+// to each request if a user is logged in and has a valid token.
+axios.interceptors.request.use(config => {
+  // Retrieve the user's token from the Redux Store
+  const token = store.getState().account.user?.token;
+
+  // If a valid token exists, add Authorization header
+  if (token) { 
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // Return the updated configuration for the request
+  return config;
+});
+
 
 const get = async <T>(endpoint: string) => {
   try {
@@ -40,7 +58,7 @@ export const getProducts = async (params?: URLSearchParams): Promise<Products | 
  * Get single product
  * @param guid get GUID
  */
-export const getProduct = async (guid: string): Promise<Product | null> => {
+export const getProduct = async (guid: string) : Promise<Product | null> => {
   try {
     const res = await get<Product>(`/products/${guid}`);
     return res;
@@ -58,6 +76,7 @@ export const getBasket = async () => {
 
 /**
  * Create a items in basket
+ * @param getAll basket
  */
 export const addItemToBasket = async (productId: string, quantity = 1) => {
   const res = await axios.post(
@@ -67,8 +86,9 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
   return res.data
 }
 
-/**
+/**s
  * Delete a item
+ * @param delete items
  */
 export const removeItemFromBasket = async (productId: string, quantity = 1) : Promise<void> => {
   try {
@@ -92,12 +112,10 @@ export const getFilters = async () => {
   }
 }
 
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Login = async (values: any) => {
+export const login = async (values: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}/Account/login`, values)
-    console.log("Data", response.data, "Values", values)
+    const response = await axios.post(`${BASE_URL}/account/login`, values)
     return response.data
   } catch (error) {
     console.log("Error when trying to login")
@@ -106,7 +124,7 @@ export const Login = async (values: any) => {
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Register = async (values: any) => {
+export const register = async (values: any) => {
   try {
     const response = await axios.post(`/account/register`, values)
     return response.data
@@ -117,10 +135,10 @@ export const Register = async (values: any) => {
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const currentUser = async () => {
+export const currentUser = async ()  => {
   try {
-    return await get(`/account/currentUser`)
-  } catch (error) {
-    console.log("Error when fetching currenUser")
+    return await get<User>(`/account/currentUser`)
+  }  catch (error) {
+    throw new Error("Failed to fetch currentUser");
   }
 }

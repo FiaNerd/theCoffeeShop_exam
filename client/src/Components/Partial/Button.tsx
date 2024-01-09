@@ -26,7 +26,6 @@ const Buttons: React.FC<IProps> = ({
   disabled,
   isLoading,
 }: IProps) => {
-  console.log("Diabled", disabled);
   const buttonClasses = (variant: string) => {
     switch (variant) {
       case 'create':

@@ -9,6 +9,8 @@ import useClickOutside from '../../hooks/useClickoutside'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { menuItems } from '../../router/Navigation'
 import { getCookie } from '../../utils/getCookie'
+import SignedInMenu from '../account/SignedInMenu'
+import { fetchCurrentUser } from '../account/accountSlice'
 import ShoppingCart from '../basket/ShoppingCart'
 import { setBasket } from '../basket/basketSlice'
 import Dropdown from './Dropdown'
@@ -18,22 +20,27 @@ import SearchBar from './Searchbar'
 const Navbar = () => {
   const logo = "/images/coffeebean_logo.png";
   
-  const [menuOpen, setMenuOpen] = useState(false)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
-  const [openBasket, setOpenBasket] = useState(false)
-  const [openSearchbar, setOpenSearchbar] = useState(false)
+  const [ menuOpen, setMenuOpen ] = useState(false)
+  const [ dropdownOpen, setDropdownOpen ] = useState(false)
+  const [ dropdownOpenProfile, setDropdownOpenProfile ] = useState(false)
+  const [ activeMenuItem, setActiveMenuItem ] = useState<string | null>(null)
+  const [ openBasket, setOpenBasket ] = useState(false)
+  const [ openSearchbar, setOpenSearchbar ] = useState(false)
+  const [ openProfile, setOpenProfile ] = useState(false)
 
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
   
   const dispatch = useAppDispatch()
   const { basket }  = useAppSelector(state => state.basket)
+  const { user }  = useAppSelector(state => state.account)
 
   const itemCount = (basket?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 
   useEffect(() => {
     const buyerId = getCookie('buyerId')
+
+    dispatch(fetchCurrentUser())
 
     const fetchData = async () => {
       try {
@@ -63,6 +70,7 @@ const Navbar = () => {
     setOpenSearchbar(!openSearchbar)
   }
 
+
   const handleClick = (event: React.MouseEvent) => {
     if (event.currentTarget.id === 'searchIcon') {
       event.stopPropagation()
@@ -80,6 +88,10 @@ const Navbar = () => {
       setMenuOpen(false)
       setDropdownOpen(false)
       setOpenSearchbar(false)
+
+      setOpenProfile(false)
+      setDropdownOpenProfile(false)
+
     }
   }
 
@@ -95,20 +107,33 @@ const Navbar = () => {
     setDropdownOpen(true)
     setActiveMenuItem(title)
   }
-
+  
   const handleMouseLeave = () => {
     setDropdownOpen(false)
   }
+  
+  const handleToggleProfile = () => {
+    setOpenProfile(!openProfile);
+  };
+
+  const handleMouseEnterProfile = () => {
+    setOpenProfile(true);
+  };
+
+  const handleMouseLeaveProfile = () => {
+    setOpenProfile(false);
+  };
+
 
   useEffect(() => {
-    if (menuOpen || dropdownOpen || openBasket || openSearchbar) {
+    if (menuOpen || dropdownOpen || openBasket || openSearchbar || openProfile || dropdownOpenProfile) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [menuOpen, dropdownOpen, openBasket, openSearchbar])
+  }, [menuOpen, dropdownOpen, openBasket, openSearchbar, openProfile, dropdownOpenProfile])
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -209,13 +234,39 @@ const Navbar = () => {
               </div>
             </span>
           </button>
-          <NavLink to='/konto/logga-in'>
-            <FontAwesomeIcon icon={faUser}  className='text-white text-4xl cursor-pointer items-center hover:opacity-80'/>
-          </NavLink>
+
+          <div
+          id="profile-container"
+          className="relative py-4 border border-transparent"
+          onMouseEnter={handleMouseEnterProfile}
+          onMouseLeave={handleMouseLeaveProfile}
+        >
+          {!user ? (
+          <NavLink
+            to="/konto/logga-in"
+            className="flex items-center"
+            onClick={handleToggleProfile}
+          >
+            <FontAwesomeIcon
+              icon={faUser}
+              className='text-white text-4xl cursor-pointer hover:opacity-80'
+            />
+            </NavLink>
+            ): 
+            <FontAwesomeIcon
+              icon={faUser}
+              className='text-white text-4xl cursor-pointer hover:opacity-80'
+            />}
+
+          {user ? openProfile && (
+              <SignedInMenu />
+          ): null}
+        </div>
+
         </div>
       </div>
 
-      {openBasket && <ShoppingCart />}
+      { openBasket && <ShoppingCart /> }
 
       <div>
         {menuOpen &&
