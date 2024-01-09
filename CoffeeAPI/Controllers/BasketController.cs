@@ -139,7 +139,7 @@ namespace CoffeeAPI.Entities
             {
                 return buyerIdFromCookies;
             }
-            
+
             // If not valid is returned, return Guid.Empty
             return Guid.Empty;
         }
@@ -147,15 +147,15 @@ namespace CoffeeAPI.Entities
             
         private Basket CreateBasket()
         {
-            var buyerId = Guid.NewGuid().ToString();
-
-            var cookieOptions = new CookieOptions
+            var buyerId = User.Identity?.Name;
+             
+             if (string.IsNullOrEmpty(buyerId))
             {
-                IsEssential = true,
-                Expires = DateTime.Now.AddDays(30)
-            };
+                buyerId = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
+                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            }
 
-            Response.Cookies.Append("buyerId", buyerId, cookieOptions);
 
             var basket = new Basket
             {
