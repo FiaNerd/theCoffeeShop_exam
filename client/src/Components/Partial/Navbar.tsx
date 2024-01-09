@@ -8,11 +8,10 @@ import { NavLink } from 'react-router-dom'
 import useClickOutside from '../../hooks/useClickoutside'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { menuItems } from '../../router/Navigation'
-import { getCookie } from '../../utils/getCookie'
 import SignedInMenu from '../account/SignedInMenu'
 import { fetchCurrentUser } from '../account/accountSlice'
 import ShoppingCart from '../basket/ShoppingCart'
-import { setBasket } from '../basket/basketSlice'
+import { fetchBasketAsync } from '../basket/basketSlice'
 import Dropdown from './Dropdown'
 import Hamburger from './Hamburger'
 import SearchBar from './Searchbar'
@@ -38,23 +37,20 @@ const Navbar = () => {
   const itemCount = (basket?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
 
   useEffect(() => {
-    const buyerId = getCookie('buyerId')
-
-    dispatch(fetchCurrentUser())
-
     const fetchData = async () => {
       try {
-        if (buyerId && basket) {
-         dispatch(setBasket(basket))
-        }
-
+        await dispatch(fetchCurrentUser());
+  
+        await dispatch(fetchBasketAsync());
+  
       } catch (error) {
-        console.error('Something went wrong', error)
+        console.error('Something went wrong', error);
       }
-    }
-
-    fetchData()
-  }, [basket, dispatch])
+    };
+  
+    fetchData();
+  }, [dispatch]);
+  
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -156,35 +152,38 @@ const Navbar = () => {
         <NavLink to='/' className='cursor-pointer'>
           <img src={logo} alt='coffebean logo' className='w-40' />
         </NavLink>
-        <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''} `}>
+       
+        <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''}`}>
           <ul className='flex md:gap-8'>
-            {menuItems.map((menu, index) => (
-              <li
-                key={index}
-                className='relative'
-                onMouseEnter={() => handleMouseEnter(menu.title)}
-                onMouseLeave={handleMouseLeave}>
+            {menuItems
+              .filter(menu => !menu.mobileOnly)
+              .map((menu, index) => (
+                <li
+                  key={index}
+                  className='relative'
+                  onMouseEnter={() => handleMouseEnter(menu.title)}
+                  onMouseLeave={handleMouseLeave}
+                >
                 <NavLink
                   to={menu.url}
                   end
                   style={{
                     color: 'text-light-tan',
                   }}
-                  className='text-white font-heading text-3xl font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
-                  onClick={handleLinkClick}>
+                  className={`text-white font-heading ${menu.title === 'Logga in' || menu.title === 'Skapa konto' ? 'text-sm x' : 'text-3xl'} font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}
+                >
                   {menu.title}
                 </NavLink>
 
-                {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
-                  <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
-                    <Dropdown
-                      subMenuItems={menu.subMenu}
-                      onCloseDropdown={closeDropdown}
-                    />
-                  </div>
-                )}
-              </li>
-            ))}
+
+
+                  {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
+                    <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
+                      <Dropdown subMenuItems={menu.subMenu} onCloseDropdown={closeDropdown} />
+                    </div>
+                  )}
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -241,26 +240,29 @@ const Navbar = () => {
           onMouseEnter={handleMouseEnterProfile}
           onMouseLeave={handleMouseLeaveProfile}
         >
-          {!user ? (
-          <NavLink
-            to="/konto/logga-in"
-            className="flex items-center"
-            onClick={handleToggleProfile}
-          >
+         {!user ? (
+            <NavLink
+              to="/konto/logga-in"
+              className=" items-center hidden md:flex"
+              onClick={handleToggleProfile}
+            >
+              <FontAwesomeIcon
+                icon={faUser}
+                className='text-white text-4xl cursor-pointer hover:opacity-80'
+              />
+            </NavLink>
+          ) : (
             <FontAwesomeIcon
               icon={faUser}
               className='text-white text-4xl cursor-pointer hover:opacity-80'
             />
-            </NavLink>
-            ): 
-            <FontAwesomeIcon
-              icon={faUser}
-              className='text-white text-4xl cursor-pointer hover:opacity-80'
-            />}
+          )}
 
-          {user ? openProfile && (
-              <SignedInMenu />
-          ): null}
+          {user ? (
+            <div className="hidden md:flex"> 
+              {openProfile && <SignedInMenu />}
+            </div>
+          ) : null}
         </div>
 
         </div>

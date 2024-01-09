@@ -18,6 +18,7 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
   async (_, thunkAPI) => {
       try {
           return await getBasket()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
           return thunkAPI.rejectWithValue({ error: error.data });
       }
