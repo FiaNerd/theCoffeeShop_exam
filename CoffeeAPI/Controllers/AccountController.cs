@@ -4,6 +4,7 @@ using CoffeeAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoffeeAPI.Controllers
 {
@@ -11,10 +12,13 @@ namespace CoffeeAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly TokenService _tokenService;
-        public AccountController(UserManager<User> userManager, TokenService tokenService)
+         private readonly StoreContext _context;
+
+        public AccountController(UserManager<User> userManager, TokenService tokenService, StoreContext context)
         {
             _tokenService = tokenService;
             _userManager = userManager;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -27,11 +31,24 @@ namespace CoffeeAPI.Controllers
                 return Unauthorized();
             }
 
-            return new UserDto
-            {
-                Email = user.Email,
-                Token = await _tokenService.GenerateToken(user),
-            };
+            var userBasket = await RetrieveBasket(loginDto.Username);
+            var anonymousBasket = await RetrieveBasket(Request.Cookies["buyerId"]);
+
+             if (anonymousBasket != null)
+        {
+            if (userBasket != null) _context.Baskets.Remove(userBasket);
+            anonymousBasket.BuyerId = user.UserName;
+            Response.Cookies.Delete("buyerId");
+            await _context.SaveChangesAsync();
+        }
+
+        return new UserDto
+        {
+            Email = user.Email,
+            Token = await _tokenService.GenerateToken(user),
+            Basket = anonymousBasket != null ? anonymousBasket.MapBasketToDto() : userBasket?.MapBasketToDto()
+        };
+
         }
 
         [HttpPost("register")]
@@ -80,6 +97,19 @@ namespace CoffeeAPI.Controllers
             {
                 return StatusCode(500, "Internal server error");
             }
+        }
+         private async Task<Basket> RetrieveBasket(string buyerId)
+        {
+            if (string.IsNullOrEmpty(buyerId))
+            {
+                Response.Cookies.Delete("buyerId");
+                return null;
+            }
+
+            return await _context.Baskets
+                .Include(i => i.Items)
+                .ThenInclude(p => p.Product)
+                .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
         }
 
     }
