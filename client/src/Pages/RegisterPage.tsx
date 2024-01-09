@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useForm } from 'react-hook-form';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Buttons from '../components/partial/Button';
-import { useAppDispatch } from '../redux/configureStore';
 import { registerUser } from '../services/CoffeeAPI';
 
 interface FormValues {
@@ -12,26 +12,55 @@ interface FormValues {
 
 const RegisterPage = () => {
   const bg_img = '/images/coffeebean_logo.png';
-  const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting, errors, isValid },
-  } = useForm<FormValues>({
-    mode: "onChange"
-  });
+      register,
+      handleSubmit,
+      setError,
+      formState: {isSubmitting, isSubmitSuccessful, errors, isValid },
+    } = useForm<FormValues>({
+      mode: "onChange"
+    });
+  
+    const handleErrors = (errors: any) => {
+        console.log(errors);
+        if (errors) {
+            errors.forEach((error: string) => {
+                if (error.includes('Password')) {
+                    setError('password', { message: error })
+                } else if (error.includes('Email')) {
+                    setError('email', { message: error })
+                } else if (error.includes('Username')) {
+                    setError('username', { message: error })
+                }
+            });
+        }
+    }
 
 
+const handleOnSubmit = async (data: any) => {
+   
+    try {
+        const { username, email, password } = data;
+    
+        await registerUser({ username, email, password });
+    
+        navigate("/konto/logga-in");
+    } catch (error: any) {
+        if (error.response.status === 400) {
+          const errors = error.response.data.errors;
+          const errorMessages = errors.map((error: { [key: string]: string }) => error[key]);
+          const message = errorMessages.join(', ');
+          alert(message);
+        } else {
+          console.error(error);
+          handleErrors(error)
+        }
+    }
+    
+    };
 
-//   const onSubmitRegister = async (data: any) => {
-//     try {
-//         const result = await registerUser(data)
-//         console.log('Registration result:', result);
-//       } catch (error) {
-//         console.error('Error during registration:', error);
-//       }
-//   };
+    // console.log(errors.username!.message)
 
   return (
     <div className=" p-4 h-[calc(94vh-148px)] w-full bg-gray-900 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: 'url(/images/Login_bg_1920X1080px.jpg)' }}>
@@ -39,7 +68,15 @@ const RegisterPage = () => {
         <div className="w-full max-w-sm md:max-w-md m-auto p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl">
           <img src={bg_img} alt="logo kaffebönans skafferi" className="m-auto mb-4 max-w-[10em]" />
           <h1 className="font-heading text-white text-center font-bold uppercase">Skapa konto</h1>
-          <form className="" onSubmit={handleSubmit(data => registerUser(data))}>
+          <form className="" 
+        //   onSubmit={handleSubmit((data) => registerUser(data)
+        //     .then(() => {
+        //         console.log("DATA", data)
+        //         navigate('/konto/logga-in');
+        //     })
+        //     .catch(error => handleErrors(error)))}
+          onSubmit={handleSubmit((data) => handleOnSubmit(data))}
+          >
             <div className={`mb-4`}>
               <label className="block mb-1 text-sm text-white">Användarnamn</label>
               <input
@@ -61,7 +98,13 @@ const RegisterPage = () => {
                 id="email"
                 placeholder="Din e-post.."
                 aria-label="email"
-                {...register('email', { required: 'Måste fylla i email' })}
+                {...register('email', { 
+                    required: 'Måste fyll i e-post',
+                    pattern: {
+                        value: /^\w+[\w-.]*@\w+((-\w+)|(\w*))\.[a-z]{2,3}$/,
+                        message: 'Eposten är inte giltig'
+                    }
+                })}
               />
               {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>}
             </div>
@@ -75,9 +118,18 @@ const RegisterPage = () => {
                 id="password"
                 placeholder="*********"
                 aria-label="password"
-                {...register('password', { required: 'Måste fylla i lösenord' })}
+                {...register('password', { 
+                    required: 'Måste fylla i löseonord',
+                    pattern: {
+                        value: /(?=^.{6,10}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\s).*$/,
+                        message: 'Lösenorder måste innehålla minst 6 tecken'
+                    } 
+                })}
               />
-              {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password.message}</p>}
+                <div>
+                {errors.password && <p className="text-sm text-red-500 mt-1">{(errors.password as const).message}</p>}
+                </div>
+
             </div>
 
             <div className="mt-8 items-center flex justify-between mb-4">

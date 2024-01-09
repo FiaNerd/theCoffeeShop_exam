@@ -128,7 +128,7 @@ export const login = async (values: any) => {
 export const registerUser = async (values: any) => {
   try {
     const response = await axios.post(`${BASE_URL}/account/register`, values)
-    console.log("RSPONSE", response)
+    console.log("RSPONSE", response.data)
     return response.data
   } catch (error) {
     console.log("Error when trying to create a account")
