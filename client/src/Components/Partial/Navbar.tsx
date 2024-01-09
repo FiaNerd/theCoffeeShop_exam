@@ -241,16 +241,22 @@ const Navbar = () => {
           onMouseLeave={handleMouseLeaveProfile}
         >
          {!user ? (
-            <NavLink
-              to="/konto/logga-in"
-              className=" items-center hidden md:flex"
-              onClick={handleToggleProfile}
-            >
-              <FontAwesomeIcon
-                icon={faUser}
-                className='text-white text-4xl cursor-pointer hover:opacity-80'
-              />
-            </NavLink>
+           <div className='flex-row gap-4 hidden md:flex items-end' >
+           <NavLink
+            to="/konto/logga-in"
+            className=" items-center hidden md:flex"
+            onClick={handleToggleProfile}
+          >
+            <FontAwesomeIcon
+              icon={faUser}
+              className='text-white text-4xl cursor-pointer hover:opacity-80'
+            />
+          </NavLink>
+          <NavLink to="/konto/registrera" className="text-white font-bold flex flex-end">
+            Skapa konto
+          </NavLink>
+        </div>
+        
           ) : (
             <FontAwesomeIcon
               icon={faUser}
@@ -264,6 +270,7 @@ const Navbar = () => {
             </div>
           ) : null}
         </div>
+
 
         </div>
       </div>

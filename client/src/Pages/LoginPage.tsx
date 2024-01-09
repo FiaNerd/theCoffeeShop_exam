@@ -38,7 +38,7 @@ const LoginPage = () => {
       <div className="container mx-auto h-full flex flex-1 justify-center items-center">
         <div className="w-full max-w-sm md:max-w-md m-auto p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl">
           <img src={bg_img} alt="logo kaffebönans skafferi" className="m-auto mb-4 max-w-[10em]" />
-          <h1 className="font-heading text-white text-center font-bold uppercase">Logain</h1>
+          <h1 className="font-heading text-white text-center font-bold uppercase">Logga in</h1>
           <form className="" onSubmit={handleSubmit(onSubmitLogin)}>
             <div className={`mb-4`}>
               <label className="block mb-1 text-sm text-white">Användarnamn</label>
@@ -88,10 +88,10 @@ const LoginPage = () => {
 
             <div className="text-center mt-4">
               <NavLink
-                to="/register"
+                to="/konto/registrera"
                 className="inline-block right-0 align-baseline font-light text-md text-white hover:text-light-tan"
               >
-                Registrera konto?
+                Har du inget konto? Skapa konto
               </NavLink>
             </div>
           </form>
