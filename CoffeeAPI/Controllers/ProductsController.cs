@@ -79,7 +79,7 @@ public class ProductsController : BaseApiController
               .Distinct()
               .ToList();
 
-          return Ok(new { types = combinedTypes, roastLevel });
+          return Ok(new { type = combinedTypes, roastLevel });
       }
 
 }

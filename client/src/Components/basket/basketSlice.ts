@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { addItemToBasket, getBasket, removeItemFromBasket } from '../../services/CoffeeAPI';
-import { Basket } from '../../types/basket';
+import { Basket } from '../../types/basketAPI';
 import { getCookie } from '../../utils/getCookie';
 
 interface BasketState {
@@ -18,6 +18,7 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
   async (_, thunkAPI) => {
       try {
           return await getBasket()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
           return thunkAPI.rejectWithValue({ error: error.data });
       }

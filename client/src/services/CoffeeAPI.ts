@@ -71,7 +71,9 @@ export const getProduct = async (guid: string) : Promise<Product | null> => {
  * Get all basket
  */
 export const getBasket = async () => {
-  return await get<Basket>('/basket')
+  const response =  await get<Basket>('/basket')
+  console.log(response.data)
+  return response
 }
 
 /**

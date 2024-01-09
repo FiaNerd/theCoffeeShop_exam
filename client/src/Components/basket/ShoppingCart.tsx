@@ -17,9 +17,23 @@ const ShoppingCart = () => {
 
   const deliveryFee = subtotal > 50000 ? 0 : 5000;
 
-  if (!basket) {
-    return null;
-  }
+  // useEffect(() => {
+  //   dispatch(fetchCurrentUser())
+
+  //   const fetchData = async () => {
+  //     try {
+  //       if (basket)
+  //        {
+  //        dispatch(setBasket(basket))
+  //       }
+
+  //     } catch (error) {
+  //       console.error('Something went wrong', error)
+  //     }
+  //   }
+
+  //   fetchData()
+  // }, [basket, dispatch])
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -51,9 +65,9 @@ const ShoppingCart = () => {
                     <div className='flex-1 overflow-y-auto px-4 py-6 sm:px-6'>
                       <div className='flex items-start justify-between'>
                         <Dialog.Title className='text-heading uppercase font-medium '>
-                          {basket?.items.length === 0
+                          { basket?.items.length === 0
                             ? 'Din vaurkog är tom'
-                            : 'Din vaurkog'}
+                            : 'Din vaurkog' }
                         </Dialog.Title>
                         <div className='ml-3 flex h-7 items-center'>
                           <button
@@ -92,7 +106,7 @@ const ShoppingCart = () => {
                                           {item.name}
                                         </NavLink>
                                       </h3>
-                                      <p className='ml-4'>
+                                      <p className='ml-4 min-w-[5em] text-end'>
                                         {formatPrice(item.price)}
                                       </p>
                                     </div>

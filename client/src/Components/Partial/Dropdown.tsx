@@ -1,3 +1,4 @@
+
 import { NavLink } from 'react-router-dom'
 
 interface SubMenu {
@@ -12,6 +13,7 @@ interface IProps {
 
 const Dropdown = ({ subMenuItems, onCloseDropdown }: IProps) => {
   return (
+   
     <ul className='font-heading text-2xl tracking-wider font-bold text-white flex flex-col gap-2'>
       {subMenuItems.map((submenu, index) => (
         <li
@@ -22,6 +24,7 @@ const Dropdown = ({ subMenuItems, onCloseDropdown }: IProps) => {
           </NavLink>
         </li>
       ))}
+     
     </ul>
   )
 }
