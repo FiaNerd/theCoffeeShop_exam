@@ -86,7 +86,7 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
   return res.data
 }
 
-/**s
+/*
  * Delete a item
  * @param delete items
  */
