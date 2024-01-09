@@ -3,6 +3,7 @@ import { FieldValues } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { currentUser, login } from "../../services/CoffeeAPI";
 import { User } from "../../types/user";
+import { setBasket } from "../basket/basketSlice";
 
 
 interface AccountState {
@@ -18,7 +19,14 @@ export const signInUser = createAsyncThunk<User,  FieldValues>(
     async (data, thunkApi) => {
         console.log('Fetching current user');
         try {
-            const user = await login(data)
+            const userDto = await login(data)
+
+            const { basket, ...user } = userDto
+            
+            if(basket){
+                thunkApi.dispatch(setBasket(basket))
+            }
+
             localStorage.setItem('user', JSON.stringify(user))
             console.log("Return user", user)
             return user
@@ -29,48 +37,81 @@ export const signInUser = createAsyncThunk<User,  FieldValues>(
     } 
 )
 
-export const fetchCurrentUser = createAsyncThunk<User | null>(
+export const fetchCurrentUser = createAsyncThunk<User>(
     'account/fetchCurrentUser',
-    async (_, thunkApi) => {
-      try {
-        const userInStorage = localStorage.getItem('user')
+    async (_, thunkAPI) => {
+        thunkAPI.dispatch(setUser(JSON.parse(localStorage.getItem('user')!)))
+        try {
+            const userDto = await currentUser()
 
-        if (userInStorage) {
-          thunkApi.dispatch(setUser(JSON.parse(userInStorage)))
-          return JSON.parse(userInStorage);
+            const {basket, ...user} = userDto
+
+            if (basket){
+                thunkAPI.dispatch(setBasket(basket))
+            }
+
+            localStorage.setItem('user', JSON.stringify(user));
+            return user;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data});
         }
-
-        console.log("USER in storage", userInStorage)
-  
-        const user = await currentUser();
-
-        console.log("user", user)
-  
-        if (user !== undefined && user !== null) {
-          localStorage.setItem('user', JSON.stringify(user))
-          console.log("Return user", user);
-          return user;
-        } else {
-          // Remove the user from local storage if currentUser API call fails
-          localStorage.removeItem('user');
-          return null;
-        }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (error: any) {
-        // Handle the error and remove the user from local storage
-        console.error("Error when fetching currentUser", error)
-        localStorage.removeItem('user');
-        return thunkApi.rejectWithValue({ error: error.data })
-      }
     }, 
     {
         condition: () => {
-            if (!localStorage.getItem('user')) {
-                return false
-            }
+            if (!localStorage.getItem('user')) return false;
         }
     }
 )
+
+// export const fetchCurrentUser = createAsyncThunk<User>(
+//     'account/fetchCurrentUser',
+//     async (_, thunkApi) => {
+//       try {
+//         const userInStorage = localStorage.getItem('user')
+
+//         const { basket, ...user } = userInStorage
+            
+//         if(basket){
+//             thunkApi.dispatch(setBasket(basket))
+//         }
+
+//         if (userInStorage) {
+//           thunkApi.dispatch(setUser(JSON.parse(userInStorage)))
+//           return JSON.parse(userInStorage);
+//         }
+
+//         console.log("USER in storage", userInStorage)
+  
+//         const user = await currentUser();
+
+//         console.log("user", user)
+  
+//         if (user !== undefined && user !== null) {
+//           localStorage.setItem('user', JSON.stringify(user))
+//           console.log("Return user", user);
+//           return user;
+//         } else {
+//           // Remove the user from local storage if currentUser API call fails
+//           localStorage.removeItem('user');
+//           return null;
+//         }
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//       } catch (error: any) {
+//         // Handle the error and remove the user from local storage
+//         console.error("Error when fetching currentUser", error)
+//         localStorage.removeItem('user');
+//         return thunkApi.rejectWithValue({ error: error.data })
+//       }
+//     }, 
+//     {
+//         condition: () => {
+//             if (!localStorage.getItem('user')) {
+//                 return false
+//             }
+//         }
+//     }
+// )
 
 
 export const accountSlice = createSlice({
