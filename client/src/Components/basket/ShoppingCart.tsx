@@ -175,16 +175,20 @@ const ShoppingCart = () => {
                       </p>
 
                       <div className='mt-6'>
-                        <Button
-                          buttonType='checkout'
-                          typeAction='button'
-                          className='disabled:opacity-75'
-                          disabled={
-                            basket?.items.length === 0 ||
-                            basket?.items === undefined
-                          }>
-                          Till Kassan
-                        </Button>
+                        <NavLink to="/checkout">
+                          <Button
+                            buttonType='checkout'
+                            typeAction='button'
+                            className='disabled:opacity-75'
+                            disabled={
+                              basket?.items.length === 0 ||
+                              basket?.items === undefined
+                            }
+                            >
+                            Till Kassan
+                          </Button>
+
+                        </NavLink>
                       </div>
                       <div className='mt-6 flex justify-center text-center text-sm text-gray-500'>
                         <p>

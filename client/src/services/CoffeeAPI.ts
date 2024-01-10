@@ -18,15 +18,17 @@ const instance = axios.create({
   },
 })
 
-// Axios interceptor to dynamically add an Authorization header
+/// Axios interceptor to dynamically add an Authorization header
 // to each request if a user is logged in and has a valid token.
 axios.interceptors.request.use((config) => {
-  // Retrieve the user's token from the Redux Store
-  const token = store.getState().account.user?.token
+  // Retrieve the user's token from local storage
+  console.log("Config", config)
+  const userString = localStorage.getItem('user')
+  const user = userString ? JSON.parse(userString) : null
 
   // If a valid token exists, add Authorization header
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  if (user && user.token) {
+    config.headers.Authorization = `Bearer ${user.token}`
   }
 
   // Return the updated configuration for the request
