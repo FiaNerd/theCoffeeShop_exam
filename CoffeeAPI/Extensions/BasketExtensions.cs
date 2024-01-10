@@ -27,4 +27,11 @@ public static class BasketExtensions
             }).ToList()
         };
     }
+          public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> query, string buyerId)
+        {
+            return query
+                    .Include(i => i.Items)
+                    .ThenInclude(p => p.Product)
+                    .Where(b => b.BuyerId == buyerId);
+        }
 }

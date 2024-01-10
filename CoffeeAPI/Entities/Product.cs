@@ -7,7 +7,7 @@ namespace CoffeeAPI.Entities
     public class Product
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string BlendDescription { get; set; }
         public string Description { get; set; }

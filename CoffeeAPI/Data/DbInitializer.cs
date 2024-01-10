@@ -147,7 +147,7 @@ namespace CoffeeAPI.Data
                 BlendDescription = "UPPTÄCK MJUKA TONER AV HASSELNÖT",
                 Description = "Dark Temptation är en blandning av högvuxna bönor från Östafrika och pärlbönor från Brasilien. Våra rostmästare har varsamt rostat och koppat bönorna i vårt kafferosteri i Helsingborg där vi lyft fram en smakfull och mjuk kaffekaraktär med tydlig friskhet och toner av hasselnöt på 100% Arabicabönor. Vi på ZOÉGAS hyser ett passionerat förhållande till gott kaffe och vill säkerställa att varje enskild detalj i vårt kaffehantverk är av högsta kvalitet. Allt för att vi på ZOÉGAS ska kunna ge dig som kaffeälskare det bästa kaffet, och låta dig uppleva en ZOÉGAS-stund tillsammans med en smakfull kopp Dark Temptation.",
                 ImageUrl = "/images/products/hela_bönor/mork_rost/dark_temptions_hela_boner_1200x1200.jpg",
-                Type = ["Helabönor"],
+                Type = ["Hela bönor"],
                  RoastLevel = "Mörkrost",
                 Price = 6780,
                 QuantityInStock = 100,

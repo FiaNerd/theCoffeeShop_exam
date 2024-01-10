@@ -21,8 +21,10 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
   'basket/fetchBasketAsync',
   async (_, thunkAPI) => {
     try {
-      return await getBasket()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const basket = await getBasket()
+      console.log('Fetched Basket:', basket)
+      return basket
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       return thunkAPI.rejectWithValue({ error: error.data })
     }
@@ -99,7 +101,6 @@ export const basketSlice = createSlice({
           return
         }
 
-
         state.basket!.items[itemIndex].quantity -= quantity
 
         if (state.basket?.items[itemIndex].quantity === 0) {
@@ -130,4 +131,3 @@ export const basketSlice = createSlice({
 })
 
 export const { setBasket, clearBasket } = basketSlice.actions
-
