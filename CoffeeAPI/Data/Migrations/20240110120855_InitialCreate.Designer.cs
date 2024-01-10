@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeAPI.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20240107131937_InitialCreateAndIdentity")]
-    partial class InitialCreateAndIdentity
+    [Migration("20240110120855_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace CoffeeAPI.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("BuyerId")
+                    b.Property<string>("BuyerId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -191,13 +191,13 @@ namespace CoffeeAPI.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e71fa42f-d326-4539-b9c1-c0332eea656d",
+                            Id = "09ee8522-4c1b-4a3a-8523-82d183a7f398",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
-                            Id = "a25c5a2f-1d03-40a6-afe4-faf73aa9f81a",
+                            Id = "4197ee32-5017-482a-ac8d-471ff99f6743",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateAndIdentity : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -57,7 +57,7 @@ namespace CoffeeAPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BuyerId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    BuyerId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,8 +222,8 @@ namespace CoffeeAPI.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a25c5a2f-1d03-40a6-afe4-faf73aa9f81a", null, "Admin", "ADMIN" },
-                    { "e71fa42f-d326-4539-b9c1-c0332eea656d", null, "Member", "MEMBER" }
+                    { "09ee8522-4c1b-4a3a-8523-82d183a7f398", null, "Member", "MEMBER" },
+                    { "4197ee32-5017-482a-ac8d-471ff99f6743", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(

@@ -1,11 +1,9 @@
-using CoffeeAPI.DTOs;
-
 namespace CoffeeAPI.Entities
 {
     public class Basket
     {
         public Guid Id { get; set; }
-        public Guid BuyerId { get; set; }
+        public string BuyerId { get; set; }
         public ICollection<BasketItem> Items { get; set; } = new List<BasketItem>();
 
         // Method to AddItems

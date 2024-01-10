@@ -17,51 +17,42 @@ namespace CoffeeAPI.Entities
         }
 
         [HttpGet(Name = "GetBasket")]
-        public async Task<ActionResult<BasketDto>> GetBasketAsync()
-        {
-            Basket basket = await RetrieveBasket(GetBuyerId());
-
-
-            if (basket == null)
+            public async Task<ActionResult<BasketDto>> GetBasket()
             {
-                return NotFound();
+                var basket = await RetrieveBasket(GetBuyerId());
+
+                if (basket == null){
+                    return NotFound();
+                }
+
+                return basket.ResponseMapBasketToDto();
             }
-
-            return basket.ResponseMapBasketToDto();
-
-        }
 
 
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<ActionResult<BasketDto>> AddItemToBasket(Guid productId, int quantity = 1)
+        public async Task<ActionResult> AddItemToBasket(Guid productId, int quantity = 1)
         {
-            var basket = await RetrieveBasket(GetBuyerId()) ?? CreateBasket();
+            var basket = await RetrieveBasket(GetBuyerId());
 
-            if (quantity < 0)
-            {
-                // Negative quantity is not allowed
-                return BadRequest(new ProblemDetails { Title = "Quantity must be non-negative." });
+            if (basket == null){
+                basket = CreateBasket();
             }
 
             var product = await _context.Products.FindAsync(productId);
 
-            if(product == null)
-            {
-                return BadRequest(new ProblemDetails{Title = "Product Not Found"});
+            if (product == null){
+                return BadRequest(new ProblemDetails { Title = "Product not found" });
             }
 
             basket.AddItem(product, quantity);
 
             var result = await _context.SaveChangesAsync() > 0;
 
-            if(result)
-            {
-                // Add loaction header to the response
+            if (result){
                 return CreatedAtRoute("GetBasket", basket.ResponseMapBasketToDto());
-
             }
 
-            return BadRequest(new ProblemDetails{ Title = "Problem saving item to basket" });
+            return BadRequest(new ProblemDetails { Title = "Problem saving item to basket" });
         }
 
 
@@ -95,10 +86,9 @@ namespace CoffeeAPI.Entities
                 {
                     return Ok();
                 }
-                else
-                {
-                    return BadRequest(new ProblemDetails { Title = "Unable to save changes to the database." });
-                }
+                
+                return BadRequest(new ProblemDetails { Title = "Unable to save changes to the database." });
+           
             }
             catch (Exception ex)
             {
@@ -116,15 +106,13 @@ namespace CoffeeAPI.Entities
         }
 
 
-        private async Task<Basket> RetrieveBasket(Guid buyerId)
+        private async Task<Basket> RetrieveBasket(string buyerId)
         {
-            if (buyerId == Guid.Empty)
+            if (string.IsNullOrEmpty(buyerId))
             {
                 Response.Cookies.Delete("buyerId");
                 return null;
             }
-
-            Console.WriteLine("BUYER ID API", buyerId);
 
             return await _context.Baskets
                 .Include(i => i.Items)
@@ -132,79 +120,14 @@ namespace CoffeeAPI.Entities
                 .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
         }
 
-        private Guid GetBuyerId()
+        private string GetBuyerId()
         {
-            // Trying to get from the identity 
-            if (Guid.TryParse(User.Identity?.Name, out Guid buyerIdFromIdentity))
-            {
-                return buyerIdFromIdentity;
-            }
-
-            // If the identity dons't exist, try get from Cookies
-            if (Guid.TryParse(Request.Cookies["buyerId"], out Guid buyerIdFromCookies))
-            {
-                return buyerIdFromCookies;
-            }
-
-            // If not valid is returned, return Guid.Empty
-            return Guid.Empty;
+            return User.Identity?.Name ?? Request.Cookies["buyerId"];
         }
-
-        // private Basket CreateBasket()
-        // {
-        //     // Declare buyerId variable and assign it a default value
-        //     var buyerId = string.Empty;
-
-        //     if (User.Identity != null)
-        //     {
-        //         // Set buyerId to the user's username
-        //         buyerId = User.Identity.Name;
-        //     }
-        //     else
-        //     {
-        //         // Generate a new Guid for anonymous user
-        //         buyerId = Guid.NewGuid().ToString();
-
-        //         // Store the generated Guid in a cookie
-        //         var cookieOptions = new CookieOptions
-        //         {
-        //             IsEssential = true,
-        //             Expires = DateTime.Now.AddDays(30)
-        //         };
-
-        //         Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-        //     }
-
-        //     // Create a new Basket object and set its BuyerId
-        //     var basket = new Basket
-        //     {
-        //         BuyerId = new Guid(buyerId)
-        //     };
-
-        //     // Add the Basket object to the database
-        //     _context.Baskets.Add(basket);
-
-        //     return basket;
-        // }
-
-
-
-
             
         private Basket CreateBasket()
         {
-            // if the user logedin and created a basket, then setting buyerid to the user name
             var buyerId = User.Identity?.Name;
-             
-             // if not user is Logedin, set it to guid
-             if (string.IsNullOrEmpty(buyerId))
-            {
-                buyerId = Guid.NewGuid().ToString();
-                var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
-                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
-            }
-
-
 
             if (string.IsNullOrEmpty(buyerId))
             {
