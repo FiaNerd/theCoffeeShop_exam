@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CoffeeAPI.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using CoffeeAPI.Entities.OrderAggregate;
 
 namespace CoffeeAPI.Data
 {
@@ -13,6 +14,7 @@ namespace CoffeeAPI.Data
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Basket> Baskets { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder){
             base.OnModelCreating(builder);
