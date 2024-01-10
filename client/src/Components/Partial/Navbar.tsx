@@ -1,5 +1,9 @@
 import '@fortawesome/fontawesome-svg-core/styles.css'
-import { faMagnifyingGlass, faUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import {
+  faMagnifyingGlass,
+  faUser,
+  faXmark,
+} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Transition } from '@headlessui/react'
 import { useEffect, useRef, useState } from 'react'
@@ -17,40 +21,43 @@ import Hamburger from './Hamburger'
 import SearchBar from './Searchbar'
 
 const Navbar = () => {
-  const logo = "/images/coffeebean_logo.png";
-  
-  const [ menuOpen, setMenuOpen ] = useState(false)
-  const [ dropdownOpen, setDropdownOpen ] = useState(false)
-  const [ dropdownOpenProfile, setDropdownOpenProfile ] = useState(false)
-  const [ activeMenuItem, setActiveMenuItem ] = useState<string | null>(null)
-  const [ openBasket, setOpenBasket ] = useState(false)
-  const [ openSearchbar, setOpenSearchbar ] = useState(false)
-  const [ openProfile, setOpenProfile ] = useState(false)
+  const logo = '/images/coffeebean_logo.png'
+
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [dropdownOpenProfile, setDropdownOpenProfile] = useState(false)
+  const [activeMenuItem, setActiveMenuItem] = useState<string | null>(null)
+  const [openBasket, setOpenBasket] = useState(false)
+  const [openSearchbar, setOpenSearchbar] = useState(false)
+  const [openProfile, setOpenProfile] = useState(false)
 
   const navRef = useRef<HTMLDivElement | null>(null)
   const searchRef = useRef<HTMLDivElement | null>(null)
-  
-  const dispatch = useAppDispatch()
-  const { basket }  = useAppSelector(state => state.basket)
-  const { user }  = useAppSelector(state => state.account)
 
-  const itemCount = (basket?.items ?? []).reduce((sum, item) => sum + item.quantity, 0)
+  const dispatch = useAppDispatch()
+  const { basket } = useAppSelector((state) => state.basket)
+  const { user } = useAppSelector((state) => state.account)
+
+  const itemCount = (basket?.items ?? []).reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  )
+
+  console.log('BASKET', basket)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(fetchCurrentUser());
-  
-        await dispatch(fetchBasketAsync());
-  
+        await dispatch(fetchCurrentUser())
+        console.log('USER', user, 'Basket ITEMS', basket?.items)
+        await dispatch(fetchBasketAsync())
       } catch (error) {
-        console.error('Something went wrong', error);
+        console.error('Something went wrong', error)
       }
-    };
-  
-    fetchData();
-  }, [dispatch]);
-  
+    }
+
+    fetchData()
+  }, [dispatch])
 
   const handleToggleMenu = (event: React.MouseEvent) => {
     event.stopPropagation()
@@ -65,7 +72,6 @@ const Navbar = () => {
   const handleToggleSearchbar = () => {
     setOpenSearchbar(!openSearchbar)
   }
-
 
   const handleClick = (event: React.MouseEvent) => {
     if (event.currentTarget.id === 'searchIcon') {
@@ -87,7 +93,6 @@ const Navbar = () => {
 
       setOpenProfile(false)
       setDropdownOpenProfile(false)
-
     }
   }
 
@@ -103,33 +108,46 @@ const Navbar = () => {
     setDropdownOpen(true)
     setActiveMenuItem(title)
   }
-  
+
   const handleMouseLeave = () => {
     setDropdownOpen(false)
   }
-  
+
   const handleToggleProfile = () => {
-    setOpenProfile(!openProfile);
-  };
+    setOpenProfile(!openProfile)
+  }
 
   const handleMouseEnterProfile = () => {
-    setOpenProfile(true);
-  };
+    setOpenProfile(true)
+  }
 
   const handleMouseLeaveProfile = () => {
-    setOpenProfile(false);
-  };
-
+    setOpenProfile(false)
+  }
 
   useEffect(() => {
-    if (menuOpen || dropdownOpen || openBasket || openSearchbar || openProfile || dropdownOpenProfile) {
+    if (
+      menuOpen ||
+      dropdownOpen ||
+      openBasket ||
+      openSearchbar ||
+      openProfile ||
+      dropdownOpenProfile
+    ) {
       document.addEventListener('click', handleOutsideClick)
     }
 
     return () => {
       document.removeEventListener('click', handleOutsideClick)
     }
-  }, [menuOpen, dropdownOpen, openBasket, openSearchbar, openProfile, dropdownOpenProfile])
+  }, [
+    menuOpen,
+    dropdownOpen,
+    openBasket,
+    openSearchbar,
+    openProfile,
+    dropdownOpenProfile,
+  ])
 
   const closeDropdown = () => {
     setDropdownOpen(false)
@@ -152,36 +170,41 @@ const Navbar = () => {
         <NavLink to='/' className='cursor-pointer'>
           <img src={logo} alt='coffebean logo' className='w-40' />
         </NavLink>
-       
+
         <div className={`hidden gap-4 md:flex ${menuOpen ? 'visible' : ''}`}>
           <ul className='flex md:gap-8'>
             {menuItems
-              .filter(menu => !menu.mobileOnly)
+              .filter((menu) => !menu.mobileOnly)
               .map((menu, index) => (
                 <li
                   key={index}
                   className='relative'
                   onMouseEnter={() => handleMouseEnter(menu.title)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                <NavLink
-                  to={menu.url}
-                  end
-                  style={{
-                    color: 'text-light-tan',
-                  }}
-                  className={`text-white font-heading ${menu.title === 'Logga in' || menu.title === 'Skapa konto' ? 'text-sm x' : 'text-3xl'} font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}
-                >
-                  {menu.title}
-                </NavLink>
+                  onMouseLeave={handleMouseLeave}>
+                  <NavLink
+                    to={menu.url}
+                    end
+                    style={{
+                      color: 'text-light-tan',
+                    }}
+                    className={`text-white font-heading ${
+                      menu.title === 'Logga in' || menu.title === 'Skapa konto'
+                        ? 'text-sm x'
+                        : 'text-3xl'
+                    } font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}>
+                    {menu.title}
+                  </NavLink>
 
-
-
-                  {menu.subMenu && dropdownOpen && activeMenuItem === 'KAFFE' && (
-                    <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
-                      <Dropdown subMenuItems={menu.subMenu} onCloseDropdown={closeDropdown} />
-                    </div>
-                  )}
+                  {menu.subMenu &&
+                    dropdownOpen &&
+                    activeMenuItem === 'KAFFE' && (
+                      <div className='bg-deep-red absolute top-full transform -translate-x-1/2 left-1/2 z-50 pt-8 pb-8 px-12'>
+                        <Dropdown
+                          subMenuItems={menu.subMenu}
+                          onCloseDropdown={closeDropdown}
+                        />
+                      </div>
+                    )}
                 </li>
               ))}
           </ul>
@@ -235,47 +258,44 @@ const Navbar = () => {
           </button>
 
           <div
-          id="profile-container"
-          className="relative py-4 border border-transparent"
-          onMouseEnter={handleMouseEnterProfile}
-          onMouseLeave={handleMouseLeaveProfile}
-        >
-         {!user ? (
-           <div className='flex-row gap-4 hidden md:flex items-end' >
-           <NavLink
-            to="/konto/logga-in"
-            className=" items-center hidden md:flex"
-            onClick={handleToggleProfile}
-          >
-            <FontAwesomeIcon
-              icon={faUser}
-              className='text-white text-4xl cursor-pointer hover:opacity-80'
-            />
-          </NavLink>
-          <NavLink to="/konto/registrera" className="text-white font-bold flex flex-end">
-            Skapa konto
-          </NavLink>
-        </div>
-        
-          ) : (
-            <FontAwesomeIcon
-              icon={faUser}
-              className='text-white text-4xl cursor-pointer hover:opacity-80'
-            />
-          )}
+            id='profile-container'
+            className='relative py-4 border border-transparent'
+            onMouseEnter={handleMouseEnterProfile}
+            onMouseLeave={handleMouseLeaveProfile}>
+            {!user ? (
+              <div className='flex-row gap-4 hidden md:flex items-end'>
+                <NavLink
+                  to='/konto/logga-in'
+                  className=' items-center hidden md:flex'
+                  onClick={handleToggleProfile}>
+                  <FontAwesomeIcon
+                    icon={faUser}
+                    className='text-white text-4xl cursor-pointer hover:opacity-80'
+                  />
+                </NavLink>
+                <NavLink
+                  to='/konto/registrera'
+                  className='text-white font-bold flex flex-end'>
+                  Skapa konto
+                </NavLink>
+              </div>
+            ) : (
+              <FontAwesomeIcon
+                icon={faUser}
+                className='text-white text-4xl cursor-pointer hover:opacity-80'
+              />
+            )}
 
-          {user ? (
-            <div className="hidden md:flex"> 
-              {openProfile && <SignedInMenu />}
-            </div>
-          ) : null}
-        </div>
-
-
+            {user ? (
+              <div className='hidden md:flex'>
+                {openProfile && <SignedInMenu />}
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
 
-      { openBasket && <ShoppingCart /> }
+      {openBasket && <ShoppingCart />}
 
       <div>
         {menuOpen &&

@@ -2,6 +2,7 @@ using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Extensions;
 
 public static class BasketExtensions
@@ -12,20 +13,21 @@ public static class BasketExtensions
         {
             Id = basket.Id,
             BuyerId = basket.BuyerId,
-            PaymentIntentId = basket.PaymentIntentId,
-            ClientSecret = basket.ClientSecret,
+
             Items = basket.Items.Select(item => new BasketItemDto
             {
                 ProductId = item.ProductId,
                 Name = item.Product.Name,
                 Price = item.Product.Price,
-                PictureUrl = item.Product.PictureUrl,
+                ImageUrl = item.Product.ImageUrl,
                 Type = item.Product.Type,
-                Brand = item.Product.Brand,
+                RoastLevel = item.Product.RoastLevel,
+
                 Quantity = item.Quantity
             }).ToList()
         };
     }
+
 
     public static IQueryable<Basket> RetrieveBasketWithItems(this IQueryable<Basket> query, string buyerId)
     {

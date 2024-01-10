@@ -1,3 +1,5 @@
+using CoffeeAPI.DTOs;
+
 namespace CoffeeAPI.Entities
 {
     public class Basket
