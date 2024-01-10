@@ -70,7 +70,7 @@ builder.Services.AddIdentityCore<User>(opt =>
     // The email has to be unique
     opt.User.RequireUniqueEmail = true;
 })
-    .AddRoles<IdentityRole>()
+    .AddRoles<Role>()
     .AddEntityFrameworkStores<StoreContext>();
 
 // Authentication and Authorization
