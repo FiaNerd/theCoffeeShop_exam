@@ -193,6 +193,7 @@ namespace CoffeeAPI.Entities
             
         private Basket CreateBasket()
         {
+         Basket basket = null;
             // if the user logedin and created a basket, then setting buyerid to the user name
             var buyerId = User.Identity?.Name;
              
@@ -213,8 +214,12 @@ namespace CoffeeAPI.Entities
                 Response.Cookies.Append("buyerId", buyerId, cookieOptions);
             }
 
-            var basket = new Basket { BuyerId = buyerId };
-            _context.Baskets.Add(basket);
+            if(Guid.TryParse(buyerId, out Guid buyerIdGuid)){
+
+                        basket = new Basket { BuyerId = buyerIdGuid };
+                        _context.Baskets.Add(basket);
+                        return basket;
+            }
             return basket;
         }
     }

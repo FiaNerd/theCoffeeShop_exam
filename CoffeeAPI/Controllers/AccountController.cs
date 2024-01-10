@@ -2,7 +2,6 @@ using API.Extensions;
 using CoffeeAPI.Data;
 using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
-using CoffeeAPI.Extensions;
 using CoffeeAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -137,20 +136,6 @@ namespace CoffeeAPI.Controllers
 
             return basket;
         }
-         private async Task<Basket> RetrieveBasket(string buyerId)
-        {
-            if (string.IsNullOrEmpty(buyerId))
-            {
-                Response.Cookies.Delete("buyerId");
-                return null;
-            }
-
-            return await _context.Baskets
-                .Include(i => i.Items)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(basket => basket.BuyerId == buyerId);
-        }
-
 
     }
 }
