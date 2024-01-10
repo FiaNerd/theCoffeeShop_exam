@@ -30,7 +30,7 @@ namespace CoffeeAPI.Entities
 
 
         [HttpPost] // api/basket?productId=1&quantity=2
-        public async Task<ActionResult> AddItemToBasket(int productId, int quantity = 1)
+        public async Task<ActionResult> AddItemToBasket(Guid productId, int quantity = 1)
         {
             var basket = await RetrieveBasket(GetBuyerId());
 
