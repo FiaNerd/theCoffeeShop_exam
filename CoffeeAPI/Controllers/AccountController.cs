@@ -25,7 +25,6 @@ namespace CoffeeAPI.Controllers
         }
 
 
-
        [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -55,7 +54,7 @@ namespace CoffeeAPI.Controllers
             {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
-                Basket = anonymous != null ? anonymous.ResponseMapBasketToDto() : userBasket?.MapBasketToDto()
+                Basket = anonymous != null ? anonymous.ResponseMapBasketToDto() : userBasket?.ResponseMapBasketToDto()
             };
         }
 
@@ -97,8 +96,8 @@ namespace CoffeeAPI.Controllers
                     Email = user.Email,
                     Token = await _tokenService.GenerateToken(user),
                     Basket = userBasket?.ResponseMapBasketToDto()
-                }
-                    }
+                };
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
