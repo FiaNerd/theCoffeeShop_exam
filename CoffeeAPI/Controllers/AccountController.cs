@@ -22,6 +22,8 @@ namespace CoffeeAPI.Controllers
             _context = context;
         }
 
+
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -44,6 +46,7 @@ namespace CoffeeAPI.Controllers
 
                 if (Guid.TryParse(user.UserName, out Guid buyerIdGuid))
                 {
+                    
                     anonymousBasket.BuyerId = buyerIdGuid;
                     Response.Cookies.Delete("buyerId");
                     await _context.SaveChangesAsync();
@@ -59,28 +62,27 @@ namespace CoffeeAPI.Controllers
         }
 
 
-
-        [HttpPost("register")]
-        public async Task<ActionResult> Register(RegisterDto registerDto)
-        {
-            var user = new User { UserName = registerDto.Username, Email = registerDto.Email };
-
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-            if(!result.Succeeded)
+            [HttpPost("register")]
+            public async Task<ActionResult> Register(RegisterDto registerDto)
             {
-                foreach(var error in result.Errors)
+                var user = new User { UserName = registerDto.Username, Email = registerDto.Email };
+
+                var result = await _userManager.CreateAsync(user, registerDto.Password);
+
+                if(!result.Succeeded)
                 {
-                    ModelState.AddModelError(error.Code, error.Description);
+                    foreach(var error in result.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+
+                    return ValidationProblem();
                 }
 
-                return ValidationProblem();
+                await _userManager.AddToRoleAsync(user, "Member");
+
+                return StatusCode(201);
             }
-
-            await _userManager.AddToRoleAsync(user, "Member");
-
-            return StatusCode(201);
-        }
 
             [Authorize]
             [HttpGet("currentUser")]
@@ -90,6 +92,7 @@ namespace CoffeeAPI.Controllers
             {
                 var user = await _userManager.FindByNameAsync(User.Identity.Name);
         
+             var userBasket = await RetrieveBasket(User.Identity.Name);
 
                 if (user == null)
                 {
@@ -99,17 +102,20 @@ namespace CoffeeAPI.Controllers
                 return new UserDto
                 {
                     Email = user.Email,
-                    Token = await _tokenService.GenerateToken(user)
+                    Token = await _tokenService.GenerateToken(user),
+                    Basket = userBasket?.ResponseMapBasketToDto()
+
                 };
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, ex.Message);
             }
         }
 
        private async Task<Basket> RetrieveBasket(string buyerId)
         {
+            Basket basket = null;
             if (string.IsNullOrEmpty(buyerId))
             {
                 Response.Cookies.Delete("buyerId");
@@ -122,9 +128,10 @@ namespace CoffeeAPI.Controllers
                     .Include(i => i.Items)
                     .ThenInclude(p => p.Product)
                     .FirstOrDefaultAsync(basket => basket.BuyerId == buyerGuid);
+                
             }
 
-            return null;
+            return basket;
         }
 
 

@@ -20,6 +20,7 @@ namespace CoffeeAPI.Entities
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
             Basket basket = await RetrieveBasket(GetBuyerId());
+            Console.WriteLine("basket", basket);
 
             if (basket == null)
             {
@@ -122,6 +123,8 @@ namespace CoffeeAPI.Entities
                 return null;
             }
 
+            Console.WriteLine("BUYER ID API", buyerId);
+
             return await _context.Baskets
                 .Include(i => i.Items)
                 .ThenInclude(p => p.Product)
@@ -145,6 +148,46 @@ namespace CoffeeAPI.Entities
             // If not valid is returned, return Guid.Empty
             return Guid.Empty;
         }
+
+        // private Basket CreateBasket()
+        // {
+        //     // Declare buyerId variable and assign it a default value
+        //     var buyerId = string.Empty;
+
+        //     if (User.Identity != null)
+        //     {
+        //         // Set buyerId to the user's username
+        //         buyerId = User.Identity.Name;
+        //     }
+        //     else
+        //     {
+        //         // Generate a new Guid for anonymous user
+        //         buyerId = Guid.NewGuid().ToString();
+
+        //         // Store the generated Guid in a cookie
+        //         var cookieOptions = new CookieOptions
+        //         {
+        //             IsEssential = true,
+        //             Expires = DateTime.Now.AddDays(30)
+        //         };
+
+        //         Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+        //     }
+
+        //     // Create a new Basket object and set its BuyerId
+        //     var basket = new Basket
+        //     {
+        //         BuyerId = new Guid(buyerId)
+        //     };
+
+        //     // Add the Basket object to the database
+        //     _context.Baskets.Add(basket);
+
+        //     return basket;
+        // }
+
+
+
 
             
         private Basket CreateBasket()
@@ -170,25 +213,5 @@ namespace CoffeeAPI.Entities
 
             return basket;
         }
-
-
-        //   public BasketDto ResponseMapBasketToDto(Basket basket)
-        // {
-        //     return new BasketDto
-        //     {
-        //         Id = basket.Id,
-        //         BuyerId = basket.BuyerId,
-        //         Items = basket.Items.Select(item => new BasketItemDto
-        //         {
-        //             ProductId = item.ProductId,
-        //             Name = item.Product.Name,
-        //             Price = item.Product.Price,
-        //             ImageUrl = item.Product.ImageUrl,
-        //             Type = item.Product.Type,
-        //             RoastLevel = item.Product.RoastLevel,
-        //             Quantity = item.Quantity
-        //         }).ToList()
-        //     };
-        // } 
     }
 }
