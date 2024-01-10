@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedOrderEntity : Migration
+    public partial class ChangedSpellingOnAddress : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,7 +58,8 @@ namespace CoffeeAPI.Data.Migrations
                 name: "Baskets",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     BuyerId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
@@ -74,8 +75,8 @@ namespace CoffeeAPI.Data.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     BuyerId = table.Column<string>(type: "TEXT", nullable: true),
                     ShippingAddress_FullName = table.Column<string>(type: "TEXT", nullable: true),
-                    ShippingAddress_Adress1 = table.Column<string>(type: "TEXT", nullable: true),
-                    ShippingAddress_Adress2 = table.Column<string>(type: "TEXT", nullable: true),
+                    ShippingAddress_Address1 = table.Column<string>(type: "TEXT", nullable: true),
+                    ShippingAddress_Address2 = table.Column<string>(type: "TEXT", nullable: true),
                     ShippingAddress_City = table.Column<string>(type: "TEXT", nullable: true),
                     ShippingAddress_Zip = table.Column<string>(type: "TEXT", nullable: true),
                     OrderDate = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -93,7 +94,8 @@ namespace CoffeeAPI.Data.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     BlendDescription = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
@@ -222,8 +224,8 @@ namespace CoffeeAPI.Data.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false),
                     FullName = table.Column<string>(type: "TEXT", nullable: true),
-                    Adress1 = table.Column<string>(type: "TEXT", nullable: true),
-                    Adress2 = table.Column<string>(type: "TEXT", nullable: true),
+                    Address1 = table.Column<string>(type: "TEXT", nullable: true),
+                    Address2 = table.Column<string>(type: "TEXT", nullable: true),
                     City = table.Column<string>(type: "TEXT", nullable: true),
                     Zip = table.Column<string>(type: "TEXT", nullable: true)
                 },
@@ -265,10 +267,11 @@ namespace CoffeeAPI.Data.Migrations
                 name: "BasketItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    ProductId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    BasketId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
+                    BasketId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

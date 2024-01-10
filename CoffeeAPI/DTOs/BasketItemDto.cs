@@ -2,7 +2,7 @@ namespace CoffeeAPI.DTOs
 {
     public class BasketItemDto
     {
-        public Guid ProductId { get; set; }
+        public int ProductId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public string ImageUrl { get; set; }
