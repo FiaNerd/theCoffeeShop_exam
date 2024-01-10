@@ -20,7 +20,7 @@ namespace CoffeeAPI.Entities
         public async Task<ActionResult<BasketDto>> GetBasketAsync()
         {
             Basket basket = await RetrieveBasket(GetBuyerId());
-            Console.WriteLine("basket", basket);
+
 
             if (basket == null)
             {
@@ -28,6 +28,7 @@ namespace CoffeeAPI.Entities
             }
 
             return basket.ResponseMapBasketToDto();
+
         }
 
 
@@ -204,13 +205,16 @@ namespace CoffeeAPI.Entities
             }
 
 
-            var basket = new Basket
+
+            if (string.IsNullOrEmpty(buyerId))
             {
-                BuyerId = new Guid(buyerId)
-            };
+                buyerId = Guid.NewGuid().ToString();
+                var cookieOptions = new CookieOptions { IsEssential = true, Expires = DateTime.Now.AddDays(30) };
+                Response.Cookies.Append("buyerId", buyerId, cookieOptions);
+            }
 
+            var basket = new Basket { BuyerId = buyerId };
             _context.Baskets.Add(basket);
-
             return basket;
         }
     }

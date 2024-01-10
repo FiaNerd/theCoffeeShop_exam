@@ -45,6 +45,7 @@ const SignedInMenu = () => {
         }}>
         Logga ut
       </NavLink>
+
     </div>
   )
 }

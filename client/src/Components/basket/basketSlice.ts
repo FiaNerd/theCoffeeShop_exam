@@ -99,6 +99,7 @@ export const basketSlice = createSlice({
           return
         }
 
+
         state.basket!.items[itemIndex].quantity -= quantity
 
         if (state.basket?.items[itemIndex].quantity === 0) {
@@ -129,3 +130,4 @@ export const basketSlice = createSlice({
 })
 
 export const { setBasket, clearBasket } = basketSlice.actions
+
