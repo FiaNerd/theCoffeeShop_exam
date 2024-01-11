@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { store } from '../redux/configureStore'
 import { Basket } from '../types/basket'
 import { Product, Products } from '../types/products'
 import { User } from '../types/user'
@@ -22,7 +21,6 @@ const instance = axios.create({
 // to each request if a user is logged in and has a valid token.
 axios.interceptors.request.use((config) => {
   // Retrieve the user's token from local storage
-  console.log("Config", config)
   const userString = localStorage.getItem('user')
   const user = userString ? JSON.parse(userString) : null
 

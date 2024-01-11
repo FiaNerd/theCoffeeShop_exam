@@ -22,7 +22,6 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
   async (_, thunkAPI) => {
     try {
       const basket = await getBasket()
-      console.log('Fetched Basket:', basket)
       return basket
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

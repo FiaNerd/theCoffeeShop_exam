@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
+import { currentUser, login } from '../../services/CoffeeAPI'
 import { User } from '../../types/user'
 import { setBasket } from '../basket/basketSlice'
-import { currentUser, login } from '../../services/CoffeeAPI'
 
 interface AccountState {
   user: User | null
@@ -49,7 +49,6 @@ export const fetchCurrentUser = createAsyncThunk<User>(
     try {
       // Call the currentUser service to get the latest user information
       const userDto = await currentUser()
-      console.log(userDto, 'USER DTO')
 
       // Extract the basket and user information from the response
       const { basket, ...user } = userDto
