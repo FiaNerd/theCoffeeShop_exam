@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import AddressForm from "../components/checkout/AddressForm";
 import OrderConfirmtation from "../components/checkout/OrderConfirmtation";
 import OrderSummary from "../components/checkout/OrderSummary";
@@ -28,6 +29,7 @@ const getStepContent = (step: number) => {
 };
 
 const CheckoutPage = () => {
+  const navigate = useNavigate()
   const methods = useForm( {
     mode: 'all',
     resolver: yupResolver(addressSchema),
@@ -35,14 +37,19 @@ const CheckoutPage = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleBack = () => {
-    setActiveStep((prevStep) => prevStep - 1);
+    if(activeStep === 0){
+      navigate('/')
+    }else{
+      setActiveStep((prevStep) => prevStep - 1);
+    }
   };
 
   const handleNext: SubmitHandler<Address> = async (data) => {
-    if (activeStep === 0) {
+    if (activeStep === steps.length - 1) {
       console.log(data);
     }
     setActiveStep((prevStep) => prevStep + 1);
+    console.log(data)
   };
 
   return (
@@ -69,7 +76,7 @@ const CheckoutPage = () => {
                   onClick={handleBack}
                   className="mt-4 hover:text-orange"
                 >
-                  Tillbaka
+                   {activeStep === 0  ? "Fortsätt shoppa" : "Tillbaka"}
                 </Button>
                 <div className="gap-4">
                   <Button

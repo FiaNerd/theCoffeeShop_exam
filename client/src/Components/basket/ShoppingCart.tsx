@@ -15,7 +15,7 @@ const ShoppingCart = () => {
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
 
-  const deliveryFee = subtotal > 50000 ? 0 : 5000;
+    const deliveryFee = subtotal > 25000 ? 0 : 2500
 
   return (
     <Transition.Root show={open} as={Fragment}>
