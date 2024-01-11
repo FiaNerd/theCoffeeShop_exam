@@ -1,3 +1,4 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import AddressForm from "../components/checkout/AddressForm";
@@ -6,6 +7,7 @@ import OrderSummary from "../components/checkout/OrderSummary";
 import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
+import addressSchema from "../schemas/AddressSchema";
 
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
@@ -26,7 +28,10 @@ const getStepContent = (step: number) => {
 };
 
 const CheckoutPage = () => {
-  const methods = useForm<Address>();
+  const methods = useForm( {
+    mode: 'all',
+    resolver: yupResolver(addressSchema),
+  })
   const [activeStep, setActiveStep] = useState(0);
 
   const handleBack = () => {

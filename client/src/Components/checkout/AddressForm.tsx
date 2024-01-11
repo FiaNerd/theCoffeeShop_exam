@@ -11,7 +11,7 @@ const AddressForm = () => {
     <h1 className="py-6 border-b-2 text-deep-brown px-8">Leverans address</h1>
         <div className="mt-8 px-4">
             <div className="w-full flex-1">
-                <InputForm control={control} label="Förnamn" name="fullname" />
+                <InputForm control={control} label="Förnamn" name="fullName" />
             </div>
 
             <div className="w-full flex-1 ">                    
@@ -24,7 +24,7 @@ const AddressForm = () => {
 
                 <div className="flex gap-4 mb-2">
                     <div className="w-full flex-1">
-                        <InputForm control={control} label="Postkod" name="Zip" />
+                        <InputForm control={control} label="Postkod" name="zip" />
                     </div>
 
                     <div className="w-full flex-1 ">
