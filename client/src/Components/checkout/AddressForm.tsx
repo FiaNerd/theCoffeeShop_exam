@@ -37,7 +37,7 @@ const AddressForm = () => {
                     </div>
                 </div>
     
-                <div className="flex justify-between mt-8">
+            <div className="flex justify-between mt-8">
                 <Button
                     buttonType='back'
                     typeAction='button'
@@ -48,10 +48,8 @@ const AddressForm = () => {
                 </Button> 
                 <div className="gap-4">
                 <Button buttonType={"create"} typeAction="submit" className="hover:scale-110 focus:outline-none px-6 py-4 cursor-pointer duration-200 ease-in-out">Nästa</Button>
-
                 </div>
-
-                </div>
+           </div>
     </div>
 </form>
   )

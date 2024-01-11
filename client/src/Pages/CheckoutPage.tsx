@@ -12,7 +12,7 @@ const getStepContent = (step: number) => {
     case 0:
       return <AddressForm />
     case 1:
-      return <ReviewOrder />
+      return <OrderSummary />
     case 2:
       return <PaymentForm />
     default:
