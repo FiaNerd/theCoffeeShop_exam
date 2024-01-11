@@ -161,9 +161,13 @@ export const getOrder = async (id: string) =>{
   }
 }
 
-export const createOrder = async (values: string) =>{
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createOrder = async (values: any) =>{
   try {
-    return await axios.post<Order>(`${BASE_URL}/orders`, values)
+    const response = await axios.post(`${BASE_URL}/orders`, values)
+    console.log("respons Order", response)
+    console.log("respons Order Data", response.data)
+    return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }

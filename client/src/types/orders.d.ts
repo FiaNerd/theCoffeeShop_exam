@@ -6,7 +6,7 @@ export type Order = {
   export type ShippingAddress = {
     fullName: string
     address1: string
-    address2: string
+    address2: string | undefined
     city: string
     zip: string
   }

@@ -13,10 +13,10 @@ const OrderSummary = () => {
     return (           
     <>
         <div className="col-span-1 ">
-            <h1 className="py-6 border-b-2 text-deep-brown px-8 uppercase">Din order</h1>
-            <ul className="py-6 border-b space-y-6 px-8">
+            <h1 className="py-6 border-b-2 border-deep-brown text-deep-brown px-8 uppercase">Din order</h1>
+            <ul className="py-6 border-b border-deep-brown space-y-6 px-8">
                 { basket?.items.map(item => ( 
-                <li className="grid grid-cols-6 gap-2 border-b-1">
+                <li className="grid grid-cols-6 gap-2">
                     <div className="col-span-1 self-center">
                         <img src={item.imageUrl} alt="Product" className="rounded w-full" />
                     </div>
@@ -36,7 +36,7 @@ const OrderSummary = () => {
                 </li>
                 ))}
             </ul>
-            <div className="px-8 border-b">
+            <div className="px-8 border-b border-deep-brown">
                 <div className="flex justify-between py-4 text-gray-600">
                     <span className="text-gray-400">* Gratis frak över 300kr</span>
                     <span className="font-semibold text-deep-brown">{formatPrice(subtotal)}</span>

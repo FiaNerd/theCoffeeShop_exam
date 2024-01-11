@@ -1,36 +1,30 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
-import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { clearBasket } from "../components/basket/basketSlice";
 import AddressForm from "../components/checkout/AddressForm";
-import OrderConfirmtation from "../components/checkout/OrderConfirmtation";
+import OrderConfirmtation from "../components/checkout/OrderConfirmation";
 import OrderSummary from "../components/checkout/OrderSummary";
 import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
+import { useAppDispatch } from "../redux/configureStore";
 import { validationOrderSchema } from "../schemas/ValidationOrderSchema";
+import { createOrder } from "../services/CoffeeAPI";
 
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
 
-const getStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return <AddressForm />;
-    case 1:
-      return <OrderSummary />;
-    case 2:
-      return <PaymentForm />;
-    case 3:
-      return <OrderConfirmtation />;
-    default:
-      throw new Error("Unknown step");
-  }
-};
+
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0);
+  const [ orderNumber, setOrderNumber ] = useState(0)
+  const [ isLoading, setIsLoading ] = useState(false)
+
+  const dispatch = useAppDispatch()
   
   const currentValidationSchema = validationOrderSchema[activeStep]
 
@@ -39,6 +33,21 @@ const CheckoutPage = () => {
     resolver: yupResolver(currentValidationSchema),
   })
 
+
+  const getStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return <AddressForm />;
+      case 1:
+        return <OrderSummary />;
+      case 2:
+        return <PaymentForm />;
+      case 3:
+        return <OrderConfirmtation  orderNr={orderNumber}/>;
+      default:
+        throw new Error("Unknown step");
+    }
+  };
   
   const handleBack = () => {
     if(activeStep === 0){
@@ -48,13 +57,30 @@ const CheckoutPage = () => {
     }
   };
 
-  const handleNext: SubmitHandler<Address> = async (data) => {
-    if (activeStep === steps.length - 1) {
-      console.log(data);
+  const handleNext = async (data: FieldValues) => {
+  const { saveAddress, ...shippingAddress } = data;
+
+  if (activeStep === steps.length - 1) {
+    setIsLoading(true);
+
+    try {
+      const orderNumber = await createOrder({ saveAddress, shippingAddress });
+      console.log('orderNumber', orderNumber);
+
+      setOrderNumber(orderNumber);
+      setActiveStep(activeStep + 1);
+      dispatch(clearBasket());
+    } catch (error) {
+      console.error("ERROR with the order", error);
+    } finally {
+      setIsLoading(false);
     }
+  } else {
     setActiveStep((prevStep) => prevStep + 1);
-    console.log(data)
-  };
+  }
+};
+
+
 
   return (
     <>
@@ -65,7 +91,7 @@ const CheckoutPage = () => {
 
         {activeStep === steps.length ? (
           <div className="mx-auto max-w-[35em] mt-16 mb-8">
-            <OrderConfirmtation />
+            <OrderConfirmtation orderNr={orderNumber}/>
           </div>
         ) : (
           <>
@@ -84,6 +110,7 @@ const CheckoutPage = () => {
                 </Button>
                 <div className="gap-4">
                   <Button
+                    isLoading={isLoading}
                     buttonType={"create"}
                     typeAction="submit"
                     className="hover:scale-110 focus:outline-none px-6 py-4 cursor-pointer duration-200 ease-in-out"
