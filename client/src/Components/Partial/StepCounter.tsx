@@ -15,7 +15,6 @@ const StepCounter = ({ activeStep, steps }: IProps) => {
       : "border-deep-brown text-deep-brown";
   };
   
-  
 
   return (
     <div className=" mb-8 mt-8">
