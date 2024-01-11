@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { clearBasket } from "../components/basket/basketSlice";
@@ -11,7 +11,7 @@ import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
 import { useAppDispatch } from "../redux/configureStore";
 import { validationOrderSchema } from "../schemas/ValidationOrderSchema";
-import { createOrder } from "../services/CoffeeAPI";
+import { createOrder, getAddress } from "../services/CoffeeAPI";
 
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
@@ -33,6 +33,18 @@ const CheckoutPage = () => {
     resolver: yupResolver(currentValidationSchema),
   })
 
+  useEffect(() => {
+    getAddress()
+      .then(response => {
+        if (response) {
+          methods.reset({ ...methods.getValues(), ...response, saveAddress: false });
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching address:', error);
+      });
+  }, [methods]);
+  
 
   const getStepContent = (step: number) => {
     switch (step) {

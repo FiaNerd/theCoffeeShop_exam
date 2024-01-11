@@ -169,6 +169,14 @@ export const createOrder = async (values: any) =>{
     console.log("respons Order Data", response.data)
     return response.data
   } catch (error) {
+    throw new Error('Failed to create orders')
+  }
+}
+
+export const getAddress = async () => {
+  try {
+    return await get('/account/savedAddress')
+  } catch (error) {
     throw new Error('Failed to fetch orders')
   }
 }

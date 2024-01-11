@@ -4,7 +4,7 @@ import InputForm from "../partial/InputForm";
 
 
 const AddressForm = () => {
-    const { control } = useFormContext()
+    const { control, formState } = useFormContext()
 
   return (
     <>
@@ -33,7 +33,11 @@ const AddressForm = () => {
 
                 </div>
               
-               <CheckboxCheckout control={control} label="Spara adress" disabled={false} name="saveAddress" />
+               <CheckboxCheckout 
+                    control={control} 
+                    label="Spara adress" 
+                    disabled={!formState.isDirty} name="saveAddress" 
+                />
 
         </div>
     </>
