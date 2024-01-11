@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Basket } from '../types/basket'
+import { Order, Orders } from '../types/orders'
 import { Product, Products } from '../types/products'
-import { User } from '../types/user'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -139,8 +139,32 @@ export const registerUser = async (values: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const currentUser = async () => {
   try {
-    return await get<User>(`/account/currentUser`)
+    return await get(`/account/currentUser`)
   } catch (error) {
     throw new Error('Failed to fetch currentUser')
+  }
+}
+
+export const getOrders = async () =>{
+  try {
+    return await get<Orders>(`/orders`)
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
+  }
+}
+
+export const getOrder = async (id: string) =>{
+  try {
+    return await get<Order>(`/orders/${id}`)
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
+  }
+}
+
+export const createOrder = async (values: string) =>{
+  try {
+    return await axios.post<Order>(`${BASE_URL}/orders`, values)
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
   }
 }

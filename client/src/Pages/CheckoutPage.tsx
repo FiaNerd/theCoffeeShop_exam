@@ -31,7 +31,6 @@ const getStepContent = (step: number) => {
 const CheckoutPage = () => {
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0);
-  // const activeSchema = activeStep === 0 ? addressSchema : paymentSchema;
   
   const currentValidationSchema = validationOrderSchema[activeStep]
 
