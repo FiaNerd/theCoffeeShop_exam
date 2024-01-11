@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../partial/Button";
-import StepCounter from "../partial/StepCounter";
 
 const OrderSummary = () => {
     const navigate = useNavigate()
 
     return (           
-    <div className="grid mx-auto max-w-[40em]">
-        <StepCounter />
+    <>
+       <h1 className="py-6 border-b-2 text-deep-brown px-8">Leverans address</h1>
+
         <div className="col-span-1 ">
             <h1 className="py-6 border-b-2 text-deep-brown px-8">Order Summary</h1>
             <ul className="py-6 border-b space-y-6 px-8">
@@ -70,7 +70,7 @@ const OrderSummary = () => {
                 <Button buttonType={"create"} typeAction="submit" className="hover:scale-110 focus:outline-none px-6 py-4 cursor-pointer duration-200 ease-in-out">Nästa</Button>
                 </div>
            </div>
-    </div>
+    </>
     );
 }
 
