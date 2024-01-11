@@ -49,7 +49,7 @@ const OrderSummary = () => {
             </div>
             <div className="font-semibold text-xl px-8 flex justify-between py-8 text-deep-brown">
                 <span>Total</span>
-                <span>€846.98</span>
+                <span>846.98 kr</span>
             </div>
         </div>
     </>

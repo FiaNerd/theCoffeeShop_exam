@@ -1,11 +1,12 @@
-import { FormEvent, useState } from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import { useState } from "react";
+import { FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import AddressForm from "../components/checkout/AddressForm";
 import OrderConfirmtation from "../components/checkout/OrderConfirmtation";
 import OrderSummary from "../components/checkout/OrderSummary";
 import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
+
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
 
@@ -25,18 +26,19 @@ const getStepContent = (step: number) => {
 };
 
 const CheckoutPage = () => {
-  const methods = useForm()
-  const [activeStep, setActiveStep] = useState(0)
+  const methods = useForm<Address>();
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1)
+    setActiveStep((prevStep) => prevStep - 1);
   };
 
-  const handleNext = (event: FormEvent<HTMLElement>) => {
-    event.preventDefault();
+  const handleNext: SubmitHandler<Address> = async (data) => {
+    if (activeStep === 0) {
+      console.log(data);
+    }
     setActiveStep((prevStep) => prevStep + 1);
   };
-
 
   return (
     <>
@@ -44,18 +46,17 @@ const CheckoutPage = () => {
         <div className="mx-auto max-w-[35em] mt-8">
           <StepCounter activeStep={activeStep} steps={steps} />
         </div>
-      </FormProvider>
- 
-      {activeStep === steps.length ? (
-        <div className="mx-auto max-w-[35em] mt-16 mb-8">
-          <OrderConfirmtation />
-        </div>
-      ): (
-        <>
-        <form className="mx-auto max-w-[35em] mt-16 mb-8" onSubmit={handleNext}>
-           {getStepContent(activeStep)}
-       
-          <div className="flex justify-between mt-8 mx-auto max-w-[35em]" onSubmit={handleNext}>
+
+        {activeStep === steps.length ? (
+          <div className="mx-auto max-w-[35em] mt-16 mb-8">
+            <OrderConfirmtation />
+          </div>
+        ) : (
+          <>
+            <form className="mx-auto max-w-[35em] mt-16 mb-8" onSubmit={methods.handleSubmit(handleNext)}>
+              {getStepContent(activeStep)}
+
+              <div className="flex justify-between mt-8 mx-auto max-w-[35em]">
                 <Button
                   buttonType="back"
                   typeAction="button"
@@ -75,11 +76,12 @@ const CheckoutPage = () => {
                   </Button>
                 </div>
               </div>
-              </form>
-        </>
-      )}
+            </form>
+          </>
+        )}
+      </FormProvider>
     </>
-  )
-}
+  );
+};
 
-export default CheckoutPage
+export default CheckoutPage;

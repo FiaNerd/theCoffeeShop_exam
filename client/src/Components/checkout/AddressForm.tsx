@@ -1,17 +1,17 @@
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import InputForm from "../partial/InputForm";
 
 
 const AddressForm = () => {
-    const { control, handleSubmit } = useForm()
+    const { control } = useFormContext()
 
   return (
     <>
         <h1 className="py-6 border-b-2 text-deep-brown px-8">Leverans address</h1>
-            <div className="mt-8 px-4">
-                <div className="w-full flex-1">
-                    <InputForm control={control} label="Förnamn" name="fullname" />
-                </div>
+        <div className="mt-8 px-4">
+            <div className="w-full flex-1">
+            <InputForm control={control} label="Förnamn" name="fullname" />
+            </div>
           
 
         <div className="w-full flex-1">                    
