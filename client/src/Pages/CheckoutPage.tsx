@@ -8,7 +8,7 @@ import OrderSummary from "../components/checkout/OrderSummary";
 import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
-import addressSchema from "../schemas/AddressSchema";
+import { validationOrderSchema } from "../schemas/ValidationOrderSchema";
 
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
@@ -30,12 +30,17 @@ const getStepContent = (step: number) => {
 
 const CheckoutPage = () => {
   const navigate = useNavigate()
-  const methods = useForm( {
-    mode: 'all',
-    resolver: yupResolver(addressSchema),
-  })
   const [activeStep, setActiveStep] = useState(0);
+  // const activeSchema = activeStep === 0 ? addressSchema : paymentSchema;
+  
+  const currentValidationSchema = validationOrderSchema[activeStep]
 
+  const methods = useForm({
+    mode: 'all',
+    resolver: yupResolver(currentValidationSchema),
+  })
+
+  
   const handleBack = () => {
     if(activeStep === 0){
       navigate('/')
