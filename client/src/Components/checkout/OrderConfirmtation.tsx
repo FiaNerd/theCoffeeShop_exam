@@ -1,7 +1,7 @@
 const OrderConfirmtation = () => {
     return (
         <div>
-            Order bekräftelse
+            <h1 className="py-6 border-b-2 text-deep-brown px-8 uppercase">Orderbekräftelse</h1>
         </div>
     );
 };

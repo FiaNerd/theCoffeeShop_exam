@@ -1,15 +1,10 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../partial/Button";
 
 const OrderSummary = () => {
-    const navigate = useNavigate()
 
     return (           
     <>
-       <h1 className="py-6 border-b-2 text-deep-brown px-8">Leverans address</h1>
-
         <div className="col-span-1 ">
-            <h1 className="py-6 border-b-2 text-deep-brown px-8">Order Summary</h1>
+            <h1 className="py-6 border-b-2 text-deep-brown px-8 uppercase">Din order</h1>
             <ul className="py-6 border-b space-y-6 px-8">
                 <li className="grid grid-cols-6 gap-2 border-b-1">
                     <div className="col-span-1 self-center">
@@ -57,19 +52,6 @@ const OrderSummary = () => {
                 <span>€846.98</span>
             </div>
         </div>
-        <div className="flex justify-between mt-8">
-                <Button
-                    buttonType='back'
-                    typeAction='button'
-                    iconType='arrow'
-                    onClick={() => navigate(-1)}
-                    className='mt-4 hover:text-orange'>
-                    address
-                </Button> 
-                <div className="gap-4">
-                <Button buttonType={"create"} typeAction="submit" className="hover:scale-110 focus:outline-none px-6 py-4 cursor-pointer duration-200 ease-in-out">Nästa</Button>
-                </div>
-           </div>
     </>
     );
 }
