@@ -78,7 +78,7 @@ const OrderDetailPage = () => {
 
         <div className="px-8 border-b border-deep-brown">
           <div className="flex justify-between py-4 text-gray-600">
-            <span className="text-gray-400">* Gratis frak över 300kr</span>
+            <span className="text-gray-400">* Gratis frakt över 299kr</span>
             <span className="font-semibold text-deep-brown">{formatPrice(subtotal)}</span>
           </div>
 
