@@ -20,7 +20,6 @@ namespace CoffeeAPI.Controllers
         {
             _userManager = userManager;
             _tokenService = tokenService;
-
             _context = context;
         }
 

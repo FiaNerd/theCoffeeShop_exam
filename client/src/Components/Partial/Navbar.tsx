@@ -277,10 +277,10 @@ const Navbar = () => {
                 </NavLink>
               </div>
             ) : (
-              <FontAwesomeIcon
+               <FontAwesomeIcon
                 icon={faUser}
-                className='text-white text-4xl cursor-pointer hover:opacity-80'
-              />
+               className='text-white text-4xl cursor-pointer hover:opacity-80'
+               />
             )}
 
             {user ? (

@@ -38,6 +38,7 @@ const CheckoutPage = () => {
       .then(response => {
         if (response) {
           methods.reset({ ...methods.getValues(), ...response, saveAddress: false });
+          console.log("RESPONSE SAVED ADDRESS", response)
         }
       })
       .catch(error => {
@@ -71,6 +72,8 @@ const CheckoutPage = () => {
 
   const handleNext = async (data: FieldValues) => {
   const { saveAddress, ...shippingAddress } = data;
+
+  console.log("Saved", saveAddress)
 
   if (activeStep === steps.length - 1) {
     setIsLoading(true);
