@@ -28,22 +28,29 @@ const CheckoutPage = () => {
 
   const methods = useForm({
     mode: 'all',
-    resolver: yupResolver(currentValidationSchema),
+    resolver: yupResolver(currentValidationSchema)
   })
 
+
   useEffect(() => {
-    getAddress()
-      .then(response => {
+    const fetchAdress = async () => {
+      try {
+        const response = await getAddress();
+
+        console.log("RESPONSE Check", response.data)
+        
         if (response) {
-          methods.reset({ ...methods.getValues(), ...response, saveAddress: false });
-          console.log("RESPONSE SAVED ADDRESS", response)
+          const test = methods.reset({ ...methods.getValues(), ...response, saveAddress: false });
+          console.log("RESPONSE SAVED ADDRESS", response);
+          console.log(test)
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching address:', error);
-      });
-  }, []);
-  
+      }
+    }
+    fetchAdress();
+  }, [methods]); 
+
 
   const getStepContent = (step: number) => {
     switch (step) {
@@ -92,7 +99,6 @@ const CheckoutPage = () => {
     setActiveStep((prevStep) => prevStep + 1);
   }
 };
-
 
 
   return (

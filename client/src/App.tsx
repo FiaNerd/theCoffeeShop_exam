@@ -1,5 +1,5 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import Footer from './components/partial/Footer'
 import Header from './components/partial/Header'
 import LoadingSpinner from './components/partial/LoadingSpinner'
@@ -35,17 +35,12 @@ const App = () => {
 
           <Route path="/konto/registrera" element={ <RegisterPage />} /> 
           
-            {/* Protect the 'checkout' route */}
-            {/* <Route
+           {/* Protect the 'checkout' route */}
+             <Route
             path='/checkout'
             element={user ? <CheckoutPage /> : <Navigate to='/konto/logga-in' />}
-          /> */}
-
-            <Route
-            path='/checkout'
-            element={ <CheckoutPage /> }
           />
-          <Route path='/orders' element={ <OrderPage />} />
+          <Route path='/orders' element={ user ? <OrderPage /> :  <Navigate to='/konto/logga-in' />} />
 
           <Route path='*' element={<PageNotFound />} />
         </Routes>

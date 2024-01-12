@@ -1,4 +1,4 @@
-export interface Order {
+export type Order = {
   id: number;
   buyerId: string;
   shippingAddress: ShippingAddress;
@@ -10,7 +10,7 @@ export interface Order {
   total: number;
 }
 
-export interface OrderItem {
+export type OrderItem = {
   productId: number;
   name: string;
   imageUrl: string;
@@ -18,7 +18,7 @@ export interface OrderItem {
   quantity: number;
 }
 
-export interface ShippingAddress {
+export type ShippingAddress = {
   fullName: string;
   address1: string;
   address2: string;

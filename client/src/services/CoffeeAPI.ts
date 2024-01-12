@@ -141,7 +141,6 @@ export const registerUser = async (values: any) => {
 export const currentUser = async ()  => {
   try {
     const response = await axios.get<User>(`${BASE_URL}/account/currentuser`)
-    console.log("response data", response)
     return response.data
 
   } catch (error) {
@@ -152,9 +151,7 @@ export const currentUser = async ()  => {
 export const getOrders = async () =>{
   try {
     const response = await axios.get<Orders>(`${BASE_URL}/orders`)
-    console.log("RESPONSE orders", response)
-
-    return response
+    return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
@@ -163,7 +160,6 @@ export const getOrders = async () =>{
 export const getOrder = async (id: string) =>{
   try {
     const response =  await axios.get<Order>(`${BASE_URL}/orders/${id}`)
-    console.log("Response Get Order req", response)
     return response
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -174,8 +170,6 @@ export const getOrder = async (id: string) =>{
 export const createOrder = async (values: any) =>{
   try {
     const response = await axios.post(`${BASE_URL}/orders`, values)
-    console.log("respons Order", response)
-    console.log("respons Order Data", response.data)
     return response.data
   } catch (error) {
     throw new Error('Failed to create orders')
@@ -184,7 +178,8 @@ export const createOrder = async (values: any) =>{
 
 export const getAddress = async () => {
   try {
-    return await axios.get(`${BASE_URL}/account/savedAddress`)
+    const response =  await axios.get(`${BASE_URL}/account/savedaddress`)
+    return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
