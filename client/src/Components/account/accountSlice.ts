@@ -48,8 +48,10 @@ export const fetchCurrentUser = createAsyncThunk<User>(
 
     try {
       // Call the currentUser service to get the latest user information
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const userDto = await currentUser()
 
+      // const userDto: User = response 
       // Extract the basket and user information from the response
       const { basket, ...user } = userDto
 
@@ -59,7 +61,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
       }
 
       // Update the user information in local storage
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(user));
 
       // Return the user information to be handled by the fulfilled action
       return user
@@ -84,7 +86,7 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      ;(state.user = null), localStorage.removeItem('user')
+      (state.user = null), localStorage.removeItem('user')
     },
     setUser: (state, action) => {
       state.user = action.payload
@@ -99,6 +101,8 @@ export const accountSlice = createSlice({
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
       (state, action) => {
         state.user = action.payload
+        console.log("state user slice", state.user)
+        console.log("state action slice", action.payload)
       }
     ),
       builder.addMatcher(

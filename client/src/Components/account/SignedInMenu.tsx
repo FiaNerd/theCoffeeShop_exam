@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
-import { signOut } from './accountSlice'
 import { clearBasket } from '../basket/basketSlice'
+import { signOut } from './accountSlice'
 
 const SignedInMenu = () => {
   const dispatch = useAppDispatch()
@@ -29,7 +29,7 @@ const SignedInMenu = () => {
       </NavLink>
 
       <NavLink
-        to='#'
+        to='/orders'
         className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
         Dina ordrar
       </NavLink>

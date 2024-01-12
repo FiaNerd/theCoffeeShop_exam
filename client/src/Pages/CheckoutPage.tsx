@@ -16,8 +16,6 @@ import { createOrder, getAddress } from "../services/CoffeeAPI";
 
 const steps = ["Leverans adress", "Se din order", "Betalning"];
 
-
-
 const CheckoutPage = () => {
   const navigate = useNavigate()
   const [activeStep, setActiveStep] = useState(0);
@@ -44,7 +42,7 @@ const CheckoutPage = () => {
       .catch(error => {
         console.error('Error fetching address:', error);
       });
-  }, [methods]);
+  }, []);
   
 
   const getStepContent = (step: number) => {

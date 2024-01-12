@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Basket } from '../types/basket'
 import { Order, Orders } from '../types/orders'
 import { Product, Products } from '../types/products'
+import { User } from '../types/user'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -137,9 +138,12 @@ export const registerUser = async (values: any) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const currentUser = async () => {
+export const currentUser = async ()  => {
   try {
-    return await get(`/account/currentUser`)
+    const response = await axios.get<User>(`${BASE_URL}/account/currentuser`)
+    console.log("response data", response)
+    return response.data
+
   } catch (error) {
     throw new Error('Failed to fetch currentUser')
   }
@@ -147,7 +151,10 @@ export const currentUser = async () => {
 
 export const getOrders = async () =>{
   try {
-    return await get<Orders>(`/orders`)
+    const response = await axios.get<Orders>(`${BASE_URL}/orders`)
+    console.log("RESPONSE orders", response)
+
+    return response
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
@@ -155,7 +162,9 @@ export const getOrders = async () =>{
 
 export const getOrder = async (id: string) =>{
   try {
-    return await get<Order>(`/orders/${id}`)
+    const response =  await axios.get<Order>(`${BASE_URL}/orders/${id}`)
+    console.log("Response Get Order req", response)
+    return response
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
@@ -175,7 +184,7 @@ export const createOrder = async (values: any) =>{
 
 export const getAddress = async () => {
   try {
-    return await get('/account/savedAddress')
+    return await axios.get(`${BASE_URL}/account/savedAddress`)
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }

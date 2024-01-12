@@ -1,16 +1,17 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Route, Routes } from 'react-router-dom'
-import HomePage from './Pages/HomePage'
-import LoginPage from './Pages/LoginPage'
-import ProductDetailPage from './Pages/ProductDetailPage'
-import ProductTypePage from './Pages/ProductTypePage'
-import RegisterPage from './Pages/RegisterPage'
 import Footer from './components/partial/Footer'
 import Header from './components/partial/Header'
 import LoadingSpinner from './components/partial/LoadingSpinner'
 import PageNotFound from './components/partial/PageNotFound'
 import './index.css'
 import CheckoutPage from './pages/CheckoutPage'
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import OrderPage from './pages/OrderPage'
+import ProductDetailPage from './pages/ProductDetailPage'
+import ProductTypePage from './pages/ProductTypePage'
+import RegisterPage from './pages/RegisterPage'
 import { useAppSelector } from './redux/configureStore'
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
             path='/checkout'
             element={ <CheckoutPage /> }
           />
+          <Route path='/orders' element={ <OrderPage />} />
 
           <Route path='*' element={<PageNotFound />} />
         </Routes>
