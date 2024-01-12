@@ -17,13 +17,12 @@ const RegisterPage = () => {
       register,
       handleSubmit,
       setError,
-      formState: {isSubmitting, isSubmitSuccessful, errors, isValid },
+      formState: {isSubmitting, errors, isValid },
     } = useForm<FormValues>({
       mode: "onChange"
     });
   
     const handleErrors = (errors: any) => {
-        console.log(errors);
         if (errors) {
             errors.forEach((error: string) => {
                 if (error.includes('Password')) {
@@ -60,21 +59,13 @@ const handleOnSubmit = async (data: any) => {
     
     };
 
-    // console.log(errors.username!.message)
-
   return (
-    <div className=" p-4 h-[calc(94vh-148px)] w-full bg-gray-900 bg-cover bg-no-repeat bg-center" style={{ backgroundImage: 'url(/images/Login_bg_1920X1080px.jpg)' }}>
+    <div className=" p-4 h-[calc(94vh-148px)] w-full bg-deep-brown bg-cover bg-no-repeat bg-center" style={{ backgroundImage: 'url(/images/Login_bg_1920X1080px.jpg)' }}>
       <div className="container mx-auto h-full flex flex-1 justify-center items-center">
         <div className="w-full max-w-sm md:max-w-md m-auto p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl">
           <img src={bg_img} alt="logo kaffebönans skafferi" className="m-auto mb-4 max-w-[10em]" />
           <h1 className="font-heading text-white text-center font-bold uppercase">Skapa konto</h1>
           <form className="" 
-        //   onSubmit={handleSubmit((data) => registerUser(data)
-        //     .then(() => {
-        //         console.log("DATA", data)
-        //         navigate('/konto/logga-in');
-        //     })
-        //     .catch(error => handleErrors(error)))}
           onSubmit={handleSubmit((data) => handleOnSubmit(data))}
           >
             <div className={`mb-4`}>
@@ -127,7 +118,7 @@ const handleOnSubmit = async (data: any) => {
                 })}
               />
                 <div>
-                {errors.password && <p className="text-sm text-red-500 mt-1">{(errors.password as const).message}</p>}
+                {errors.password && <p className="text-sm text-red-500 mt-1">{(errors.password).message}</p>}
                 </div>
 
             </div>

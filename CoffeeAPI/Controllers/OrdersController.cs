@@ -107,7 +107,8 @@ namespace CoffeeAPI.Controllers
                     Zip = orderDto.ShippingAddress.Zip,
                 };
                 
-                _context.Update(user);
+                user.Address = address;
+                // _context.Update(user);
             }
 
             var result = await _context.SaveChangesAsync() > 0;

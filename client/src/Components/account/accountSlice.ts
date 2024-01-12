@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, isAnyOf } from '@reduxjs/toolkit'
 import { FieldValues } from 'react-hook-form'
+import { currentUser, login } from '../../services/CoffeeAPI'
 import { User } from '../../types/user'
 import { setBasket } from '../basket/basketSlice'
-import { currentUser, login } from '../../services/CoffeeAPI'
 
 interface AccountState {
   user: User | null
@@ -48,9 +48,10 @@ export const fetchCurrentUser = createAsyncThunk<User>(
 
     try {
       // Call the currentUser service to get the latest user information
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const userDto = await currentUser()
-      console.log(userDto, 'USER DTO')
 
+      // const userDto: User = response 
       // Extract the basket and user information from the response
       const { basket, ...user } = userDto
 
@@ -60,7 +61,7 @@ export const fetchCurrentUser = createAsyncThunk<User>(
       }
 
       // Update the user information in local storage
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(user));
 
       // Return the user information to be handled by the fulfilled action
       return user
@@ -85,7 +86,7 @@ export const accountSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      ;(state.user = null), localStorage.removeItem('user')
+      (state.user = null), localStorage.removeItem('user')
     },
     setUser: (state, action) => {
       state.user = action.payload

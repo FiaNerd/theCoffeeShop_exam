@@ -15,7 +15,7 @@ const ShoppingCart = () => {
   const subtotal =
     basket?.items.reduce((sum, item) => sum + item.quantity * item.price, 0) ?? 0;
 
-  const deliveryFee = subtotal > 50000 ? 0 : 5000;
+  const deliveryFee = subtotal > 25000 ? 0 : 2500;
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -165,14 +165,17 @@ const ShoppingCart = () => {
                         <p className='font-bold'>{formatPrice(subtotal)}</p>
                       </div>
 
+                    <div className='flex justify-between mt-4'>
+                      <p className=' text-sm text-gray-500'>
+                        *Gratis frakt för över 299 kr
+                      </p>
                       <p className='flex flex-rows justify-end mt-0.5 font-bold text-gray-500'>
                         {' '}
                         {formatPrice(deliveryFee + deliveryFee)}
+
                       </p>
 
-                      <p className=' text-sm text-gray-500'>
-                        *Gratis frakt för över 500 kr
-                      </p>
+                    </div>
 
                       <div className='mt-6'>
                         <NavLink to="/checkout">

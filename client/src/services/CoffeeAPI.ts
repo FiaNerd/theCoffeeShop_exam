@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { store } from '../redux/configureStore'
 import { Basket } from '../types/basket'
+import { Order, Orders } from '../types/orders'
 import { Product, Products } from '../types/products'
 import { User } from '../types/user'
 
@@ -22,7 +22,6 @@ const instance = axios.create({
 // to each request if a user is logged in and has a valid token.
 axios.interceptors.request.use((config) => {
   // Retrieve the user's token from local storage
-  console.log("Config", config)
   const userString = localStorage.getItem('user')
   const user = userString ? JSON.parse(userString) : null
 
@@ -139,10 +138,50 @@ export const registerUser = async (values: any) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const currentUser = async () => {
+export const currentUser = async ()  => {
   try {
-    return await get<User>(`/account/currentUser`)
+    const response = await axios.get<User>(`${BASE_URL}/account/currentuser`)
+    return response.data
+
   } catch (error) {
     throw new Error('Failed to fetch currentUser')
+  }
+}
+
+export const getOrders = async () =>{
+  try {
+    const response = await axios.get<Orders>(`${BASE_URL}/orders`)
+    console.log("Fetch Order axios", response)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
+  }
+}
+
+export const getOrder = async (id: number) =>{
+  try {
+    const response =  await axios.get<Order>(`${BASE_URL}/orders/${id}`)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
+  }
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const createOrder = async (values: any) =>{
+  try {
+    const response = await axios.post(`${BASE_URL}/orders`, values)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to create orders')
+  }
+}
+
+export const getAddress = async () => {
+  try {
+    const response =  await axios.get(`${BASE_URL}/account/savedaddress`)
+    return response.data
+  } catch (error) {
+    throw new Error('Failed to fetch orders')
   }
 }

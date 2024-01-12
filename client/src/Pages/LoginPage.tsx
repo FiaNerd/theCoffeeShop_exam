@@ -95,7 +95,6 @@ const LoginPage = () => {
                 typeAction='submit'
                 buttonType='loginOrRegister'
                 // disabled={isSubmitting || !isValid}
-                isLoading={isSubmitting}
                 onClick={handleSubmit(onSubmitLogin)}>
                 Logga in
               </Buttons>

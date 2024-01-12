@@ -20,7 +20,6 @@ namespace CoffeeAPI.Controllers
         {
             _userManager = userManager;
             _tokenService = tokenService;
-
             _context = context;
         }
 
@@ -102,6 +101,16 @@ namespace CoffeeAPI.Controllers
             {
                 return StatusCode(500, ex.Message);
             }
+        }
+
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await _userManager.Users
+                .Where(x => x.UserName == User.Identity.Name)
+                .Select(user => user.Address)
+                .FirstOrDefaultAsync();
         }
 
         private async Task<Basket> RetrieveBasket(string buyerId)
