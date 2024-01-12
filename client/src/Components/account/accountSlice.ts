@@ -101,8 +101,6 @@ export const accountSlice = createSlice({
       isAnyOf(signInUser.fulfilled, fetchCurrentUser.fulfilled),
       (state, action) => {
         state.user = action.payload
-        console.log("state user slice", state.user)
-        console.log("state action slice", action.payload)
       }
     ),
       builder.addMatcher(

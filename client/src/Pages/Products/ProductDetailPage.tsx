@@ -1,11 +1,11 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import Button from '../components/partial/Button'
-import { formatPrice } from '../utils/formatPrice'
-import { useAppDispatch, useAppSelector } from '../redux/configureStore'
-import { addBasketItemAsync, removeItemFromBasketAsync } from '../components/basket/basketSlice'
-import {  fetchProductAsync, productSelectors } from '../components/product/productSlice'
-import LoadingSpinner from '../components/partial/LoadingSpinner'
 import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { addBasketItemAsync, removeItemFromBasketAsync } from '../../components/basket/basketSlice'
+import Button from '../../components/partial/Button'
+import LoadingSpinner from '../../components/partial/LoadingSpinner'
+import { fetchProductAsync, productSelectors } from '../../components/product/productSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { formatPrice } from '../../utils/formatPrice'
 
 const ProductDetailPage = () => {
   const { productId } = useParams()
@@ -33,24 +33,6 @@ const ProductDetailPage = () => {
       }
     }, [productId, product, dispatch]);
    
-
-    // const handleUpdateCart = () => {
-    //   if (!product) {
-    //     return;
-    //   }
-
-    //   if (!item || quantity > item?.quantity) {
-    //     const updatedQuantity = item ? quantity - item.quantity : quantity;
-
-    //     dispatch(addBasketItemAsync({ productId: product.id, quantity: updatedQuantity }));
-    //     console.log("update", updatedQuantity)
-    //   } else if (item.quantity > quantity) {
-    //     const updatedQuantity = item.quantity - quantity;
-
-    //     dispatch(removeItemFromBasketAsync({ productId: product.id, quantity: updatedQuantity }));
-    //     console.log("Quantity", quantity);
-    //   }
-    // }
      
     if (productStatus.includes('pending')){ 
       return <LoadingSpinner />

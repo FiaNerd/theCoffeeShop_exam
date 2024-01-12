@@ -8,9 +8,10 @@ import './index.css'
 import CheckoutPage from './pages/CheckoutPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
-import OrderPage from './pages/OrderPage'
-import ProductDetailPage from './pages/ProductDetailPage'
-import ProductTypePage from './pages/ProductTypePage'
+import OrderDetailPage from './pages/Orders/OrderDetailPage'
+import OrderPage from './pages/Orders/OrderPage'
+import ProductDetailPage from './pages/Products/ProductDetailPage'
+import ProductTypePage from './pages/Products/ProductTypePage'
 import RegisterPage from './pages/RegisterPage'
 import { useAppSelector } from './redux/configureStore'
 
@@ -41,6 +42,8 @@ const App = () => {
             element={user ? <CheckoutPage /> : <Navigate to='/konto/logga-in' />}
           />
           <Route path='/orders' element={ user ? <OrderPage /> :  <Navigate to='/konto/logga-in' />} />
+          
+          <Route path='/orders/:id' element={ <OrderDetailPage />} />
 
           <Route path='*' element={<PageNotFound />} />
         </Routes>

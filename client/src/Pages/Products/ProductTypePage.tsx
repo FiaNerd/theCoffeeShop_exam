@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import CoffeeCard from '../components/product/CoffeeCard'
-import { fetchProductsAsync, productSelectors } from '../components/product/productSlice'
-import { useAppDispatch, useAppSelector } from '../redux/configureStore'
+import CoffeeCard from '../../components/product/CoffeeCard'
+import { fetchProductsAsync, productSelectors } from '../../components/product/productSlice'
+import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 
 const ProductTypePage = () => {
   const { type } = useParams()

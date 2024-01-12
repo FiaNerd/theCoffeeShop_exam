@@ -151,16 +151,17 @@ export const currentUser = async ()  => {
 export const getOrders = async () =>{
   try {
     const response = await axios.get<Orders>(`${BASE_URL}/orders`)
+    console.log("Fetch Order axios", response)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
 }
 
-export const getOrder = async (id: string) =>{
+export const getOrder = async (id: number) =>{
   try {
     const response =  await axios.get<Order>(`${BASE_URL}/orders/${id}`)
-    return response
+    return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
   }
