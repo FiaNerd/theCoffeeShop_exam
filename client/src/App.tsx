@@ -41,9 +41,8 @@ const App = () => {
             path='/checkout'
             element={user ? <CheckoutPage /> : <Navigate to='/konto/logga-in' />}
           />
-          <Route path='/orders' element={ user ? <OrderPage /> :  <Navigate to='/konto/logga-in' />} />
-          
-          <Route path='/orders/:id' element={ <OrderDetailPage />} />
+          <Route path='/orders' element={ user ? <OrderPage /> : <Navigate to='/konto/logga-in' />} />
+          <Route path='/orders/:id' element={ user ? <OrderDetailPage /> : <Navigate to='/konto/logga-in' />} />
 
           <Route path='*' element={<PageNotFound />} />
         </Routes>

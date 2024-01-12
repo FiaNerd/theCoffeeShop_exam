@@ -15,15 +15,16 @@ const CoffeeCard = ({ product }: IProps) => {
   const { status } = useAppSelector(state => state.basket)
 
 
-  const limitDescription = (text: string | undefined, sentenceLimit = 1) => {
+  const limitDescription = (text: string | undefined, wordLimit = 10) => {
     if (!text) {
-      return ''
+      return '';
     }
-
-    const sentences = text.split('.')
-    const truncatedText = sentences.slice(0, sentenceLimit).join('.') + '...'
-    return truncatedText
-  }
+  
+    const words = text.split(' ');
+    const truncatedText = words.slice(0, wordLimit).join(' ') + '...';
+    return truncatedText;
+  };
+  
 
   return (
     <div className='relative flex flex-col rounded-xl bg-white bg-clip-border overflow-hidden shadow-md'>
@@ -36,7 +37,7 @@ const CoffeeCard = ({ product }: IProps) => {
         <div>
           <h3 className='text-sub-title font-bold mb-2'>{product.name}</h3>
           {product.type && Array.isArray(product.type) && (
-            <p className='font-bold mb-2'>Typ: {product.type.join(' ')}</p>
+            <p className='font-bold mb-2'>{product.type.join(', ')}</p>
           )}
           <p className='font-bold mb-2'>{product.roastLevel}</p>
           <p className='text-paragraph mb-4'>
