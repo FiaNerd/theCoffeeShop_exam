@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class ChangedSpellingOnAddress : Migration
+    public partial class AddPublicIdApiKeyForCloudinary : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -105,7 +105,8 @@ namespace CoffeeAPI.Data.Migrations
                     Price = table.Column<int>(type: "INTEGER", nullable: false),
                     QuantityInStock = table.Column<int>(type: "INTEGER", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    UpdatedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    PublicId = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

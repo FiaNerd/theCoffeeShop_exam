@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeAPI.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20240110210922_ChangedSpellingOnAddress")]
-    partial class ChangedSpellingOnAddress
+    [Migration("20240113151422_AddPublicIdApiKeyForCloudinary")]
+    partial class AddPublicIdApiKeyForCloudinary
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,6 +132,9 @@ namespace CoffeeAPI.Data.Migrations
 
                     b.Property<int>("Price")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("INTEGER");
