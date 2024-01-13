@@ -96,4 +96,27 @@ public class ProductsController : BaseApiController
             return BadRequest(new ProblemDetails { Title = "Problem creating a new product"});
       }
 
+      [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public async Task<ActionResult<Product>> UpdateProduct(UpdateProductDto productDto)
+        {
+            var product = await _context.Products.FindAsync(productDto.Id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(productDto, product);
+
+            var result = await _context.SaveChangesAsync() > 0;
+
+            if (result)
+            {
+                return Ok(product);
+            }
+
+            return BadRequest(new ProblemDetails { Title = "Problem updating product" });
+        }
+
 }

@@ -9,6 +9,7 @@ namespace CoffeeAPI.RequestHelpers
     public MappingProfiles()
     {
         CreateMap<CreateProductDto, Product>();
+        CreateMap<UpdateProductDto, Product>();
     }
 }
 }
