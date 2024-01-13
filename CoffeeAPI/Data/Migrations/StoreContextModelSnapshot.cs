@@ -130,6 +130,9 @@ namespace CoffeeAPI.Data.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("INTEGER");
 

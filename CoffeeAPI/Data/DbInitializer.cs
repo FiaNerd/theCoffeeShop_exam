@@ -44,7 +44,7 @@ namespace CoffeeAPI.Data
                 BlendDescription = "UPPTÄCK DECAF ORGANIC MED FRISKA TONER",
                 Description = "En lätt och mild koffeinfri mörkrostblandning med friska toner och välbalanserad syra. Perfekt för alla som vill kunna njuta av en kopp kaffe på kvällen utan att tänka på att sömnen ska påverkas negativt eller av andra anledningar vill undvika koffein. Zoégas Decaf Organic är ett smakfullt kaffe gjort på 100% certifierade Rainforest Alliance och ekologiskt certifierade Arabicabönor. Bönorna kommer från Central- och Latinamerika och bjuder på en lätt och mild smak med friska toner och välbalanserad syra.",
                 ImageUrl = "/images/products/bryggkaffe/ekologiskt/defect_organic_brygg_1200x1200.jpg",
-                Type =  ["Bryggkaffe", "Ekologisk"],
+                Type =  ["Bryggkaffe", "Ekologiskt"],
                 RoastLevel = "Mellanrost",
                 Price = 6280,
                 QuantityInStock = 100,
