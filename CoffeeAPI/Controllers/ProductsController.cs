@@ -1,8 +1,11 @@
 using API.Extensions;
+using AutoMapper;
 using CoffeeAPI.Data;
+using CoffeeAPI.DTOs;
 using CoffeeAPI.Entities;
 using CoffeeAPI.Extensions;
 using CoffeeAPI.RequestHelpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +13,11 @@ namespace CoffeeAPI.Controllers;
 public class ProductsController : BaseApiController
 {
     private readonly StoreContext _context;
-    public ProductsController(StoreContext context) 
+    private readonly IMapper _mapper;
+    public ProductsController(StoreContext context, IMapper mapper) 
     {
       _context = context;
+      _mapper = mapper;
       
     }
 
@@ -36,7 +41,7 @@ public class ProductsController : BaseApiController
                 return products;
         }
 
-       [HttpGet("{id}")]
+       [HttpGet("{id}", Name="GetProduct")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product =  await _context.Products.FindAsync(id);
@@ -49,14 +54,6 @@ public class ProductsController : BaseApiController
             return product;
         }
 
-        // [HttpGet("filters")]
-        // public async Task<ActionResult> GetFilters()
-        // {
-        //   var types = await _context.Products.Select(p => p.Type).Distinct().ToListAsync();
-        //   var roastLevel = await _context.Products.Select(p => p.RoastLevel).Distinct().ToListAsync();
-
-        //   return Ok(new {types, roastLevel});
-        // }
 
       [HttpGet("filters")]
       public async Task<ActionResult> GetFilters()
@@ -80,6 +77,23 @@ public class ProductsController : BaseApiController
               .ToList();
 
           return Ok(new { type = combinedTypes, roastLevel });
+      }
+
+      [Authorize(Roles = "Admin")]
+      [HttpPost]
+      public async Task<ActionResult<Product>> CreateProduct(CreateProductDto productDto)
+      {
+        var product = _mapper.Map<Product>(productDto);
+
+        _context.Products.Add(product);
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if(result)
+        {
+            return CreatedAtRoute("GetProduct", new { Id = product.Id}, product);
+        }
+            return BadRequest(new ProblemDetails { Title = "Problem creating a new product"});
       }
 
 }
