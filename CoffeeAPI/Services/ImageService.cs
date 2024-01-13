@@ -22,6 +22,7 @@ namespace CoffeeAPI.Services
             _cloudinary = new Cloudinary(acc);
         }
 
+        // Upload imageas to cloudinary
         public async Task<ImageUploadResult> AddImageAsync(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
@@ -39,6 +40,16 @@ namespace CoffeeAPI.Services
             }
 
             return uploadResult;
+        }
+
+        // Remove images from Cloudinary
+        public async Task<DeletionResult> DeleteImageAsync(string publicId)
+        {
+            var deleteParams = new DeletionParams(publicId);
+
+            var result = await _cloudinary.DestroyAsync(deleteParams);
+
+            return result;
         }
     }
 }
