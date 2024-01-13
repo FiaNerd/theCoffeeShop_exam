@@ -117,7 +117,7 @@ public class ProductsController : BaseApiController
 
         [Authorize(Roles = "Admin")]
         [HttpPut]
-        public async Task<ActionResult<Product>> UpdateProduct(UpdateProductDto productDto)
+        public async Task<ActionResult<Product>> UpdateProduct([FromForm]UpdateProductDto productDto)
         {
             var product = await _context.Products.FindAsync(productDto.Id);
 
@@ -134,7 +134,7 @@ public class ProductsController : BaseApiController
 
                 if (imageResult.Error != null) 
                 {
-                    return BadRequest(new ProblemDetails{Title = imageResult.Error.Message});
+                    return BadRequest(new ProblemDetails{ Title = imageResult.Error.Message });
                 }
 
                 if(!string.IsNullOrEmpty(product.PublicId))
