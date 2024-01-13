@@ -14,7 +14,7 @@ namespace CoffeeAPI.DTOs
         [Required(ErrorMessage = "Fältet är obligatoriskt.")]
         public string Description { get; set; }
 
-        public IFormFile ImageUrl { get; set; }
+        public IFormFile ImageFile { get; set; }
 
         [Required(ErrorMessage = "Fältet är obligatoriskt.")]
         public List<string> Type { get; set; }

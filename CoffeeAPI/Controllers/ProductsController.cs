@@ -128,6 +128,26 @@ public class ProductsController : BaseApiController
 
             _mapper.Map(productDto, product);
 
+            if (productDto.ImageFile != null)
+            {
+                var imageResult = await _imageService.AddImageAsync(productDto.ImageFile);
+
+                if (imageResult.Error != null) 
+                {
+                    return BadRequest(new ProblemDetails{Title = imageResult.Error.Message});
+                }
+
+                if(!string.IsNullOrEmpty(product.PublicId))
+                {
+                    await _imageService.DeleteImageAsync(product.PublicId);
+                }
+
+                // Is Success -setting the old picture url to the new one
+                product.ImageUrl = imageResult.SecureUrl.ToString();
+                // and updating - use the new publicId that is given 
+                product.PublicId = imageResult.PublicId;
+            }
+
             var result = await _context.SaveChangesAsync() > 0;
 
             if (result)
