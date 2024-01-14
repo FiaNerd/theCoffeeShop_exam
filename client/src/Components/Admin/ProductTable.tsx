@@ -1,7 +1,9 @@
 import { NavLink } from "react-router-dom";
+import useProducts from "../../hooks/useProducts";
 
 const ProductTable = () => {
  
+const { allProducts } = useProducts()
 
   const columns = [
     { Header: "# Id", accessor: "id" },
@@ -29,7 +31,7 @@ const ProductTable = () => {
     prepareRow,
     state,
     setGlobalFilter,
-  } = useTable({ columns, data: products ?? [] }, useSortBy, useFilters, useGlobalFilter);
+  } = useTable({ columns, data: allProducts ?? [] }, useSortBy, useFilters, useGlobalFilter);
 
   const { globalFilter } = state;
 
