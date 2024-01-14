@@ -1,6 +1,6 @@
-import { useEffect} from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
-import { fetchFilters, fetchProductsAsync, setProductParamas } from "../product/productSlice";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../redux/configureStore";
+import { fetchFilters, fetchProductsAsync, setProductParamas } from "../../product/productSlice";
 import FilterCheckGroup from "./FilterCheckGroup";
 
 

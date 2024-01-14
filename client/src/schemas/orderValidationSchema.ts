@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const validationOrderSchema = [
+export const orderValidationSchema = [
     yup.object({
       fullName: yup.string().required('För- och efternamn är obligatorsika'),
       address1: yup.string().required('Address 1 obligatoriskt'),

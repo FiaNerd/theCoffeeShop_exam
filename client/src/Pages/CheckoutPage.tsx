@@ -10,7 +10,7 @@ import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
 import { useAppDispatch } from "../redux/configureStore";
-import { validationOrderSchema } from "../schemas/ValidationOrderSchema";
+import { orderValidationSchema } from "../schemas/OrderValidationSchema";
 import { createOrder, getAddress } from "../services/CoffeeAPI";
 
 
@@ -24,7 +24,7 @@ const CheckoutPage = () => {
 
   const dispatch = useAppDispatch()
   
-  const currentValidationSchema = validationOrderSchema[activeStep]
+  const currentValidationSchema = orderValidationSchema[activeStep]
 
   const methods = useForm({
     mode: 'all',

@@ -7,7 +7,7 @@ interface IProps extends UseControllerProps {
 }
 
 const SelectProductList = ({ label, items, ...props }: IProps) => {
-  const { fieldState, field } = useController({ ...props, defaultValue: 'Välj ur listan' });
+  const { fieldState, field } = useController({ ...props, defaultValue: '' });
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -16,10 +16,10 @@ const SelectProductList = ({ label, items, ...props }: IProps) => {
   };
 
   return (
-    <div className="flex-auto flex flex-col items-center relative">
-      <label className="text-gray-700">{label}</label>
+    <div className="flex flex-col">
+      <label className="text-deep-brown uppercase text-sm font-bold mb-2">{label}</label>
       <div className="relative w-full svelte-1l8159u">
-        <div className="my-2 bg-gray-200 p-1 flex border border-deep-brown rounded svelte-1l8159u relative">
+        <div className=" bg-gray-200 p-1 flex border border-deep-brown rounded svelte-1l8159u relative">
           <div className="flex flex-auto flex-wrap"></div>
           <div
             onClick={toggleDropdown}
