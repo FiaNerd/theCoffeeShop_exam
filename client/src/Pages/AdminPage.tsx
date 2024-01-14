@@ -29,7 +29,7 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto mt-8">
+    <div className="max-w-[1280px] mx-auto mt-8 px-4">
       <div className="flex flex-row justify-between mb-8">
         { !editMode && (
         <>

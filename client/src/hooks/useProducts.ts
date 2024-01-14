@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import {
-    fetchFilters,
-    fetchProductsAsync
+  fetchFilters,
+  fetchProductsAsync
 } from "../components/product/productSlice";
 import { useAppDispatch, useAppSelector } from "../redux/configureStore";
 
@@ -9,7 +9,7 @@ const useProducts = () => {
     const dispatch = useAppDispatch();
     const productParams = useAppSelector((state) => state.product.productParams);
     const allCoffeeProducts  = useAppSelector((state) => state.product.allProducts);
-    const {  productsLoaded, filtersLoaded } = useAppSelector((state) => state.product);
+    const {  productsLoaded, filtersLoaded, types, roastLevels } = useAppSelector((state) => state.product);
   
   
   
@@ -35,6 +35,8 @@ const useProducts = () => {
         productParams,
         productsLoaded, 
         filtersLoaded,
+        types,
+        roastLevels
     }
 }
 
