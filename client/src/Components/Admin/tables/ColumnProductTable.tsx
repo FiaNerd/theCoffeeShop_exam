@@ -1,7 +1,10 @@
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table'
-import { Link } from 'react-router-dom'
-import { Product } from '../../types/products'
-import { formatPrice } from '../../utils/formatPrice'
+import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { Link } from 'react-router-dom';
+import { Product } from '../../../types/products';
+import { formatPrice } from '../../../utils/formatPrice';
+
 const columnHelper = createColumnHelper<Product>()
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,14 +49,14 @@ export const productColumns: ColumnDef<Product, any>[] = [
 	}),
 
 	columnHelper.accessor('quantityInStock', {
-		header: 'I LAGER',
+		header: 'I lager',
 		cell: (props) => (
 			<span>{props.row.original.quantityInStock || '-'}</span>
 		),
 		sortDescFirst: false,
 	}),
 	columnHelper.accessor('price', {
-		header: 'PRIS',
+		header: 'Pris',
 		cell: (props) => (
 			<span>{formatPrice(props.row.original.price) || '-'}</span>
 		),
@@ -61,13 +64,23 @@ export const productColumns: ColumnDef<Product, any>[] = [
 	}),
 	columnHelper.display({
 		id: 'actions',
-		header: 'Updatera',
 		cell: (props) => (
 			<Link
 				key={props.row.original.id}
 				to={`/products/${props.row.original.id}`}
 			>
-				<button>Updatera</button>
+				<FontAwesomeIcon icon={faPenToSquare} className='text-amber-600'/>
+			</Link>
+		),
+	}),
+    columnHelper.display({
+		id: 'actions',
+		cell: (props) => (
+			<Link
+				key={props.row.original.id}
+				to={`/products/${props.row.original.id}`}
+			>
+				<FontAwesomeIcon icon={faTrash} className='text-red-800'/>
 			</Link>
 		),
 	}),

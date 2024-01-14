@@ -1,4 +1,4 @@
-import { faArrowDown, faArrowUp, faArrowsAltV } from '@fortawesome/free-solid-svg-icons'; // Import the appropriate icons
+import { faArrowDown, faArrowUp, faArrowsAltV } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
