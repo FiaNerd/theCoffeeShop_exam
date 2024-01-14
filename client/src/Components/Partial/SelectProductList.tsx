@@ -7,7 +7,7 @@ interface IProps extends UseControllerProps {
 }
 
 const SelectProductList = ({ label, items, ...props }: IProps) => {
-  const { fieldState, field } = useController({ ...props, defaultValue: 'välj ur listan' });
+  const { fieldState, field } = useController({ ...props, defaultValue: 'Välj ur listan' });
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 

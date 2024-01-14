@@ -43,20 +43,20 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
         </div>
 
         <div className="w-full flex-1 mb-4">
-          <InputForm control={control} name="description" label="Beskrivning" />
+          <InputForm multiline={true} rows={4} control={control} name="description" label="Beskrivning" />
         </div>
 
         <div className="w-full flex-1 mb-4">
-          <InputForm control={control} name="imageUrl" label="Produkt Bild" />
+          <InputForm control={control}  name="imageUrl" label="Produkt Bild" />
         </div>
 
         <div className="flex gap-4 mb-4">
           <div className="w-full flex-1">
-            <InputForm control={control} name="price" label="Pris" />
+           <InputForm type="number" control={control} name="quantityInStock" label="Antal i lager" />
           </div>
 
           <div className="w-full flex-1">
-            <InputForm control={control} name="quantityInStock" label="Antal i lager" />
+             <InputForm type="number" control={control} name="price" label="Pris" />
           </div>
         </div>
 
