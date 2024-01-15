@@ -1,6 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import useProducts from "../../hooks/useProducts";
+import productValidationSchema from '../../schemas/productValidationSchema';
 import { Product } from "../../types/products";
 import Buttons from "../partial/Button";
 import DropZoneProduct from "../partial/Forms/DropZoneProduct";
@@ -14,19 +16,32 @@ interface IProps {
 }
 
 const ProductForm = ({ product, cancelEdit, title }: IProps) => {
-  const { control, reset, handleSubmit, watch } = useForm();
-  const { types, roastLevels } = useProducts();
+  const {
+    control,
+    reset,
+    handleSubmit,
+    watch,
+  } = useForm<FieldValues>({
+    resolver: yupResolver<FieldValues>(productValidationSchema),
+  })
+  const { types, roastLevels } = useProducts()
   const watchAllFields = watch()
   const watchFile = watchAllFields['file'] as { preview: string } | null
 
+  console.log("WATCH", watchFile)
   useEffect(() => {
     if (product) {
-      reset(product);
+      reset({
+        ...product,
+        roastLevel: [product.roastLevel], 
+      });
     }
   }, [product, reset]);
 
+  
+
   const handleSubmitImg= (data: FieldValues) => {
-    console.log(data)
+    console.log("DATA", data)
   }
 
   return (
@@ -64,24 +79,26 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
           </div>
         </div>
 
-        <div className="w-full flex flex-rows md:flex-cols flex-1 gap-4 mb-12 h-[8em]">
-          <DropZoneProduct control={control}  name="file"/>
-          <div className="flex-shrink-0">
-          {watchFile ? (
-                <img
-                  src={watchFile.preview}
-                  alt='preview'
-                  className="w-[9em] h-auto"
-                />
-              ) : (
-                <img
-                  src={product?.imageUrl}
-                  alt={product?.name}
-                  className="w-[8em] h-auto"
-                />
-              )}
-              </div>
-        </div>
+        <div className="w-full flex flex-col md:flex-row gap-4 mb-12">
+  <DropZoneProduct control={control} name="file" />
+
+  <div className="flex items-center justify-center">
+    {watchFile ? (
+      <img
+        src={watchFile.preview}
+        alt="preview"
+        className="w-[13em] h-[8.3em] object-cover" 
+      />
+    ) : (
+      <img
+        src={product?.imageUrl}
+        alt={product?.name}
+        className="w-[13em] h-[8.3em] object-contain" 
+      />
+    )}
+  </div>
+</div>
+
 
         <div className="flex flex-row justify-between">
           <Buttons buttonType={"cancel"} typeAction={"button"} className="px-8" onClick={cancelEdit}>

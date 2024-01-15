@@ -33,9 +33,10 @@ const InputForm = ({ label, placeholder, multiline, rows,type, ...props }: Input
           className={`w-full px-5 py-2 text-gray-700 bg-slate-200 border border-deep-brown rounded focus:outline-none focus:bg-slate-100  ${fieldState?.error ? 'border-red-500' : 'border-deep-brown'}`}
         />
       )}
-      {fieldState?.error && (
-        <p className="text-red-500 text-xs italic mt-2">{fieldState.error.message}</p>
-      )}
+      {fieldState.error && 
+      <span className="text-red-800">
+        {fieldState.error.message}
+      </span>}
     </div>
   );
 };

@@ -85,7 +85,7 @@ const SelectProductList = ({ label, items, ...props }: IProps) => {
               <div
                 key={index}
                 onClick={() => {
-                  field.onChange(item);
+                  field.onChange([item]);
                   toggleDropdown();
                 }}
                 className={`cursor-pointer w-full border-gray-200 ${
