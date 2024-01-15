@@ -31,8 +31,8 @@ const Buttons: React.FC<IProps> = ({
       case 'create':
         return clsx(
           'py-3',
-          'flex items-normal justify-center gap-4',
-          'text-white bg-orange rounded'
+        'flex items-center justify-center gap-4', 
+        'text-white bg-orange rounded'
         )
 
       case 'read-more':
@@ -116,7 +116,12 @@ const Buttons: React.FC<IProps> = ({
           />
         )
         case 'spinner':
-          return <FontAwesomeIcon icon={faSpinner} spin className="fa-spin fa-lg" />
+          return (
+            <div className="flex items-center justify-center">
+              <FontAwesomeIcon icon={faSpinner} spin className="fa-spin fa-lg" />
+            </div>
+          );
+    
       default:
         return null
     }

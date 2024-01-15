@@ -192,22 +192,18 @@ export const getAddress = async () => {
 /**
  */
 export const createProduct = async (data: FormData) => {
-  const formData = new FormData();
-
-  Object.keys(data).forEach((key) => {
-      formData.append(key, data.get(key)!);
-  });
-console.log("FORM DATA", formData)
   try {
-      const response = await axios.post(`${BASE_URL}/products`, formData, {
-          headers: {'Content-Type': 'multipart/form-data'},
-      });
+    const response = await axios.post(`${BASE_URL}/products`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
 
-      console.log("RESPONSE DATA POST", response);
-      return response.data;
+    console.log("RESPONSE DATA POST", response.data);
+    console.log("DATA", data);
+    return response.data;
+    
   } catch (error) {
-      console.error("Error in createProduct:", error);
-      throw error; 
+    console.error("Error in createProduct:", error);
+    throw error;
   }
 };
 
@@ -217,27 +213,21 @@ console.log("FORM DATA", formData)
  * @param create products
 /**
  */
-
 export const editProduct = async (data: FormData) => {
-  const formData = new FormData();
-
-  Object.keys(data).forEach((key) => {
-      formData.append(key, data.get(key)!);
-  });
-console.log("FORM DATA", formData)
   try {
-      const response = await axios.patch(`${BASE_URL}/products`, formData, {
-          headers: {'Content-Type': 'multipart/form-data'},
-      });
+    const response = await axios.put(`${BASE_URL}/products`, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
 
-      console.log("RESPONSE DATA POST", response);
-      return response.data;
+    console.log("RESPONSE DATA POST", response);
+    return response.data;
+
   } catch (error) {
-      console.error("Error in createProduct:", error);
-      throw error; 
+    console.error("Error in createProduct:", error);
+    throw error;
   }
 };
- 
+
 /**
  * Admin
  * @param DELETE products

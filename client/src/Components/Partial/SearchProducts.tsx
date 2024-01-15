@@ -49,7 +49,7 @@ const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {
       <input
         type="text"
         placeholder="Hitta ditt kaffe..."
-        className="flex-1 py-3 px-3 border rounded focus:outline-none focus:ring focus:border-orange"
+        className="flex-1 py-3 px-3  border border-deep-brown rounded focus:outline-none focus:ring focus:border-orange"
         value={searchTerm || ""}
         onChange={handleSearch}
         onKeyDown={handleKeyDown}
