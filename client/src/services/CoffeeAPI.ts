@@ -185,3 +185,72 @@ export const getAddress = async () => {
     throw new Error('Failed to fetch orders')
   }
 }
+
+/**
+ * Admin
+ * @param create products
+/**
+ */
+export const createProduct = async (data: FormData) => {
+  const formData = new FormData();
+
+  Object.keys(data).forEach((key) => {
+      formData.append(key, data.get(key)!);
+  });
+console.log("FORM DATA", formData)
+  try {
+      const response = await axios.post(`${BASE_URL}/products`, formData, {
+          headers: {'Content-Type': 'multipart/form-data'},
+      });
+
+      console.log("RESPONSE DATA POST", response);
+      return response.data;
+  } catch (error) {
+      console.error("Error in createProduct:", error);
+      throw error; 
+  }
+};
+
+
+/**
+ * Admin
+ * @param create products
+/**
+ */
+
+export const editProduct = async (data: FormData) => {
+  const formData = new FormData();
+
+  Object.keys(data).forEach((key) => {
+      formData.append(key, data.get(key)!);
+  });
+console.log("FORM DATA", formData)
+  try {
+      const response = await axios.patch(`${BASE_URL}/products`, formData, {
+          headers: {'Content-Type': 'multipart/form-data'},
+      });
+
+      console.log("RESPONSE DATA POST", response);
+      return response.data;
+  } catch (error) {
+      console.error("Error in createProduct:", error);
+      throw error; 
+  }
+};
+ 
+/**
+ * Admin
+ * @param DELETE products
+/**
+ */
+export const deleteProduct = async (id: number) => {
+  try {
+    const response = await get<Product>(`/products/${id}`)
+    return response
+  } catch (error) {
+    console.error(error)
+    return null
+  }
+}
+
+
