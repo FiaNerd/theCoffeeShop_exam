@@ -1,39 +1,11 @@
-import { useEffect } from "react";
 import Button from "../components/partial/Button";
 import CoffeeCard from "../components/product/CoffeeCard";
-import {
-  fetchFilters,
-  fetchProductsAsync
-} from "../components/product/productSlice";
-import { useAppDispatch, useAppSelector } from "../redux/configureStore";
+import useProducts from "../hooks/useProducts";
 
 const HomePage = () => {
-  const dispatch = useAppDispatch();
-  const productParams = useAppSelector((state) => state.product.productParams);
-  // const products = useAppSelector(productSelectors.selectAll);
-  const allCoffeeProducts = useAppSelector((state) => state.product.allProducts);
 
-  useEffect(() => {
-    // Whenever productParams changes, dispatch the fetchProductsAsync thunk
-    dispatch(fetchProductsAsync());
-  }, [dispatch, productParams]);
-
-  // console.log("PRODUCTS", products);
-  const { productsLoaded, filtersLoaded } = useAppSelector(
-    (state) => state.product
-  );
-
-  useEffect(() => {
-    if (!productsLoaded) {
-      dispatch(fetchProductsAsync());
-    }
-  }, [dispatch, productsLoaded]);
-
-  useEffect(() => {
-    if (!filtersLoaded) {
-      dispatch(fetchFilters());
-    }
-  }, [dispatch, filtersLoaded]);
+  const { allCoffeeProducts } = useProducts()
+  
 
   console.log("PRODUCTS BEFORE THEY HOPE IN MAP", allCoffeeProducts);
 

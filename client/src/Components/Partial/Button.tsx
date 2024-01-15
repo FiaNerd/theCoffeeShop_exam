@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import React from 'react'
 
 interface IProps {
-  buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back' | 'load-more' | 'loginOrRegister'
+  buttonType: 'create' | 'read-more' | 'search' | 'checkout' | 'back' | 'load-more' | 'loginOrRegister' | 'cancel'
   typeAction: 'button' | 'submit'
   iconType?: 'increase' | 'decrease' | 'cart' | 'arrow' | 'spinner'
   children?: React.ReactNode
@@ -56,6 +56,11 @@ const Buttons: React.FC<IProps> = ({
         return clsx(
           'flex flex-rows gap-2',
           'items-center text-center text-dark-deep-brown hover:text-orange'
+        );
+      case 'cancel':
+        return clsx(
+          'flex flex-rows gap-2',
+          'items-center text-center border rounded border-2 border-deep-red text-dark-deep-red hover:text-opacity-80'
         );
 
       case 'search':

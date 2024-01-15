@@ -5,6 +5,7 @@ import Header from './components/partial/Header'
 import LoadingSpinner from './components/partial/LoadingSpinner'
 import PageNotFound from './components/partial/PageNotFound'
 import './index.css'
+import AdminPage from './pages/AdminPage'
 import CheckoutPage from './pages/CheckoutPage'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
@@ -43,6 +44,9 @@ const App = () => {
           />
           <Route path='/orders' element={ user ? <OrderPage /> : <Navigate to='/konto/logga-in' />} />
           <Route path='/orders/:id' element={ user ? <OrderDetailPage /> : <Navigate to='/konto/logga-in' />} />
+
+          {/* Admin */}
+          <Route path='/produktpanel' element={<AdminPage /> } />
 
           <Route path='*' element={<PageNotFound />} />
         </Routes>

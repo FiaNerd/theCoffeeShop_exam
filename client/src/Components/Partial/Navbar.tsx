@@ -294,6 +294,8 @@ const Navbar = () => {
 
       {openBasket && <ShoppingCart />}
 
+      
+
       <div>
         {menuOpen &&
           ReactDOM.createPortal(

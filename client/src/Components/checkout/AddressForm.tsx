@@ -1,6 +1,6 @@
 import { useFormContext } from "react-hook-form";
-import CheckboxCheckout from "../partial/CheckboxCheckout";
-import InputForm from "../partial/InputForm";
+import CheckboxCheckout from "../partial/Forms/CheckboxCheckout";
+import InputForm from "../partial/Forms/InputForm";
 
 
 const AddressForm = () => {

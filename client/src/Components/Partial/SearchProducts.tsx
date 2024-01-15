@@ -4,8 +4,8 @@ import { setProductParamas } from "../product/productSlice";
 import Button from "./Button";
 
 interface IProps {
-  onCloseSearch: () => void
-  onCloseEnterSearch: () => void
+  onCloseSearch?: () => void
+  onCloseEnterSearch?: () => void
 }
 
 const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {

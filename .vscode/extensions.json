@@ -1,0 +1,17 @@
+{
+    "recommendations": [
+        "dbaeumer.vscode-eslint",
+        "rvest.vs-code-prettier-eslint",
+        "ms-dotnettools.vscode-dotnet-pack",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "formulahendry.auto-close-tag",
+        "formulahendry.auto-complete-tag",
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "kreativ-software.csharpextensions",
+        "vain0x.csharp-gen-ctor",
+        "jorgeserrano.vscode-csharp-snippets",
+        "anseki.vscode-color",
+        "naumovs.color-highlight"
+    ]
+}

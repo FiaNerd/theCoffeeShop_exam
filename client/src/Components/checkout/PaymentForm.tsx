@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form"
-import InputForm from "../partial/InputForm"
+import InputForm from "../partial/Forms/InputForm"
 
 const PaymentForm = () => {
     const { control } = useFormContext()
