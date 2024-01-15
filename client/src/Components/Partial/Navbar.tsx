@@ -46,7 +46,7 @@ const Navbar = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await dispatch(fetchCurrentUser())
+        dispatch(fetchCurrentUser())
         await dispatch(fetchBasketAsync())
       } catch (error) {
         console.error('Something went wrong', error)

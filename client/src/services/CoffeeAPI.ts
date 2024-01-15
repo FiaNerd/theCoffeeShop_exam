@@ -235,7 +235,8 @@ export const editProduct = async (data: FormData) => {
  */
 export const deleteProduct = async (id: number) => {
   try {
-    const response = await get<Product>(`/products/${id}`)
+    const response = await axios.delete(`${BASE_URL}/products/${id}`)
+    console.log("RESP", response)
     return response
   } catch (error) {
     console.error(error)

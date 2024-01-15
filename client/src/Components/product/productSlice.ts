@@ -52,8 +52,6 @@ import { Product, ProductParams, Products } from "../../types/products";
     const params = getAxiosParams(thunkAPI.getState().product.productParams);
     try {
       const allProducts = await getProducts(params);
-      // dispatch(setAllProducts(allProducts));
-      console.log("allProductsSLICE", allProducts);
       return allProducts;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -125,6 +123,11 @@ import { Product, ProductParams, Products } from "../../types/products";
         state.productsLoaded = false
         productsAdapter.upsertOne(state, action.payload)
       },
+      removeProduct: (state, action) => {
+        productsAdapter.removeOne(state, action.payload)
+        state.productsLoaded = false
+        console.log("Action", action.payload, "state" ,state, )
+      }
     },
     extraReducers: (builder) => {
       builder.addCase(fetchProductsAsync.pending, (state) => {
@@ -173,4 +176,4 @@ import { Product, ProductParams, Products } from "../../types/products";
     (state: RootState) => state.product
   );
 
-  export const { setProductParamas, resetProductParams, setProduct } = productSlice.actions;
+  export const { setProductParamas, resetProductParams, setProduct, removeProduct } = productSlice.actions;
