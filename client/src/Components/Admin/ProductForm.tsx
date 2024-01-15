@@ -46,8 +46,6 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
             }
         }
     }
-
-    console.log(product?.imageUrl)
 }, [isDirty, product, reset, watchFile]);
 
 
