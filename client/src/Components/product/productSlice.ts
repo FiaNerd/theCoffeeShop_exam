@@ -121,6 +121,10 @@ import { Product, ProductParams, Products } from "../../types/products";
       resetProductParams: (state) => {
         state.productParams = initParams();
       },
+      setProduct: (state, action) => {
+        state.productsLoaded = false
+        productsAdapter.upsertOne(state, action.payload)
+      },
     },
     extraReducers: (builder) => {
       builder.addCase(fetchProductsAsync.pending, (state) => {
@@ -158,7 +162,6 @@ import { Product, ProductParams, Products } from "../../types/products";
         state.status = "idle";
         state.filtersLoaded = true;
       });
-
       builder.addCase(fetchFilters.rejected, (state, action) => {
         state.status = "idle";
         console.log(action.payload);
@@ -170,4 +173,4 @@ import { Product, ProductParams, Products } from "../../types/products";
     (state: RootState) => state.product
   );
 
-  export const { setProductParamas, resetProductParams } = productSlice.actions;
+  export const { setProductParamas, resetProductParams, setProduct } = productSlice.actions;
