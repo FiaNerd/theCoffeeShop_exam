@@ -3,6 +3,7 @@ import ProductForm from "../components/Admin/ProductForm";
 import { productColumns } from "../components/Admin/tables/ColumnProductTable";
 import ProductTable from "../components/Admin/tables/ProductTable";
 import Buttons from "../components/partial/Button";
+import SearchProducts from "../components/partial/SearchProducts";
 import useProducts from "../hooks/useProducts";
 import { Product } from "../types/products";
 
@@ -29,19 +30,24 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto mt-8 px-4">
+    <div className="max-w-[1280px] mx-auto px-4 mb-8">
       <div className="flex flex-row justify-between mb-8">
         { !editMode && (
-        <>
-            <h1 className="uppercase">Produkt panel</h1>
-            <Buttons
-            buttonType="create"
-            typeAction="button"
-            className="px-8 py-2"
-            onClick={createNewProduct}
-            >
-            Ny Produkt
-            </Buttons>
+          <>
+            <div className=" flex flex-1 flex-col  justify-between mt-8">
+            <SearchProducts />
+            <div className="flex flex-1 flex-col md:flex-row justify-between">
+              <h1 className="uppercase mb-8 md:mb-0">Produkt panel</h1>
+              <Buttons
+              buttonType="create"
+              typeAction="button"
+              className="px-8 py-2 bg-deep-brown"
+              onClick={createNewProduct}
+              >
+              Ny Produkt
+              </Buttons>
+            </div>
+            </div>
             </>
         )}
         </div>

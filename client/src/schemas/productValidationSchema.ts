@@ -16,7 +16,8 @@ setLocale({
 const productValidationSchema = yup.object({
     name: yup.string().required("Fältet är obligatoriskt"),
     type: yup.array().of(yup.string()).required("Fältet är obligatoriskt"),
-    roastLevel: yup.array().of(yup.string()).required("Fältet är obligatoriskt"),
+    // roastLevel: yup.array().of(yup.string()).required("Fältet är obligatoriskt"),
+    roastLevel: yup.array().of(yup.string()).default([]).required("Fältet är obligatoriskt"),
     description: yup.string().required("Fältet är obligatoriskt"),
     quantityInStock: yup.number().required("Fältet är obligatoriskt").min(0),
     price: yup

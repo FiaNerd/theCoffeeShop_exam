@@ -38,7 +38,7 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
     }
   }, [product, reset]);
 
-  
+
 
   const handleSubmitImg= (data: FieldValues) => {
     console.log("DATA", data)
@@ -55,8 +55,8 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
           <InputForm control={control} name="name" label="Produkt" />
         </div>
 
-        <div className="flex gap-4 mb-4">
-          <div className="w-full flex-1">
+        <div className="flex flex-col w-full md:flex-row gap-4 mb-4">
+          <div className="w-full flex-1 ">
             <SelectProductList control={control} name="type" label="Typ" items={types} />
           </div>
 
@@ -87,7 +87,7 @@ const ProductForm = ({ product, cancelEdit, title }: IProps) => {
       <img
         src={watchFile.preview}
         alt="preview"
-        className="w-[13em] h-[8.3em] object-cover" 
+        className="w-[13em] h-[8.3em] object-contain" 
       />
     ) : (
       <img
