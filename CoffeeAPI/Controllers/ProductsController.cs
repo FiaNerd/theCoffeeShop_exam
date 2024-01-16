@@ -111,7 +111,9 @@ public class ProductsController : BaseApiController
             {
                 return CreatedAtRoute("GetProduct", new { Id = product.Id}, product);
             }
-                return BadRequest(new ProblemDetails { Title = "Problem creating a new product"});
+
+            return BadRequest(new { ErrorMessage = "Problem att skapa en ny produkt"});
+            // return BadRequest(new ProblemDetails { Title = "Problem att skapa en ny produkt"});
         }
 
 

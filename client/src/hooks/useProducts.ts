@@ -9,10 +9,9 @@ const useProducts = () => {
     const dispatch = useAppDispatch();
     const productParams = useAppSelector((state) => state.product.productParams);
     const allCoffeeProducts  = useAppSelector((state) => state.product.allProducts);
-    const {  productsLoaded, filtersLoaded, types, roastLevels } = useAppSelector((state) => state.product);
+    const {  productsLoaded, filtersLoaded, types, roastLevels, metaData } = useAppSelector((state) => state.product);
   
-  
-  
+    
     useEffect(() => {
       // Whenever productParams changes, dispatch the fetchProductsAsync thunk
       dispatch(fetchProductsAsync());
@@ -36,7 +35,8 @@ const useProducts = () => {
         productsLoaded, 
         filtersLoaded,
         types,
-        roastLevels
+        roastLevels,
+        metaData
     }
 }
 

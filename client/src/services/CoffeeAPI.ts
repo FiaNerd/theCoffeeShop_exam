@@ -1,8 +1,9 @@
-import axios from 'axios'
-import { Basket } from '../types/basket'
-import { Order, Orders } from '../types/orders'
-import { Product, Products } from '../types/products'
-import { User } from '../types/user'
+import axios from 'axios';
+import { Basket } from '../types/basket';
+import { Order, Orders } from '../types/orders';
+import { PaginatedResponse } from '../types/pagination';
+import { Product, Products } from '../types/products';
+import { User } from '../types/user';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -34,36 +35,77 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-const get = async <T>(endpoint: string) => {
-  try {
-    const resp = await instance.get<T>(endpoint)
-    return resp.data
-  } catch (error) {
-    console.error('Error during GET request:', error)
-    throw error
+// axios.interceptors.response.use(async (response) => {
+//   const pagination = response.headers['pagination'];
+//   if (pagination) {
+//     response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+//     return response;
+//   }
+//   return response;
+// });
+
+
+axios.interceptors.response.use(async (response) => {
+  const pagination = response.headers['pagination'];
+  if (pagination) {
+    response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+    return response;
   }
-}
+  return response;
+});
+
+
+export const get = async <T>(endpoint: string, params?: URLSearchParams) => {
+  try {
+    const url = params ? `${endpoint}?${params.toString()}` : endpoint;
+    const response = await instance.get<T>(url);
+
+    const pagination = response.headers['pagination'];
+
+    if (pagination) {
+      response.data = new PaginatedResponse(
+        response.data,
+        JSON.parse(pagination)
+      ) as unknown as T;
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Error during GET request:', error);
+    throw error; 
+  }
+};
+
 
 /**
  * Get single product
  * @param all products
  */
-export const getProducts = async (
-  params?: URLSearchParams
-): Promise<Products | []> => {
-  const url = `/products${params ? `?${params.toString()}` : ''}`
-  const response = await get<Products>(url)
-  return response
+
+export const getProducts = async (params?: URLSearchParams): Promise<PaginatedResponse<Products>> => {
+  try {
+    const url = `/products${params ? `?${params.toString()}` : ''}`
+    const response = await get<PaginatedResponse<Products>>(url)
+    if (response.headers['pagination']) {
+      return response.data
+    } else {
+      return response.data; 
+    }
+  } catch (error) {
+    console.error("Couldn't fetch products", error)
+    throw error
+  }
 }
+
 
 /**
  * Get single product
  * @param guid get GUID
  */
-export const getProduct = async (guid: string): Promise<Product | null> => {
+export const getProduct = async (id: number): Promise<Product | null> => {
   try {
-    const response = await get<Product>(`/products/${guid}`)
-    return response
+    const response = await get<Product>(`/products/${id}`)
+    return response.data
   } catch (error) {
     console.error(error)
     return null
@@ -81,7 +123,7 @@ export const getBasket = async () => {
  * Create a items in basket
  * @param add basket
  */
-export const addItemToBasket = async (productId: string, quantity = 1) => {
+export const addItemToBasket = async (productId: number, quantity = 1) => {
   const response = await axios.post(
     `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
     {}
@@ -94,7 +136,7 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
  * @param delete items
  */
 export const removeItemFromBasket = async (
-  productId: string,
+  productId: number,
   quantity = 1
 ): Promise<void> => {
   try {
@@ -151,7 +193,6 @@ export const currentUser = async ()  => {
 export const getOrders = async () =>{
   try {
     const response = await axios.get<Orders>(`${BASE_URL}/orders`)
-    console.log("Fetch Order axios", response)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -197,8 +238,6 @@ export const createProduct = async (data: FormData) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log("RESPONSE DATA POST", response.data);
-    console.log("DATA", data);
     return response.data;
     
   } catch (error) {
@@ -219,7 +258,6 @@ export const editProduct = async (data: FormData) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log("RESPONSE DATA POST", response);
     return response.data;
 
   } catch (error) {
@@ -236,7 +274,6 @@ export const editProduct = async (data: FormData) => {
 export const deleteProduct = async (id: number) => {
   try {
     const response = await axios.delete(`${BASE_URL}/products/${id}`)
-    console.log("RESP", response)
     return response
   } catch (error) {
     console.error(error)

@@ -5,7 +5,7 @@ export type Basket = {
 };
 
 export type BasketItems = {
-  productId: string;
+  productId: number;
   name: string;
   price: number;
   imageUrl: string;

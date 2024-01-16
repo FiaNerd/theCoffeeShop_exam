@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/configureStore";
-import { fetchFilters, fetchProductsAsync, setProductParamas } from "../../product/productSlice";
+import { fetchFilters, fetchProductsAsync, setProductParams } from "../../product/productSlice";
 import FilterCheckGroup from "./FilterCheckGroup";
 
 
@@ -28,7 +28,7 @@ const FilterProducts = () => {
           Typer
         </div>
         {types &&(
-          <FilterCheckGroup items={types} checked={productParams.types} onChange={(types: string[]) => dispatch(setProductParamas({ types: types }))} />
+          <FilterCheckGroup items={types} checked={productParams.types} onChange={(types: string[]) => dispatch(setProductParams({ types: types }))} />
         )}
       </div>
 
@@ -38,7 +38,7 @@ const FilterProducts = () => {
         </div>
         {roastLevels &&
           roastLevels ? (
-          <FilterCheckGroup items={roastLevels} checked={productParams.roastLevels} onChange={(roastLevels: string[]) => dispatch(setProductParamas({ roastLevels: roastLevels }))} />
+          <FilterCheckGroup items={roastLevels} checked={productParams.roastLevels} onChange={(roastLevels: string[]) => dispatch(setProductParams({ roastLevels: roastLevels }))} />
         ) : (
           <span>No roast levels available</span>
         )}

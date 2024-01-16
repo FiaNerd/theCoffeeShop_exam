@@ -37,12 +37,9 @@ const CheckoutPage = () => {
       try {
         const response = await getAddress();
 
-        console.log("RESPONSE Check", response.data)
-        
         if (response) {
-          const test = methods.reset({ ...methods.getValues(), ...response, saveAddress: false });
-          console.log("RESPONSE SAVED ADDRESS", response);
-          console.log(test)
+          const saveData = methods.reset({ ...methods.getValues(), ...response, saveAddress: false })
+          return saveData
         }
       } catch (error) {
         console.error('Error fetching address:', error);

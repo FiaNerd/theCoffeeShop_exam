@@ -5,6 +5,7 @@
 } from "@reduxjs/toolkit";
 import { RootState } from "../../redux/configureStore";
 import { getFilters, getProduct, getProducts } from "../../services/CoffeeAPI";
+import { MetaData } from "../../types/pagination";
 import { Product, ProductParams, Products } from "../../types/products";
 
   interface ProductState {
@@ -15,13 +16,14 @@ import { Product, ProductParams, Products } from "../../types/products";
     types: string[];
     roastLevels: string[];
     productParams: ProductParams;
+    metaData: MetaData | null
   }
 
   const productsAdapter = createEntityAdapter<Product>({
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
 
-  const getAxiosParams = (productParams: ProductParams) => {
+  const getAxiosParams = (productParams: ProductParams) : URLSearchParams => {
     const params = new URLSearchParams();
 
     params.append("pageNumber", productParams.pageNumber.toString());
@@ -32,7 +34,7 @@ import { Product, ProductParams, Products } from "../../types/products";
       params.append("searchTerm", productParams.searchTerm);
     }
 
-    if (productParams.types) {
+    if (productParams.types?.length) {
       console.log(productParams.types.toString());
       params.append("types", productParams.types.toString());
     }
@@ -43,26 +45,40 @@ import { Product, ProductParams, Products } from "../../types/products";
 
     return params;
   };
+  
+  // export const fetchProductsAsync = createAsyncThunk<Products, ProductParams, { state: RootState }>(
+  //   'products/fetchProductsAsync',
+  //   async (params, thunkAPI) => {
+  //     // Use params directly, no need to get it from getState
+  //     try {
+  //       const allProducts = await getProducts(getAxiosParams(params));
+  //       thunkAPI.dispatch(setMetaData(allProducts.metaData));
+  //       return allProducts.items;
+  //     } catch (error: any) {
+  //       return thunkAPI.rejectWithValue({ error: error.data })
+  //     }
+  //   }
+  // );
 
-  export const fetchProductsAsync = createAsyncThunk<
-    Products,
-    void,
-    { state: RootState }
-  >("products/fetchProductsAsync", async (_, thunkAPI) => {
-    const params = getAxiosParams(thunkAPI.getState().product.productParams);
-    try {
-      const allProducts = await getProducts(params);
-      return allProducts;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.error(error);
-      return thunkAPI.rejectWithValue({ error: error.data });
+  export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
+    'products/fetchProductsAsync',
+    async (_, thunkAPI) => {
+        const params = getAxiosParams(thunkAPI.getState().product.productParams);
+
+        try {
+            const allProducts = await getProducts(params);
+            thunkAPI.dispatch(setMetaData(allProducts.metaData));
+            return allProducts.items;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({ error: error.data })
+        }
     }
-  });
+)
 
   export const fetchProductAsync = createAsyncThunk<
     Product,
-    string,
+    number,
     { rejectValue: { error: string } }
   >("products/fetchProductAsync", async (productId, thunkAPI) => {
     try {
@@ -93,6 +109,8 @@ import { Product, ProductParams, Products } from "../../types/products";
       pageNumber: 1,
       pageSize: 12,
       orderBy: "name",
+      types: [],
+      roastLevels: []
     };
   };
 
@@ -106,21 +124,30 @@ import { Product, ProductParams, Products } from "../../types/products";
       types: [] as string[],
       roastLevels: [] as string[],
       productParams: initParams(),
+      metaData: null
     }),
     reducers: {
       setAllProducts: (state, action) => {
         state.productsLoaded = true;
         state.allProducts = action.payload;
       },
-      setProductParamas: (state, action) => {
+      setPageNumber: (state, action) => {
+        state.productsLoaded = false;
+        state.productParams = {...state.productParams, ...action.payload}
+      },
+      setProductParams: (state, action) => {
         state.productsLoaded = false;
         state.productParams = { ...state.productParams, ...action.payload };
+      },
+      setMetaData: (state, action) => {
+        state.metaData = action.payload
       },
       resetProductParams: (state) => {
         state.productParams = initParams();
       },
       setProduct: (state, action) => {
         state.productsLoaded = false
+        // productsAdapter.upsertOne(state, action)
         productsAdapter.upsertOne(state, action.payload)
       },
       removeProduct: (state, action) => {
@@ -136,7 +163,7 @@ import { Product, ProductParams, Products } from "../../types/products";
       builder.addCase(fetchProductsAsync.fulfilled, (state, action) => {
         productsAdapter.setAll(state, action.payload);
         state.allProducts = action.payload;
-        state.status = "full";
+        state.status = "idle";
         state.productsLoaded = true;
       });
       builder.addCase(fetchProductsAsync.rejected, (state, action) => {
@@ -160,8 +187,8 @@ import { Product, ProductParams, Products } from "../../types/products";
         state.status = "pendingFetchFilters";
       });
       builder.addCase(fetchFilters.fulfilled, (state, action) => {
-        state.types = action.payload.type;
-        state.roastLevels = action.payload.roastLevel;
+        state.types = action.payload.data.type;
+        state.roastLevels = action.payload.data.roastLevel;
         state.status = "idle";
         state.filtersLoaded = true;
       });
@@ -176,4 +203,4 @@ import { Product, ProductParams, Products } from "../../types/products";
     (state: RootState) => state.product
   );
 
-  export const { setProductParamas, resetProductParams, setProduct, removeProduct } = productSlice.actions;
+  export const { setProductParams, resetProductParams, setMetaData, setPageNumber, setProduct, removeProduct } = productSlice.actions;
