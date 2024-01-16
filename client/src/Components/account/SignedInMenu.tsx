@@ -28,17 +28,21 @@ const SignedInMenu = () => {
         Din profil
       </NavLink>
 
-      <NavLink
-        to='/orders'
-        className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
-        Dina ordrar
-      </NavLink>
-
-      <NavLink
-        to='/produktpanel'
-        className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
-        Produktpanel
-      </NavLink>
+      { user && !user.roles?.includes('Admin') && (
+        <NavLink
+          to='/orders'
+          className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
+          Dina ordrar
+        </NavLink>
+      )}
+      
+      { user && user.roles?.includes('Admin') && (
+        <NavLink
+          to='/produktpanel'
+          className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
+          Produktpanel
+        </NavLink>
+      )}
 
       <hr className='border-gray-200 dark:border-orange ' />
 

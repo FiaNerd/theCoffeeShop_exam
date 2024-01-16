@@ -275,6 +275,7 @@ const Navbar = () => {
                   className='text-white font-bold flex flex-end'>
                   Skapa konto
                 </NavLink>
+             
               </div>
             ) : (
                <FontAwesomeIcon
@@ -283,18 +284,16 @@ const Navbar = () => {
                />
             )}
 
-            {user ? (
+            {user && (
               <div className='hidden md:flex'>
                 {openProfile && <SignedInMenu />}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
       </div>
 
       {openBasket && <ShoppingCart />}
-
-      
 
       <div>
         {menuOpen &&
