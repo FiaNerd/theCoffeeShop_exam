@@ -3,7 +3,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthRoute from './auth/AuthRoute';
 import Footer from './components/partial/Footer';
 import Header from './components/partial/Header';
-import LoadingSpinner from './components/partial/LoadingSpinner';
 import PageNotFound from './components/partial/PageNotFound';
 import { AuthProvider } from './context/AuthContextProvider';
 import AdminPage from './pages/AdminPage';
@@ -25,8 +24,6 @@ const App = () => {
       <div className='flex flex-col min-h-screen'>
         <Header />
         <div className='flex-1'>
-          <LoadingSpinner />
-
           <Routes>
             <Route
               path='/produkt/:type/:productId'
