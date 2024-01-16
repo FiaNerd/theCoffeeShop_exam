@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace CoffeeAPI.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPublicIdApiKeyForCloudinary : Migration
+    public partial class JustNeededMoreItemsInFrontend : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

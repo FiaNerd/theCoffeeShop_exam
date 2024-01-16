@@ -1,8 +1,9 @@
-import axios from 'axios'
-import { Basket } from '../types/basket'
-import { Order, Orders } from '../types/orders'
-import { Product, Products } from '../types/products'
-import { User } from '../types/user'
+import axios from 'axios';
+import { Basket } from '../types/basket';
+import { Order, Orders } from '../types/orders';
+import { PaginatedResponse } from '../types/pagination';
+import { Product, Products } from '../types/products';
+import { User } from '../types/user';
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -34,27 +35,87 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-const get = async <T>(endpoint: string) => {
-  try {
-    const resp = await instance.get<T>(endpoint)
-    return resp.data
-  } catch (error) {
-    console.error('Error during GET request:', error)
-    throw error
+// axios.interceptors.response.use(async (response) => {
+//   const pagination = response.headers['pagination'];
+//   if (pagination) {
+//     response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+//     return response;
+//   }
+//   return response;
+// });
+
+
+axios.interceptors.response.use(async (response) => {
+  const pagination = response.headers['pagination'];
+  if (pagination) {
+    response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
+    return response;
   }
-}
+  return response;
+});
+
+
+
+// const get = async <T>(endpoint: string) => {
+//   try {
+//     const resp = await instance.get<T>(endpoint)
+//     return resp.data
+//   } catch (error) {
+//     console.error('Error during GET request:', error)
+//     throw error
+//   }
+// }
+
+export const get = async <T>(endpoint: string, params?: URLSearchParams) => {
+  try {
+    const url = params ? `${endpoint}?${params.toString()}` : endpoint;
+    const response = await instance.get<T>(url);
+
+    const pagination = response.headers['pagination'];
+
+    if (pagination) {
+      response.data = new PaginatedResponse(
+        response.data,
+        JSON.parse(pagination)
+      ) as unknown as T;
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Error during GET request:', error);
+    throw error; 
+  }
+};
+
 
 /**
  * Get single product
  * @param all products
  */
-export const getProducts = async (
-  params?: URLSearchParams
-): Promise<Products | []> => {
-  const url = `/products${params ? `?${params.toString()}` : ''}`
-  const response = await get<Products>(url)
-  return response
-}
+
+export const getProducts = async (params?: URLSearchParams): Promise<PaginatedResponse<Products>> => {
+  try {
+    const url = `/products${params ? `?${params.toString()}` : ''}`;
+    const response = await get<PaginatedResponse<Products>>(url);
+    console.log("RESPONSE FROM API ", response )
+    if (response.headers['pagination']) {
+      return response.data
+    } else {
+      return response.data; 
+    }
+  } catch (error) {
+    console.error("Couldn't fetch products", error);
+    throw error; 
+  }
+};
+
+// export const getProducts = async (
+//   params?: URLSearchParams
+// ): Promise<Products | []> => {
+//   const url = `/products${params ? `?${params.toString()}` : ''}`
+//   const response = await get<Products>(url)
+//   return response.data
+// }
 
 /**
  * Get single product
@@ -63,7 +124,7 @@ export const getProducts = async (
 export const getProduct = async (guid: string): Promise<Product | null> => {
   try {
     const response = await get<Product>(`/products/${guid}`)
-    return response
+    return response.data
   } catch (error) {
     console.error(error)
     return null

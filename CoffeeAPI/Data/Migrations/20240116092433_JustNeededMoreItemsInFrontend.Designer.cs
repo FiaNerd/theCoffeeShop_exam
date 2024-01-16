@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoffeeAPI.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20240113151422_AddPublicIdApiKeyForCloudinary")]
-    partial class AddPublicIdApiKeyForCloudinary
+    [Migration("20240116092433_JustNeededMoreItemsInFrontend")]
+    partial class JustNeededMoreItemsInFrontend
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
