@@ -39,7 +39,7 @@ export const fetchBasketAsync = createAsyncThunk<Basket>(
 
 export const addBasketItemAsync = createAsyncThunk<
   Basket,
-  { productId: string; quantity?: number }
+  { productId: number; quantity?: number }
 >(
   '/basket/addBasketItemAsync',
   async ({ productId, quantity = 1 }, ThunkAPI) => {
@@ -55,7 +55,7 @@ export const addBasketItemAsync = createAsyncThunk<
 
 export const removeItemFromBasketAsync = createAsyncThunk<
   void,
-  { productId: string; quantity: number }
+  { productId: number; quantity: number }
 >(
   'basket/removeItemFromBasketAsync',
   async ({ productId, quantity }, ThunkAPI) => {

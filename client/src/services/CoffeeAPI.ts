@@ -142,7 +142,7 @@ export const getBasket = async () => {
  * Create a items in basket
  * @param add basket
  */
-export const addItemToBasket = async (productId: string, quantity = 1) => {
+export const addItemToBasket = async (productId: number, quantity = 1) => {
   const response = await axios.post(
     `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
     {}
@@ -155,7 +155,7 @@ export const addItemToBasket = async (productId: string, quantity = 1) => {
  * @param delete items
  */
 export const removeItemFromBasket = async (
-  productId: string,
+  productId: number,
   quantity = 1
 ): Promise<void> => {
   try {

@@ -2,12 +2,12 @@ import { faArrowDown, faArrowUp, faArrowsAltV, faPenToSquare, faTrash } from '@f
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import {
-	ColumnDef,
-	SortingState,
-	flexRender,
-	getCoreRowModel,
-	getSortedRowModel,
-	useReactTable
+  ColumnDef,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable
 } from '@tanstack/react-table';
 import { useState } from 'react';
 import { Product } from '../../../types/products';
@@ -33,7 +33,7 @@ const ProductTable = ({ columns, data, onSelectProduct, onDeleteProduct }: IProp
   });
 
   return (
-    <div className=' my-2 border rounded-md overflow-hidden custom-shadow '>
+    <div className=' my-2 border rounded-md overflow-hidden custom-shadow mb-12'>
       <table className='w-full mx-auto table-auto' table-layout=''>
         <thead className=''>
           {productTable.getHeaderGroups().map((headerGroup) => (

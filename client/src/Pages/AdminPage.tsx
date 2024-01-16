@@ -9,6 +9,7 @@ import useProducts from "../hooks/useProducts";
 import { useAppDispatch } from "../redux/configureStore";
 import { deleteProduct } from "../services/CoffeeAPI";
 import { Product } from "../types/products";
+import Pagination from "./Pagination";
 
 const AdminPage = () => {
   const { allCoffeeProducts }  = useProducts();
@@ -79,6 +80,7 @@ const AdminPage = () => {
       ) : (
         <ProductTable  columns={ productColumns } data={ allCoffeeProducts } onSelectProduct={ handleSelectProduct } onDeleteProduct={ handleDeleteProduct } />
       )}
+      <Pagination />
     </div>
   );
 };
