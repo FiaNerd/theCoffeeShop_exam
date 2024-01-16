@@ -47,22 +47,6 @@ import { Product, ProductParams, Products } from "../../types/products";
   };
   
 
-//   export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
-//     'products/fetchProductsAsync',
-//     async (_, thunkAPI) => {
-//         const params = getAxiosParams(thunkAPI.getState().product.productParams);
-
-//         try {
-//             const allProducts = await getProducts(params);
-//             thunkAPI.dispatch(setMetaData(allProducts.metaData));
-//             return allProducts.items;
-//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//         } catch (error: any) {
-//             return thunkAPI.rejectWithValue({ error: error.data })
-//         }
-//     }
-// )
-
 export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
   'products/fetchProductsAsync',
   async (_, thunkAPI) => {
@@ -100,7 +84,7 @@ export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootS
     async (_, thunkAPI) => {
       try {
         const response = await getFilters();
-        return response;
+        return response.data
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data });

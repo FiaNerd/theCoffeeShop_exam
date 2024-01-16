@@ -107,7 +107,7 @@ export const getProduct = async (id: number): Promise<Product | null> => {
  */
 export const getBasket = async () => {
   const response = await get<Basket>('/basket')
-  return response
+  return response.data
 }
 
 /**

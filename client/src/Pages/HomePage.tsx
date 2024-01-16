@@ -1,3 +1,4 @@
+import LoadingSpinner from "../components/partial/LoadingSpinner";
 import Pagination from "../components/partial/Pagination";
 import CoffeeCard from "../components/product/CoffeeCard";
 import { setPageNumber } from "../components/product/productSlice";
@@ -8,6 +9,10 @@ const HomePage = () => {
 
   const { allCoffeeProducts, metaData } = useProducts()
   const dispatch = useAppDispatch()
+
+  if(allCoffeeProducts.length === 0){
+      return <LoadingSpinner />
+  }
 
   return (
     <div className="px-4 container max-w-[1280px] mx-auto mb-4 mt-8">

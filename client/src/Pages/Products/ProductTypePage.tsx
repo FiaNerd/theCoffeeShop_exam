@@ -1,21 +1,20 @@
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import LoadingSpinner from '../../components/partial/LoadingSpinner';
 import Pagination from '../../components/partial/Pagination';
 import CoffeeCard from '../../components/product/CoffeeCard';
-import { fetchProductsAsync, setPageNumber } from '../../components/product/productSlice';
+import { setPageNumber } from '../../components/product/productSlice';
 import useProducts from '../../hooks/useProducts';
 import { useAppDispatch } from '../../redux/configureStore';
 
 const ProductTypePage = () => {
   const { type } = useParams();
-  const { allCoffeeProducts, productsLoaded, metaData } = useProducts();
+  const { allCoffeeProducts, metaData } = useProducts();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (!productsLoaded) {
-      dispatch(fetchProductsAsync());
-    }
-  }, [dispatch, productsLoaded]);
+  
+  if (allCoffeeProducts.length === 0) {
+    return <LoadingSpinner />
+  }
 
   const trimmedType = type ?? '';
 
@@ -32,10 +31,6 @@ const ProductTypePage = () => {
   };
 
   const filteredProducts = allCoffeeProducts ? filterProducts() : [];
-
-  if (!allCoffeeProducts) {
-    return null;
-  }
 
   if(!metaData){
     return null
