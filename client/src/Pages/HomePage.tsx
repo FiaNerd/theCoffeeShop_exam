@@ -1,11 +1,14 @@
-import Button from "../components/partial/Button";
+import Pagination from "../components/partial/Pagination";
 import CoffeeCard from "../components/product/CoffeeCard";
+import { setPageNumber } from "../components/product/productSlice";
 import useProducts from "../hooks/useProducts";
+import { useAppDispatch } from "../redux/configureStore";
 
 const HomePage = () => {
 
-  const { allCoffeeProducts } = useProducts()
-  
+  const { allCoffeeProducts, metaData } = useProducts()
+  const dispatch = useAppDispatch()
+
   return (
     <div className="px-4 container max-w-[1280px] mx-auto mb-4 mt-8">
       <h1 className="text-dark-deep-brown mb-4 to uppercase">Vårt kaffe</h1>
@@ -18,15 +21,10 @@ const HomePage = () => {
           ))}
       </div>
 
-      <div className="flex mx-auto justify-center mb-8">
-        <Button
-          buttonType="load-more"
-          typeAction={"button"}
-          onClick={() => console.log("Click")}
-        >
-          Ladda fler
-        </Button>
-      </div>
+      { metaData && (
+        <Pagination   metaData={metaData}
+        onPageChange={(page: number) => dispatch(setPageNumber({pageNumber: page}))} />
+      )}
     </div>
   );
 };

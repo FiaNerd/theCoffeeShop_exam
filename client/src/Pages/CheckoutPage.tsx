@@ -10,7 +10,7 @@ import PaymentForm from "../components/checkout/PaymentForm";
 import Button from "../components/partial/Button";
 import StepCounter from "../components/partial/StepCounter";
 import { useAppDispatch } from "../redux/configureStore";
-import { orderValidationSchema } from "../schemas/OrderValidationSchema";
+import { orderValidationSchema } from "../schemas/orderValidationSchema";
 import { createOrder, getAddress } from "../services/CoffeeAPI";
 
 
@@ -74,8 +74,6 @@ const CheckoutPage = () => {
 
   const handleNext = async (data: FieldValues) => {
   const { saveAddress, ...shippingAddress } = data;
-
-  console.log("Saved", saveAddress)
 
   if (activeStep === steps.length - 1) {
     setIsLoading(true);

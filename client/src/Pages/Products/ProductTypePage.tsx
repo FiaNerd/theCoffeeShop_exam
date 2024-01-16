@@ -1,45 +1,58 @@
-import { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import CoffeeCard from '../../components/product/CoffeeCard'
-import { fetchProductsAsync, productSelectors } from '../../components/product/productSlice'
-import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import Pagination from '../../components/partial/Pagination';
+import CoffeeCard from '../../components/product/CoffeeCard';
+import { fetchProductsAsync, setPageNumber } from '../../components/product/productSlice';
+import useProducts from '../../hooks/useProducts';
+import { useAppDispatch } from '../../redux/configureStore';
 
 const ProductTypePage = () => {
-  const { type } = useParams()
-  const products = useAppSelector(productSelectors.selectAll)
-  const { productsLoaded } = useAppSelector(state => state.product)
-  const dispatch = useAppDispatch()
+  const { type } = useParams();
+  const { allCoffeeProducts, productsLoaded, metaData } = useProducts();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(!productsLoaded){
-      dispatch(fetchProductsAsync())
+    if (!productsLoaded) {
+      dispatch(fetchProductsAsync());
     }
-  },[dispatch, productsLoaded])
+  }, [dispatch, productsLoaded]);
 
-  const trimmedType = type ?? ''
+  const trimmedType = type ?? '';
 
   const filterProducts = () => {
-    return products?.filter((products) => {
+    return allCoffeeProducts?.filter((products) => {
       const productTypes = products.type.map((productType) =>
         productType.toLowerCase().trim()
-      )
+      );
 
       return productTypes.some((productType) =>
         trimmedType.toLowerCase().includes(productType)
-      )
-    })
+      );
+    });
+  };
+
+  const filteredProducts = allCoffeeProducts ? filterProducts() : [];
+
+  if (!allCoffeeProducts) {
+    return null;
   }
 
-  const filteredProducts = products ? filterProducts() : []
-
-  if (!products) {
-    return
+  if(!metaData){
+    return null
   }
+
+  // Calculate metaData for the filtered products to get right pagination
+  const filteredMetaData = {
+    pageSize: metaData?.pageSize,
+    currentPage: metaData?.currentPage,
+    totalCount: filteredProducts.length,
+    totalPages: Math.ceil(filteredProducts.length / metaData?.pageSize),
+  };
 
   return (
-    <div className='px-4  container max-w-[1280px] mx-auto mb-4 mt-8'>
-      <h1 className='text-dark-deep-brown mb-4 uppercase '>{type}</h1>
-  
+    <div className='px-4 container max-w-[1280px] mx-auto mb-4 mt-8'>
+      <h1 className='text-dark-deep-brown mb-4 uppercase'>{type}</h1>
+
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 text-dark-deep-brown mb-8'>
         {filteredProducts && filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
@@ -49,9 +62,15 @@ const ProductTypePage = () => {
           <p>No products found</p>
         )}
       </div>
+
+      {metaData && (
+        <Pagination
+          metaData={filteredMetaData}
+          onPageChange={(page: number) => dispatch(setPageNumber({ pageNumber: page }))}
+        />
+      )}
     </div>
   );
-  
-}
+};
 
-export default ProductTypePage
+export default ProductTypePage;

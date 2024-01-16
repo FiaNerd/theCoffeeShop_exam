@@ -187,6 +187,7 @@ const ShoppingCart = () => {
                               basket?.items.length === 0 ||
                               basket?.items === undefined
                             }
+                            onClick={() => setOpen(false)}
                             >
                             Till Kassan
                           </Button>
