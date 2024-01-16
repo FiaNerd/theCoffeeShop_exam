@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
-import { MetaData } from "../types/pagination";
+import { MetaData } from "../../types/pagination";
 
 interface IProps {
   metaData: MetaData;
@@ -8,12 +9,8 @@ interface IProps {
 
 const Pagination = ({ metaData, onPageChange }: IProps) => {
   const { pageSize, currentPage, totalCount, totalPages } = metaData;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pageNumber, setPageNumber] = useState(currentPage);
 
-
-  console.log("CURRENT", currentPage)
-  console.log("total", totalPages)
 
   function handlePageChange(page: number) {
     setPageNumber(page);

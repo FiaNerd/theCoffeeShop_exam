@@ -35,15 +35,6 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-// axios.interceptors.response.use(async (response) => {
-//   const pagination = response.headers['pagination'];
-//   if (pagination) {
-//     response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
-//     return response;
-//   }
-//   return response;
-// });
-
 
 axios.interceptors.response.use(async (response) => {
   const pagination = response.headers['pagination'];
