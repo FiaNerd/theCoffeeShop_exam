@@ -1,39 +1,39 @@
-// // AuthContext.js
-// import { createContext, useContext, ReactNode, useState } from 'react';
-// import { User } from '../types/user';
+import { ReactNode, createContext, useContext } from "react";
+import { useAppSelector } from "../redux/configureStore";
+import { User } from "../types/user";
 
-// interface AuthContextProps {
-//   user: User | null;
-//   login: (user: User) => void;
-//   logout: () => void;
-// }
+interface AuthContextProps {
+  children: ReactNode;
+}
 
-// const AuthContextProvider = createContext<AuthContextProps | undefined>(undefined);
+interface AuthContextValue {
+  user: User | null;
+  isAuthenticated?: boolean;
+  userRoles?: string[]; 
+}
 
-// export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-//   const [currentUser, setCurrentUser] = useState<User | null>(null)
-//   const [userEmail, setUserEmail] = useState<string | null>(null)
-// 	const [userName, setUserName] = useState<string | null>(null)
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-//   const login = (email: string, username: string) => {
-//     setUser(email, usetName);
-//   };
+export const AuthProvider = ({ children }: AuthContextProps) => {
+    const { user } = useAppSelector((state) => state.account);
 
-//   const logout = () => {
-//     setUser(null);
-//   };
+    const authContextValue: AuthContextValue = {
+        isAuthenticated: user !== null,
+        userRoles: user?.roles || [], 
+        user,
+    };
+  
+    return (
+      <AuthContext.Provider value={authContextValue}>
+        {children}
+      </AuthContext.Provider>
+    );
+};
 
-//   return (
-//     <AuthContextProvider.Provider value={{ user, login, logout }}>
-//       {children}
-//     </AuthContextProvider.Provider>
-//   );
-// };
-
-// export const useAuth = () => {
-//   const context = useContext(AuthContextProvider);
-//   if (!context) {
-//     throw new Error('useAuth must be used within an AuthProvider');
-//   }
-//   return context;
-// };
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

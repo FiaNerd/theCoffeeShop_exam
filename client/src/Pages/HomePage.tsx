@@ -6,9 +6,6 @@ const HomePage = () => {
 
   const { allCoffeeProducts } = useProducts()
   
-
-  console.log("PRODUCTS BEFORE THEY HOPE IN MAP", allCoffeeProducts);
-
   return (
     <div className="px-4 container max-w-[1280px] mx-auto mb-4 mt-8">
       <h1 className="text-dark-deep-brown mb-4 to uppercase">Vårt kaffe</h1>
