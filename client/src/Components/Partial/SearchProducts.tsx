@@ -1,6 +1,6 @@
-import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
-import { setProductParamas } from "../product/productSlice";
+import { setProductParams } from "../product/productSlice";
 import Button from "./Button";
 
 interface IProps {
@@ -15,7 +15,7 @@ const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    dispatch(setProductParamas({ searchTerm: event.target.value }));
+    dispatch(setProductParams({ searchTerm: event.target.value }));
     setSearchTerm(event.target.value);
   };
 
@@ -31,11 +31,12 @@ const SearchProducts = ({ onCloseSearch, onCloseEnterSearch }: IProps) => {
   };
 
   const performSearch = () => {
-    dispatch(setProductParamas({ searchTerm }));
+    dispatch(setProductParams({ searchTerm }));
     setSearchTerm("");
-    onCloseSearch();
-    onCloseEnterSearch()
+    onCloseSearch && onCloseSearch();
+    onCloseEnterSearch && onCloseEnterSearch();
   };
+  
 
   useEffect(() => {
     if(!searchTerm){

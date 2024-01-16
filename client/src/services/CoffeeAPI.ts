@@ -121,9 +121,9 @@ export const getProducts = async (params?: URLSearchParams): Promise<PaginatedRe
  * Get single product
  * @param guid get GUID
  */
-export const getProduct = async (guid: string): Promise<Product | null> => {
+export const getProduct = async (id: number): Promise<Product | null> => {
   try {
-    const response = await get<Product>(`/products/${guid}`)
+    const response = await get<Product>(`/products/${id}`)
     return response.data
   } catch (error) {
     console.error(error)
