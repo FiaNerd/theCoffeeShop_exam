@@ -11,6 +11,7 @@ const useProducts = () => {
     const allCoffeeProducts  = useAppSelector((state) => state.product.allProducts);
     const {  productsLoaded, filtersLoaded, types, roastLevels, metaData } = useAppSelector((state) => state.product);
   
+    console.log("METADAT hook", metaData)
     useEffect(() => {
       // Whenever productParams changes, dispatch the fetchProductsAsync thunk
       dispatch(fetchProductsAsync());

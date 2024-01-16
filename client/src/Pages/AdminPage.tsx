@@ -4,7 +4,7 @@ import { productColumns } from "../components/Admin/tables/ColumnProductTable";
 import ProductTable from "../components/Admin/tables/ProductTable";
 import Buttons from "../components/partial/Button";
 import SearchProducts from "../components/partial/SearchProducts";
-import { removeProduct } from "../components/product/productSlice";
+import { removeProduct, setPageNumber } from "../components/product/productSlice";
 import useProducts from "../hooks/useProducts";
 import { useAppDispatch } from "../redux/configureStore";
 import { deleteProduct } from "../services/CoffeeAPI";
@@ -12,13 +12,14 @@ import { Product } from "../types/products";
 import Pagination from "./Pagination";
 
 const AdminPage = () => {
-  const { allCoffeeProducts }  = useProducts();
+  const { allCoffeeProducts, metaData }  = useProducts();
   const [ editMode, setEditMode ] = useState(false)
   const [ loading, setLoading ] = useState(false)
   const [ selectedProduct, setSelectedProduct ] = useState<Product | undefined>(
-    undefined
-  );
+    undefined)
   const dispatch = useAppDispatch()
+
+  console.log("MetaData Admin",metaData)
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
@@ -80,7 +81,12 @@ const AdminPage = () => {
       ) : (
         <ProductTable  columns={ productColumns } data={ allCoffeeProducts } onSelectProduct={ handleSelectProduct } onDeleteProduct={ handleDeleteProduct } />
       )}
-      <Pagination />
+
+      { metaData && (
+        <Pagination   metaData={metaData}
+        onPageChange={(page: number) => dispatch(setPageNumber({pageNumber: page}))} />
+      )}
+      
     </div>
   );
 };

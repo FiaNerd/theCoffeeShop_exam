@@ -23,7 +23,7 @@ import { Product, ProductParams, Products } from "../../types/products";
     sortComparer: (a, b) => a.name.localeCompare(b.name),
   });
 
-  const getAxiosParams = (productParams: ProductParams) => {
+  const getAxiosParams = (productParams: ProductParams) : URLSearchParams => {
     const params = new URLSearchParams();
 
     params.append("pageNumber", productParams.pageNumber.toString());
@@ -45,28 +45,26 @@ import { Product, ProductParams, Products } from "../../types/products";
 
     return params;
   };
-
-  // export const fetchProductsAsync = createAsyncThunk<
-  //   Products,
-  //   void,
-  //   { state: RootState }
-  // >("products/fetchProductsAsync", async (_, thunkAPI) => {
-  //   const params = getAxiosParams(thunkAPI.getState().product.productParams);
-  //   try {
-  //     const allProducts = await getProducts(params);
-  //     return allProducts;
-  //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //   } catch (error: any) {
-  //     console.error(error);
-  //     return thunkAPI.rejectWithValue({ error: error.data });
+  
+  // export const fetchProductsAsync = createAsyncThunk<Products, ProductParams, { state: RootState }>(
+  //   'products/fetchProductsAsync',
+  //   async (params, thunkAPI) => {
+  //     // Use params directly, no need to get it from getState
+  //     try {
+  //       const allProducts = await getProducts(getAxiosParams(params));
+  //       thunkAPI.dispatch(setMetaData(allProducts.metaData));
+  //       return allProducts.items;
+  //     } catch (error: any) {
+  //       return thunkAPI.rejectWithValue({ error: error.data })
+  //     }
   //   }
-  // });
-
+  // );
 
   export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootState}>(
-    'catalog/fetchProductsAsync',
+    'products/fetchProductsAsync',
     async (_, thunkAPI) => {
         const params = getAxiosParams(thunkAPI.getState().product.productParams);
+
         try {
             const allProducts = await getProducts(params);
             thunkAPI.dispatch(setMetaData(allProducts.metaData));
@@ -149,6 +147,7 @@ import { Product, ProductParams, Products } from "../../types/products";
       },
       setProduct: (state, action) => {
         state.productsLoaded = false
+        // productsAdapter.upsertOne(state, action)
         productsAdapter.upsertOne(state, action.payload)
       },
       removeProduct: (state, action) => {
