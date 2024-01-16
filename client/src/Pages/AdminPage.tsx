@@ -19,7 +19,6 @@ const AdminPage = () => {
     undefined)
   const dispatch = useAppDispatch()
 
-  console.log("MetaData Admin",metaData)
 
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
@@ -86,7 +85,7 @@ const AdminPage = () => {
         <Pagination   metaData={metaData}
         onPageChange={(page: number) => dispatch(setPageNumber({pageNumber: page}))} />
       )}
-      
+
     </div>
   );
 };

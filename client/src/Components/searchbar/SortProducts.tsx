@@ -1,4 +1,3 @@
-import React from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
 import SortButtonGroup from "../partial/SortButtonGroup";
 import { setProductParams } from "../product/productSlice";
@@ -13,9 +12,6 @@ import { setProductParams } from "../product/productSlice";
 const SortProducts = () => {
   const { productParams  } = useAppSelector((state) => state.product);
   const dispatch = useAppDispatch()
-
-  console.log("productPraams", productParams)
-
 
   return (
     <div className='main gap-4 w-full md:max-w-[70%] flex-col md:flex-row mx-auto flex border rounded overflow-hidden m-4 select-none'>

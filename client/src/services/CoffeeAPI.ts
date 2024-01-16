@@ -55,17 +55,6 @@ axios.interceptors.response.use(async (response) => {
 });
 
 
-
-// const get = async <T>(endpoint: string) => {
-//   try {
-//     const resp = await instance.get<T>(endpoint)
-//     return resp.data
-//   } catch (error) {
-//     console.error('Error during GET request:', error)
-//     throw error
-//   }
-// }
-
 export const get = async <T>(endpoint: string, params?: URLSearchParams) => {
   try {
     const url = params ? `${endpoint}?${params.toString()}` : endpoint;
@@ -95,27 +84,19 @@ export const get = async <T>(endpoint: string, params?: URLSearchParams) => {
 
 export const getProducts = async (params?: URLSearchParams): Promise<PaginatedResponse<Products>> => {
   try {
-    const url = `/products${params ? `?${params.toString()}` : ''}`;
-    const response = await get<PaginatedResponse<Products>>(url);
-    console.log("RESPONSE FROM API ", response )
+    const url = `/products${params ? `?${params.toString()}` : ''}`
+    const response = await get<PaginatedResponse<Products>>(url)
     if (response.headers['pagination']) {
       return response.data
     } else {
       return response.data; 
     }
   } catch (error) {
-    console.error("Couldn't fetch products", error);
-    throw error; 
+    console.error("Couldn't fetch products", error)
+    throw error
   }
-};
+}
 
-// export const getProducts = async (
-//   params?: URLSearchParams
-// ): Promise<Products | []> => {
-//   const url = `/products${params ? `?${params.toString()}` : ''}`
-//   const response = await get<Products>(url)
-//   return response.data
-// }
 
 /**
  * Get single product
@@ -212,7 +193,6 @@ export const currentUser = async ()  => {
 export const getOrders = async () =>{
   try {
     const response = await axios.get<Orders>(`${BASE_URL}/orders`)
-    console.log("Fetch Order axios", response)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -258,8 +238,6 @@ export const createProduct = async (data: FormData) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log("RESPONSE DATA POST", response.data);
-    console.log("DATA", data);
     return response.data;
     
   } catch (error) {
@@ -280,7 +258,6 @@ export const editProduct = async (data: FormData) => {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
 
-    console.log("RESPONSE DATA POST", response);
     return response.data;
 
   } catch (error) {
@@ -297,7 +274,6 @@ export const editProduct = async (data: FormData) => {
 export const deleteProduct = async (id: number) => {
   try {
     const response = await axios.delete(`${BASE_URL}/products/${id}`)
-    console.log("RESP", response)
     return response
   } catch (error) {
     console.error(error)

@@ -8,7 +8,12 @@ interface IProps {
 
 const Pagination = ({ metaData, onPageChange }: IProps) => {
   const { pageSize, currentPage, totalCount, totalPages } = metaData;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pageNumber, setPageNumber] = useState(currentPage);
+
+
+  console.log("CURRENT", currentPage)
+  console.log("total", totalPages)
 
   function handlePageChange(page: number) {
     setPageNumber(page);
@@ -47,9 +52,9 @@ const Pagination = ({ metaData, onPageChange }: IProps) => {
 
       <div aria-label="Pagination" className="flex justify-center items-center text-gray-600 mt-8 lg:mt-0">
         <button
-          className="p-2 mr-4 rounded hover:bg-gray-100"
+          className="p-2 rounded hover:bg-white hover:opacity-80"
           onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
+          disabled={currentPage === 1 || totalPages === 1}
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -59,19 +64,23 @@ const Pagination = ({ metaData, onPageChange }: IProps) => {
         {pageNumbers.map((page) => (
           <button
             key={page}
-            className={`p-2 ml-4 rounded hover:bg-gray-100 ${page === currentPage ? 'bg-gray-200' : ''}`}
+            className={`py-2 px-4 ml-4 rounded border text-deep-brown border-deep-brown hover:bg-deep-brown hover:opacity-80 hover:text-white ${page === currentPage ? 'bg-deep-brown text-white' : ''}`}
             onClick={() => handlePageChange(page)}
           >
             {page}
           </button>
         ))}
 
-        <button className="p-2 ml-4 rounded hover:bg-gray-100" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
+            <button
+            className="p-2 ml-4 rounded hover:bg-white hover:opacity-80" 
+            onClick={() => handlePageChange(currentPage + 1)} 
+            disabled={currentPage === totalPages || totalPages === 1}
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
     </div>
   );
 };
