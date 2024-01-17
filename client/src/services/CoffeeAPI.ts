@@ -141,7 +141,7 @@ export const removeItemFromBasket = async (
 
 export const getFilters = async () => {
   try {
-    return await get('/products/filters')
+    return await get<Product>('/products/filters')
   } catch (error) {
     console.error('Error fetching filters:', error)
     throw error
