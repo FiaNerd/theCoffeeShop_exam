@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { Basket } from '../types/basket';
-import { Order, Orders } from '../types/orders';
-import { PaginatedResponse } from '../types/pagination';
-import { Product, Products } from '../types/products';
-import { User } from '../types/user';
+import axios from 'axios'
+import { Basket } from '../types/basket'
+import { Order, Orders } from '../types/orders'
+import { PaginatedResponse } from '../types/pagination'
+import { Product, Products } from '../types/products'
+import { User } from '../types/user'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
@@ -35,59 +35,57 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-
 axios.interceptors.response.use(async (response) => {
-  const pagination = response.headers['pagination'];
+  const pagination = response.headers['pagination']
   if (pagination) {
-    response.data = new PaginatedResponse(response.data, JSON.parse(pagination));
-    return response;
+    response.data = new PaginatedResponse(response.data, JSON.parse(pagination))
+    return response
   }
-  return response;
-});
-
+  return response
+})
 
 export const get = async <T>(endpoint: string, params?: URLSearchParams) => {
   try {
-    const url = params ? `${endpoint}?${params.toString()}` : endpoint;
-    const response = await instance.get<T>(url);
+    const url = params ? `${endpoint}?${params.toString()}` : endpoint
+    const response = await instance.get<T>(url)
 
-    const pagination = response.headers['pagination'];
+    const pagination = response.headers['pagination']
 
     if (pagination) {
       response.data = new PaginatedResponse(
         response.data,
         JSON.parse(pagination)
-      ) as unknown as T;
+      ) as unknown as T
     }
 
-    return response;
+    return response
   } catch (error) {
-    console.error('Error during GET request:', error);
-    throw error; 
+    console.error('Error during GET request:', error)
+    throw error
   }
-};
-
+}
 
 /**
  * Get single product
  * @param all products
  */
 
-export const getProducts = async (params?: URLSearchParams): Promise<PaginatedResponse<Products>> => {
+export const getProducts = async (
+  params?: URLSearchParams
+): Promise<PaginatedResponse<Products>> => {
   try {
     const url = `/products${params ? `?${params.toString()}` : ''}`
     const response = await get<PaginatedResponse<Products>>(url)
     if (response.headers['pagination']) {
       return response.data
     } else {
-      return response.data; 
+      return response.data
     }
   } catch (error) {
     console.error("Couldn't fetch products", error)
     throw error
   }
 }
-
 
 /**
  * Get single product
@@ -143,7 +141,7 @@ export const removeItemFromBasket = async (
 
 export const getFilters = async () => {
   try {
-    return await get<Product>('/products/filters')
+    return await get('/products/filters')
   } catch (error) {
     console.error('Error fetching filters:', error)
     throw error
@@ -171,17 +169,16 @@ export const registerUser = async (values: any) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const currentUser = async ()  => {
+export const currentUser = async () => {
   try {
     const response = await axios.get<User>(`${BASE_URL}/account/currentuser`)
     return response.data
-
   } catch (error) {
     throw new Error('Failed to fetch currentUser')
   }
 }
 
-export const getOrders = async () =>{
+export const getOrders = async () => {
   try {
     const response = await axios.get<Orders>(`${BASE_URL}/orders`)
     return response.data
@@ -190,9 +187,9 @@ export const getOrders = async () =>{
   }
 }
 
-export const getOrder = async (id: number) =>{
+export const getOrder = async (id: number) => {
   try {
-    const response =  await axios.get<Order>(`${BASE_URL}/orders/${id}`)
+    const response = await axios.get<Order>(`${BASE_URL}/orders/${id}`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -200,7 +197,7 @@ export const getOrder = async (id: number) =>{
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createOrder = async (values: any) =>{
+export const createOrder = async (values: any) => {
   try {
     const response = await axios.post(`${BASE_URL}/orders`, values)
     return response.data
@@ -211,7 +208,7 @@ export const createOrder = async (values: any) =>{
 
 export const getAddress = async () => {
   try {
-    const response =  await axios.get(`${BASE_URL}/account/savedaddress`)
+    const response = await axios.get(`${BASE_URL}/account/savedaddress`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -227,16 +224,14 @@ export const createProduct = async (data: FormData) => {
   try {
     const response = await axios.post(`${BASE_URL}/products`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    })
 
-    return response.data;
-    
+    return response.data
   } catch (error) {
-    console.error("Error in createProduct:", error);
-    throw error;
+    console.error('Error in createProduct:', error)
+    throw error
   }
-};
-
+}
 
 /**
  * Admin
@@ -247,15 +242,14 @@ export const editProduct = async (data: FormData) => {
   try {
     const response = await axios.put(`${BASE_URL}/products`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
-    });
+    })
 
-    return response.data;
-
+    return response.data
   } catch (error) {
-    console.error("Error in createProduct:", error);
-    throw error;
+    console.error('Error in createProduct:', error)
+    throw error
   }
-};
+}
 
 /**
  * Admin
@@ -271,5 +265,3 @@ export const deleteProduct = async (id: number) => {
     return null
   }
 }
-
-
