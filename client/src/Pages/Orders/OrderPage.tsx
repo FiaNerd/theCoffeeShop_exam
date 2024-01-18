@@ -6,7 +6,8 @@ import { currencyFormat } from "../../utils/currencyFormat";
 
 const OrderPage = () => {
     const [orders, setOrders] = useState<Orders | null>(null);
-    const [ isLoading, setIsLoading ] = useState(true)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [ _isLoading, setIsLoading ] = useState(true)
 
     useEffect(() => {
         // setIsLoading(true);

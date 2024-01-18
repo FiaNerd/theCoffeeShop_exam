@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../redux/configureStore";
 import { fetchFilters, fetchProductsAsync, setProductParams } from "../../product/productSlice";
 import FilterCheckGroup from "./FilterCheckGroup";
@@ -9,6 +9,7 @@ const FilterProducts = () => {
   const { productsLoaded, filtersLoaded, types, roastLevels, productParams } = useAppSelector(state => state.product)
   const dispatch = useAppDispatch()
 
+  
   useEffect(() => {
     if (!productsLoaded) {
       dispatch(fetchProductsAsync());

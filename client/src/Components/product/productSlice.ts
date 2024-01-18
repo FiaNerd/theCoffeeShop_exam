@@ -84,7 +84,7 @@ export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootS
     async (_, thunkAPI) => {
       try {
         const response = await getFilters();
-        return response.data
+        return response
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data });
@@ -97,8 +97,8 @@ export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootS
       pageNumber: 1,
       pageSize: 12,
       orderBy: "name",
-      types: [],
-      roastLevels: []
+      // types: [],
+      // roastLevels: []
     };
   };
 
@@ -174,8 +174,8 @@ export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootS
         state.status = "pendingFetchFilters";
       });
       builder.addCase(fetchFilters.fulfilled, (state, action) => {
-        state.types = action.payload.data.type;
-        state.roastLevels = action.payload.data.roastLevel;
+        state.types = action.payload.type;
+        state.roastLevels = action.payload.roastLevel;
         state.status = "idle";
         state.filtersLoaded = true;
       });

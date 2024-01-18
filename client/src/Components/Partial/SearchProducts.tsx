@@ -1,4 +1,4 @@
-import React, { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/configureStore";
 import { setProductParams } from "../product/productSlice";
 import Button from "./Button";
