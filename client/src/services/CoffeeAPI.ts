@@ -139,9 +139,23 @@ export const removeItemFromBasket = async (
   }
 }
 
+// export const getFilters = async () => {
+//   try {
+//     return await get<Product>('/products/filters')
+//   } catch (error) {
+//     console.error('Error fetching filters:', error)
+//     throw error
+//   }
+// }
+// Check if BASE_URL is correctly configured
+console.log('BASE_URL:', BASE_URL)
+
 export const getFilters = async () => {
   try {
-    return await get<Product>('/products/filters')
+    console.log('Fetching filters...')
+    const response = await get<Product>('/products/filters')
+    console.log('Filters response:', response.data)
+    return response.data
   } catch (error) {
     console.error('Error fetching filters:', error)
     throw error

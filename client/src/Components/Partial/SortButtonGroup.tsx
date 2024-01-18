@@ -1,13 +1,12 @@
-import React, { ChangeEvent } from "react";
+import { ChangeEvent } from 'react'
 
 interface IProps {
-    options: { value: string; label: string }[];
-    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-    selectedValue: string;
-  }
+  options: { value: string; label: string }[]
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void
+  selectedValue: string
+}
 
 const SortButtonGroup = ({ options, selectedValue, onChange }: IProps) => {
-
   return (
     <>
       {options.map(({ value, label }) => (
@@ -24,7 +23,7 @@ const SortButtonGroup = ({ options, selectedValue, onChange }: IProps) => {
         </div>
       ))}
     </>
-  );
-};
+  )
+}
 
-export default SortButtonGroup;
+export default SortButtonGroup

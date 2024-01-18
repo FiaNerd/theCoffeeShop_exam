@@ -84,7 +84,7 @@ export const fetchProductsAsync = createAsyncThunk<Products, void, {state: RootS
     async (_, thunkAPI) => {
       try {
         const response = await getFilters();
-        return response.data
+        return response
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         return thunkAPI.rejectWithValue({ error: error.data });

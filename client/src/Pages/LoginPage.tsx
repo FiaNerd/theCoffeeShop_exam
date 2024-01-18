@@ -16,7 +16,7 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     mode: 'onChange',
   })
