@@ -1,4 +1,4 @@
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
@@ -19,18 +19,22 @@ const SearchBar = ({ openSearchbar, onCloseSearchbar }: IProps) => {
   return (
     <div
       ref={searchRef}
-      className={`fixed bg-deep-red shadow-md flex-col top-0 mt-[30px] left-0 w-full  items-center justify-center z-50 transition-opacity ${
+      className={`fixed bg-deep-red overflow-y-auto shadow-md flex-col top-0 mt-[30px] left-0 w-full  items-center justify-center z-50 transition-opacity ${
         openSearchbar ? 'opacity-100' : 'opacity-0 pointer-events-none'
-      }`}>
+      }`}
+      style={{ maxHeight: 'calc(100vh - 30px)' }}>
       <div className='bg-deep-red p-4 shadow-md w-full'>
-        <SearchProducts onCloseSearch={onCloseSearchbar} onCloseEnterSearch={onCloseSearchbar}/>
+        <SearchProducts
+          onCloseSearch={onCloseSearchbar}
+          onCloseEnterSearch={onCloseSearchbar}
+        />
         <SortProducts />
         <FilterProducts />
 
         <div className='flex flex-col items-center gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
-          <button type='button' onClick={onCloseSearchbar}>
+          <button type='button' onClick={onCloseSearchbar} className='flex flex-col items-center '>
             <FontAwesomeIcon
-              icon={faXmark}
+              icon={faTimes}
               className='flex text-white text-4xl pt-8'
             />
             <p className='text-white'>Stäng</p>

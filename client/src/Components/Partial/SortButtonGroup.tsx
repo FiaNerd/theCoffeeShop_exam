@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent } from 'react';
 
 interface IProps {
   options: { value: string; label: string }[]
@@ -10,7 +10,7 @@ const SortButtonGroup = ({ options, selectedValue, onChange }: IProps) => {
   return (
     <>
       {options.map(({ value, label }) => (
-        <div key={value} className='flex items-center'>
+        <div key={value} className='flex items-center px-2'>
           <input
             className='my-auto transform scale-125'
             type='radio'
