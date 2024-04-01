@@ -5,18 +5,19 @@ import { PaginatedResponse } from '../types/pagination'
 import { Product, Products } from '../types/products'
 import { User } from '../types/user'
 
-const BASE_URL = import.meta.env.VITE_BASE_URL
+// const BASE_URL = import.meta.env.VITE_BASE_URL
+axios.defaults.baseURL = import.meta.env.VITE_API_URL
 const AXIOS_CREDENTIALS = import.meta.env.VITE_AXIOS_WITH_CREDENTIALS === 'true'
-
 axios.defaults.withCredentials = AXIOS_CREDENTIALS
 
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: axios.defaults.baseURL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
+  withCredentials: axios.defaults.withCredentials,
 })
 
 /// Axios interceptor to dynamically add an Authorization header
@@ -114,7 +115,7 @@ export const getBasket = async () => {
  */
 export const addItemToBasket = async (productId: number, quantity = 1) => {
   const response = await axios.post(
-    `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`,
+    `/basket?productId=${productId}&quantity=${quantity}`,
     {}
   )
   return response.data
@@ -130,7 +131,7 @@ export const removeItemFromBasket = async (
 ): Promise<void> => {
   try {
     const response = await axios.delete(
-      `${BASE_URL}/basket?productId=${productId}&quantity=${quantity}`
+      `/basket?productId=${productId}&quantity=${quantity}`
     )
     return response.data
   } catch (error) {
@@ -148,7 +149,6 @@ export const removeItemFromBasket = async (
 //   }
 // }
 // Check if BASE_URL is correctly configured
-console.log('BASE_URL:', BASE_URL)
 
 export const getFilters = async () => {
   try {
@@ -165,7 +165,7 @@ export const getFilters = async () => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const login = async (values: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}/account/login`, values)
+    const response = await axios.post(`/account/login`, values)
     return response.data
   } catch (error) {
     console.log('Error when trying to login')
@@ -175,7 +175,7 @@ export const login = async (values: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const registerUser = async (values: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}/account/register`, values)
+    const response = await axios.post(`/account/register`, values)
     return response.data
   } catch (error) {
     console.log('Error when trying to create a account')
@@ -185,7 +185,7 @@ export const registerUser = async (values: any) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const currentUser = async () => {
   try {
-    const response = await axios.get<User>(`${BASE_URL}/account/currentuser`)
+    const response = await axios.get<User>(`/account/currentuser`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch currentUser')
@@ -194,7 +194,7 @@ export const currentUser = async () => {
 
 export const getOrders = async () => {
   try {
-    const response = await axios.get<Orders>(`${BASE_URL}/orders`)
+    const response = await axios.get<Orders>(`/orders`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -203,7 +203,7 @@ export const getOrders = async () => {
 
 export const getOrder = async (id: number) => {
   try {
-    const response = await axios.get<Order>(`${BASE_URL}/orders/${id}`)
+    const response = await axios.get<Order>(`/orders/${id}`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -213,7 +213,7 @@ export const getOrder = async (id: number) => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createOrder = async (values: any) => {
   try {
-    const response = await axios.post(`${BASE_URL}/orders`, values)
+    const response = await axios.post(`/orders`, values)
     return response.data
   } catch (error) {
     throw new Error('Failed to create orders')
@@ -222,7 +222,7 @@ export const createOrder = async (values: any) => {
 
 export const getAddress = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/account/savedaddress`)
+    const response = await axios.get(`/account/savedaddress`)
     return response.data
   } catch (error) {
     throw new Error('Failed to fetch orders')
@@ -236,7 +236,7 @@ export const getAddress = async () => {
  */
 export const createProduct = async (data: FormData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/products`, data, {
+    const response = await axios.post(`/products`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
@@ -254,7 +254,7 @@ export const createProduct = async (data: FormData) => {
  */
 export const editProduct = async (data: FormData) => {
   try {
-    const response = await axios.put(`${BASE_URL}/products`, data, {
+    const response = await axios.put(`/products`, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
 
@@ -272,7 +272,7 @@ export const editProduct = async (data: FormData) => {
  */
 export const deleteProduct = async (id: number) => {
   try {
-    const response = await axios.delete(`${BASE_URL}/products/${id}`)
+    const response = await axios.delete(`/products/${id}`)
     return response
   } catch (error) {
     console.error(error)

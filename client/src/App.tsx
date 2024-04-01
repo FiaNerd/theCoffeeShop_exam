@@ -1,6 +1,7 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import AuthRoute from './auth/AuthRoute';
+
 import Footer from './components/partial/Footer';
 import Header from './components/partial/Header';
 import PageNotFound from './components/partial/PageNotFound';
@@ -9,11 +10,11 @@ import AdminPage from './pages/AdminPage';
 import CheckoutPage from './pages/CheckoutPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import OrderDetailPage from './pages/Orders/OrderDetailPage';
-import OrderPage from './pages/Orders/OrderPage';
-import ProductDetailPage from './pages/Products/ProductDetailPage';
-import ProductTypePage from './pages/Products/ProductTypePage';
 import RegisterPage from './pages/RegisterPage';
+import OrderDetailPage from './pages/orders/OrderDetailPage';
+import OrderPage from './pages/orders/OrderPage';
+import ProductDetailPage from './pages/products/ProductDetailPage';
+import ProductTypePage from './pages/products/ProductTypePage';
 import { useAppSelector } from './redux/configureStore';
 
 const App = () => {
@@ -21,9 +22,9 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <div className='flex flex-col min-h-screen'>
+      <div className='flex flex-col h-screen'>
         <Header />
-        <div className='flex-1'>
+        <div >
           <Routes>
             <Route
               path='/produkt/:type/:productId'

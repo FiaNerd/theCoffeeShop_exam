@@ -90,12 +90,13 @@ const LoginPage = () => {
               )}
             </div>
 
-            <div className='mt-8 items-center flex justify-between mb-4'>
+            <div className='flex flex-col md:flex-row w-full gap-4 justify-between mt-8 items-center mb-4'>
               <Buttons
                 typeAction='submit'
                 buttonType='loginOrRegister'
                 // disabled={isSubmitting || !isValid}
-                onClick={handleSubmit(onSubmitLogin)}>
+                onClick={handleSubmit(onSubmitLogin)}
+                className='w-full md:max-w-[12em]'>
                 Logga in
               </Buttons>
 
@@ -110,7 +111,7 @@ const LoginPage = () => {
               <NavLink
                 to='/konto/registrera'
                 className='inline-block right-0 align-baseline font-light text-md text-white hover:text-light-tan'>
-                Har du inget konto? Skapa konto
+                Har du inget konto? <span className='font-bold'>Skapa konto</span>
               </NavLink>
             </div>
           </form>

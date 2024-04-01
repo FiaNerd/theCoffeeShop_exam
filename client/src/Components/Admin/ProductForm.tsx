@@ -7,9 +7,9 @@ import productValidationSchema from '../../schemas/productValidationSchema';
 import { createProduct, editProduct } from '../../services/CoffeeAPI';
 import { Product } from "../../types/products";
 import Buttons from "../partial/Button";
-import DropZoneProduct from "../partial/Forms/DropZoneProduct";
-import InputForm from "../partial/Forms/InputForm";
-import SelectProductList from "../partial/Forms/SelectProductList";
+import DropZoneProduct from "../partial/forms/DropZoneProduct";
+import InputForm from "../partial/forms/InputForm";
+import SelectProductList from "../partial/forms/SelectProductList";
 import { setProduct } from '../product/productSlice';
 
 interface IProps {

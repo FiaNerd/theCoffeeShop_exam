@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useRef } from 'react'
 import useClickOutside from '../../hooks/useClickoutside'
 import SortProducts from '../searchbar/SortProducts'
-import FilterProducts from './Forms/FilterProducts'
 import SearchProducts from './SearchProducts'
+import FilterProducts from './forms/FilterProducts'
 
 interface IProps {
   openSearchbar: boolean

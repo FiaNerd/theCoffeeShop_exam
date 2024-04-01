@@ -148,14 +148,15 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <div className='mt-8 items-center flex justify-between mb-4'>
+            <div className='mt-8 items-center flex-col md:flex-row gap-4 flex justify-between mb-4'>
               <Buttons
                 typeAction='submit'
                 buttonType='loginOrRegister'
                 disabled={isSubmitting || !isValid}
                 isLoading={isSubmitting}
                 // onClick={handleSubmit(onSubmitRegister)}
-              >
+                className='w-full md:max-w-[12em]'
+                >
                 Skapa konto
               </Buttons>
 
@@ -170,7 +171,7 @@ const RegisterPage = () => {
               <NavLink
                 to='/konto/logga-in'
                 className='inline-block right-0 align-baseline font-light text-md text-white hover:text-light-tan'>
-                Har du redan ett konot? Logga in
+                Har du redan ett konot? <span className='font-bold'>Logga in</span> 
               </NavLink>
             </div>
           </form>
