@@ -58,7 +58,7 @@ const RegisterPage = () => {
 
   return (
     <div
-      className=' p-4 h-[calc(94vh-148px)] w-full bg-deep-brown bg-cover bg-no-repeat bg-center'
+      className=' p-4 overflow-y-auto h-[calc(94vh-148px)] w-full bg-deep-brown bg-cover bg-no-repeat bg-center'
       style={{ backgroundImage: 'url(/images/Login_bg_1920X1080px.jpg)' }}>
       <div className='container mx-auto h-full flex flex-1 justify-center items-center'>
         <div className='w-full max-w-sm md:max-w-md m-auto p-4 md:p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl'>
@@ -148,13 +148,14 @@ const RegisterPage = () => {
               </div>
             </div>
 
-            <div className='mt-8 items-center flex justify-between mb-4'>
+            <div className='flex flex-col gap-4  mt-8 items-center justify-between mb-4'>
               <Buttons
                 typeAction='submit'
                 buttonType='loginOrRegister'
                 disabled={isSubmitting || !isValid}
                 isLoading={isSubmitting}
                 // onClick={handleSubmit(onSubmitRegister)}
+                className='w-full'
               >
                 Skapa konto
               </Buttons>
@@ -170,7 +171,7 @@ const RegisterPage = () => {
               <NavLink
                 to='/konto/logga-in'
                 className='inline-block right-0 align-baseline font-light text-md text-white hover:text-light-tan'>
-                Har du redan ett konot? Logga in
+                Har du redan ett konot? <span className='font-bold'>Logga in</span>
               </NavLink>
             </div>
           </form>
