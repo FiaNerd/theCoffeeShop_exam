@@ -22,9 +22,9 @@ const App = () => {
 
   return (
     <AuthProvider>
-      <div className='flex flex-col h-screen'>
+      <div className='flex flex-col min-h-screen'>
         <Header />
-        <div >
+        <div className='flex-1 h-full'>
           <Routes>
             <Route
               path='/produkt/:type/:productId'

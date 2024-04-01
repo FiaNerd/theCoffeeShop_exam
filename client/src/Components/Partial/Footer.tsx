@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <div className='text-white bg-deep-red w-full text-center flex flex-col justify-between h-full'>
+    <div className='footer text-white inset-0 bg-deep-red w-full text-center flex flex-col justify-between'>
       <ul className='flex justify-center gap-4 py-2'>
         <li>Om oss</li>
         <li>Kontakta oss</li>

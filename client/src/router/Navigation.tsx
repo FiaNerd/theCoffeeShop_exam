@@ -47,14 +47,14 @@ export const menuItems: MenuItem[] = [
     url: '#',
     mobileOnly: false
   },
-  {
-    title: 'Logga in',
-    url: '/konto/logga-in',
-    mobileOnly: true
-  },
-  {
-    title: 'Skapa konto',
-    url: '/konto/register',
-    mobileOnly: true
-  }
+  // {
+  //   title: 'Logga in',
+  //   url: '/konto/logga-in',
+  //   mobileOnly: true
+  // },
+  // {
+  //   title: 'Skapa konto',
+  //   url: '/konto/register',
+  //   mobileOnly: true
+  // }
 ]

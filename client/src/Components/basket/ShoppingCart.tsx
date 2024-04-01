@@ -17,6 +17,10 @@ const ShoppingCart = () => {
 
   const deliveryFee = subtotal > 25000 ? 0 : 2500;
 
+  // if(!basket){
+  //   return null
+  // }
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={setOpen}>
@@ -197,13 +201,15 @@ const ShoppingCart = () => {
                       <div className='mt-6 flex justify-center text-center text-sm text-gray-500'>
                         <p>
                           Eller {''}
-                          <button
-                            type='button'
-                            className='font-bold text-deep-brown hover:opacity-80'
-                            onClick={() => setOpen(false)}
-                            >
-                            Fortsätta shoppa
-                          </button>
+                          <NavLink to="/">
+                            <button
+                              type='button'
+                              className='font-bold text-deep-brown hover:opacity-80'
+                              onClick={() => setOpen(false)}
+                              >
+                              Fortsätta shoppa
+                            </button>
+                          </NavLink>
                         </p>
                       </div>
                     </div>

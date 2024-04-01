@@ -13,9 +13,9 @@ import useClickOutside from '../../hooks/useClickoutside'
 import { useAppDispatch, useAppSelector } from '../../redux/configureStore'
 import { menuItems } from '../../router/Navigation'
 import SignedInMenu from '../account/SignedInMenu'
-import { fetchCurrentUser } from '../account/accountSlice'
+import { fetchCurrentUser, signOut } from '../account/accountSlice'
 import ShoppingCart from '../basket/ShoppingCart'
-import { fetchBasketAsync } from '../basket/basketSlice'
+import { clearBasket, fetchBasketAsync } from '../basket/basketSlice'
 import Dropdown from './Dropdown'
 import Hamburger from './Hamburger'
 import SearchBar from './Searchbar'
@@ -186,9 +186,10 @@ const Navbar = () => {
                     }}
                     className={`text-white font-heading ${
                       menu.title === 'Logga in' || menu.title === 'Skapa konto'
-                        ? 'text-sm x'
+                        ? 'text-sm'
                         : 'text-3xl'
-                    } font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}>
+                    } font-bold tracking-wider cursor-pointer hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan`}
+                    >
                     {menu.title}
                   </NavLink>
 
@@ -275,13 +276,12 @@ const Navbar = () => {
                   className='text-white font-bold flex flex-end'>
                   Skapa konto
                 </NavLink>
-             
               </div>
             ) : (
-               <FontAwesomeIcon
+              <FontAwesomeIcon
                 icon={faUser}
-               className='text-white text-4xl cursor-pointer hover:opacity-80'
-               />
+                className='text-white text-4xl cursor-pointer hidden md:flex hover:opacity-80'
+              />
             )}
 
             {user && (
@@ -302,45 +302,130 @@ const Navbar = () => {
               ref={navRef}
               className={`md:hidden gap-4 ${
                 menuOpen ? 'visible' : ''
-              } bg-deep-red h-8/12 mt-8 text-white font-bold w-8/12 fixed top-0 left-0 z-10 px-4 text-xl`}
+              } bg-deep-red h-full mt-2 text-white font-bold w-full sm:w-8/12 fixed top-0 left-0 z-10 px-4 overflow-y-auto`}
               style={{
                 marginTop: '104.641px',
-                height: '100vh',
+                height: 'calc(100vh - 104.641px)',
               }}>
-              <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
-                <button type='button' onClick={handleToggleMenu}>
-                  <FontAwesomeIcon
-                    icon={faXmark}
-                    className='flex text-4xl pl-2 pt-8'
-                  />
-                </button>
+              <div
+                className='bg-deep-red fixed w-full sm:w-[62%] pr-8'
+                style={{ background: '#42201A', zIndex: 90 }}>
+                <div className='flex flex-col items-end gap-4 cursor-pointer hover:text-light-tan focus:text-light-tan'>
+                  <button type='button' onClick={handleToggleMenu}>
+                    <FontAwesomeIcon
+                      icon={faXmark}
+                      className='flex text-4xl pl-2 pt-8'
+                    />
+                  </button>
+                </div>
+
+                {user && (
+                  <div className='flex items-start mb-4 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:text-white'>
+                    <div className='mx-1'>
+                      <h1 className='text-sm font-semibold text-gray-700 dark:text-gray-200'>
+                        Du är inlogad som
+                      </h1>
+                      <p className='text-sm text-gray-500 dark:text-gray-400'>
+                        {user?.email}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <ul className=' relative flex flex-col gap-8'>
-                {menuItems.map((menu, index) => (
-                  <li key={index} onClick={handleToggleMenu}>
+              <div
+                style={{
+                  paddingBottom: '2em',
+                  marginTop: '4rem',
+                  overflowY: 'auto',
+                }}>
+                <ul className='relative flex flex-col gap-6 mt-2 mb-8'>
+                  {menuItems.map((menu, index) => (
+                    <li key={index} onClick={handleToggleMenu}>
+                      <NavLink
+                        to={menu.url}
+                        end
+                        style={{
+                          color: 'text-light-tan',
+                        }}
+                        className='font-heading text-3xl hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+                        onClick={handleLinkClick}>
+                        {menu.title}
+                      </NavLink>
+
+                      {menu.subMenu && (
+                        <div className='ml-4 z-100'>
+                          <Dropdown
+                            subMenuItems={menu.subMenu}
+                            onCloseDropdown={closeDropdown}
+                          />
+                        </div>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
+                {!user ? (
+                  <div className='flex-row gap-4 items-end mt-8'>
                     <NavLink
-                      to={menu.url}
-                      end
-                      style={{
-                        color: 'text-light-tan',
-                      }}
-                      className='font-heading text-3xl hover:text-light-tan hover:underline hover:underline-offset-8 focus:text-light-tan'
+                      to='/konto/logga-in'
+                      className=' items-center'
                       onClick={handleLinkClick}>
-                      {menu.title}
+                      Logga in
                     </NavLink>
-                    {menu.subMenu && (
-                      <div className='ml-4 z-100'>
-                        <Dropdown
-                          subMenuItems={menu.subMenu}
-                          onCloseDropdown={closeDropdown}
-                        />
-                      </div>
+                    <NavLink
+                      to='/konto/registrera'
+                      className='text-white font-bold flex flex-end mt-4'
+                      onClick={handleLinkClick}>
+                      Skapa konto
+                    </NavLink>
+                  </div>
+                ) : (
+                  <>
+                    <hr className='border-gray-200 dark:border-orange ' />
+
+                    <NavLink
+                      to='#'
+                      onClick={handleLinkClick}
+                      className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
+                      Din profil
+                    </NavLink>
+
+                    {user && !user.roles?.includes('Admin') && (
+                      <NavLink
+                        to='/orders'
+                        onClick={handleLinkClick}
+                        className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
+                        Dina ordrar
+                      </NavLink>
                     )}
-                  </li>
-                ))}
-              </ul>
+
+                    {user && user.roles?.includes('Admin') && (
+                      <NavLink
+                        to='/produktpanel'
+                        onClick={handleLinkClick}
+                        className='block px-4 py-2 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'>
+                        Produktpanel
+                      </NavLink>
+                    )}
+
+                    <hr className='border-gray-200 dark:border-orange ' />
+
+                    <NavLink
+                      to='/'
+                      className='block px-4 py-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300  hover:bg-orange hover:text-white'
+                      onClick={() => {
+                        dispatch(signOut())
+                        dispatch(clearBasket())
+                        handleLinkClick()
+                      }}>
+                      Logga ut
+                    </NavLink>
+                  </>
+                )}
+              </div>
             </div>,
+
             portalRoot
           )}
       </div>
