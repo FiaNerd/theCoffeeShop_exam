@@ -36,10 +36,10 @@ const LoginPage = () => {
 
   return (
     <div
-      className=' p-4 h-[calc(94vh-148px)] w-full bg-gray-900 bg-cover bg-no-repeat bg-center'
+      className='p-4 h-[calc(94vh-148px)] overflow-y-auto w-full bg-gray-900 bg-cover bg-no-repeat bg-center'
       style={{ backgroundImage: 'url(/images/Login_bg_1920X1080px.jpg)' }}>
       <div className='container mx-auto h-full flex flex-1 justify-center items-center'>
-        <div className='w-full max-w-sm md:max-w-md m-auto p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl'>
+        <div className='w-full max-w-sm md:max-w-md m-auto p-4  md:p-10 bg-deep-brown bg-opacity-90 rounded-lg shadow-xl'>
           <img
             src={bg_img}
             alt='logo kaffebönans skafferi'
